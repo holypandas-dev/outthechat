@@ -5,21 +5,27 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+
+    if (password !== confirm) {
+      setError('Passwords do not match.')
+      return
+    }
+
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.updateUser({ password })
 
     if (error) {
       setError(error.message)
@@ -41,40 +47,37 @@ export default function LoginPage() {
             <span className="font-mono text-sm tracking-widest text-[#e8623a]">Out</span>
             <span className="font-mono text-sm tracking-widest text-[#f2ede4]">TheChat</span>
           </Link>
-          <h1 className="mt-6 text-2xl font-semibold text-[#f2ede4]">Welcome back</h1>
-          <p className="mt-2 text-sm text-[#b8b0a2]">Sign in to your account</p>
+          <h1 className="mt-6 text-2xl font-semibold text-[#f2ede4]">Set new password</h1>
+          <p className="mt-2 text-sm text-[#b8b0a2]">Choose a strong password for your account</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-[#b8b0a2] mb-1.5 tracking-wide uppercase">
-              Email
+              New password
             </label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              placeholder="you@example.com"
-              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f2ede4] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-medium text-[#b8b0a2] tracking-wide uppercase">
-                Password
-              </label>
-              <Link href="/forgot-password" className="text-xs text-[#e8623a] hover:underline">
-                Forgot password?
-              </Link>
-            </div>
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
+              minLength={6}
+              placeholder="Min. 6 characters"
+              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f2ede4] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-[#b8b0a2] mb-1.5 tracking-wide uppercase">
+              Confirm password
+            </label>
+            <input
+              type="password"
+              value={confirm}
+              onChange={e => setConfirm(e.target.value)}
+              required
+              minLength={6}
               placeholder="••••••••"
               className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f2ede4] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
             />
@@ -91,17 +94,9 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-[#e8623a] hover:bg-[#c44d28] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-3 text-sm transition-colors"
           >
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'Updating...' : 'Update password'}
           </button>
         </form>
-
-        {/* Footer */}
-        <p className="mt-6 text-center text-sm text-[#b8b0a2]">
-          No account?{' '}
-          <Link href="/signup" className="text-[#e8623a] hover:underline">
-            Create one
-          </Link>
-        </p>
 
       </div>
     </div>
