@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { InviteButton } from '@/components/InviteButton'
 import { VoteButtons } from '@/components/VoteButtons'
+import { TripAIChat } from '@/components/TripAIChat'
 
 export default async function TripPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -281,6 +282,8 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
         </div>
 
       </main>
+
+      <TripAIChat tripId={id} />
     </div>
   )
 }
