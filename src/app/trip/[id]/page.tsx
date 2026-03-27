@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { InviteButton } from '@/components/InviteButton'
 import { TripAIChat } from '@/components/TripAIChat'
 import { ItinerarySection } from '@/components/ItinerarySection'
+import { WhatToWear } from '@/components/WhatToWear'
 
 export default async function TripPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -158,6 +159,14 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
               </ul>
             </div>
           )}
+        </div>
+
+        {/* What to wear */}
+        <div className="mb-6">
+          <WhatToWear
+            tripId={id}
+            initialData={trip.what_to_wear ?? null}
+          />
         </div>
 
         {/* Days */}

@@ -5,7 +5,9 @@
       "Bash(npx tsc:*)",
       "Bash(find C:UsersangelDocumentsoutthchat -name .env* -type f)",
       "Bash(npm install:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(find /c/Users/angel/Documents/outthchat -type f \\\\\\(-name *.prisma -o -name *schema* -o -name *migration* -o -name *.sql \\\\\\))",
+      "Bash(find /c/Users/angel/Documents/outthchat -type f -name schema.sql -o -name *.prisma -o -name *migration*)"
     ]
   }
 }
