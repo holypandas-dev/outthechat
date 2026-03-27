@@ -37,6 +37,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const [isSending, setIsSending] = useState(false)
+  const [sendError, setSendError] = useState<string | null>(null)
   const [isMobile, setIsMobile] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
 
@@ -90,7 +91,8 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
       .select('*, profiles(display_name, avatar_url)')
       .eq('trip_id', tripId)
       .order('created_at', { ascending: true })
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) console.error('Failed to load messages:', error)
         if (data) setMessages(data as ChatMessage[])
       })
 
@@ -121,7 +123,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
     const handleShareActivity = async (e: Event) => {
       const { activity } = (e as CustomEvent<{ activity: Record<string, unknown> }>).detail
       setIsOpen(true)
-      await db.from('comments').insert({
+      const { error } = await db.from('comments').insert({
         trip_id: tripId,
         user_id: currentUserId,
         body: JSON.stringify({
@@ -135,6 +137,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
         message_type: 'activity_share',
         activity_id: activity.id,
       })
+      if (error) setSendError(error.message)
     }
     window.addEventListener('share-activity-to-chat', handleShareActivity)
 
@@ -148,15 +151,19 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
   async function handleSend() {
     const text = input.trim()
     if (!text || isSending) return
-    setInput('')
     setIsSending(true)
+    setSendError(null)
     try {
-      await supabase.current.from('comments').insert({
+      const { error } = await supabase.current.from('comments').insert({
         trip_id: tripId,
         user_id: currentUserId,
         body: text,
         message_type: 'text',
       })
+      if (error) throw error
+      setInput('')
+    } catch (err) {
+      setSendError(err instanceof Error ? err.message : (err as { message?: string })?.message || 'Failed to send message')
     } finally {
       setIsSending(false)
     }
@@ -414,6 +421,19 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
             flexShrink: 0,
           }}
         >
+          {sendError && (
+            <p style={{
+              fontSize: '11px',
+              color: '#e05a3a',
+              margin: '0 0 8px',
+              padding: '6px 10px',
+              background: 'rgba(224,90,58,0.1)',
+              border: '1px solid rgba(224,90,58,0.25)',
+              borderRadius: '8px',
+            }}>
+              {sendError}
+            </p>
+          )}
           <div
             style={{
               display: 'flex',
