@@ -1,6 +1,34 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { CopyLinkButtonCard } from '@/components/CopyLinkButtonCard'
+
+async function fetchDestinationPhoto(destination: string): Promise<string | null> {
+  const key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+  if (!key) return null
+  try {
+    const query = encodeURIComponent(destination)
+    const res = await fetch(
+      `https://api.unsplash.com/search/photos?query=${query}&per_page=1&orientation=landscape&client_id=${key}`,
+      { next: { revalidate: 86400 } }
+    )
+    const data = await res.json()
+    return data.results?.[0]?.urls?.regular ?? null
+  } catch {
+    return null
+  }
+}
+
+const vibeLabels: Record<string, string> = {
+  food_adventure: '🍜 Food adventure',
+  luxury: '✨ Luxury soft life',
+  backpacker: '🎒 Backpacker',
+  girls_trip: '💅 Girls trip',
+  nightlife: '🎉 Party & nightlife',
+  wellness: '🧘 Wellness retreat',
+  cultural: '🏛 Cultural deep dive',
+  adventure: '🏔 Adventure',
+}
 
 export default async function TripCardPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -27,6 +55,8 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
     .from('trip_members')
     .select(`*, profiles (display_name, avatar_url)`)
     .eq('trip_id', id)
+
+  const destinationPhoto = await fetchDestinationPhoto(trip.destination)
 
   // Flatten all activities and sort by vote_score desc to get top highlights
   const allActivities = (days ?? []).flatMap((d: { activities?: { id: string; title: string; category: string; vote_score: number }[] }) => d.activities ?? [])
@@ -58,10 +88,12 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
     transport: '🚌',
   }
 
+  const vibeLabel = trip.vibe_preset ? (vibeLabels[trip.vibe_preset] ?? trip.vibe_preset) : null
+
   return (
     <div className="min-h-screen bg-[#050504] flex flex-col items-center justify-start py-10 px-4">
 
-      {/* Back link */}
+      {/* Back link + copy button */}
       <div className="w-full max-w-[390px] mb-4 flex items-center justify-between">
         <Link
           href={`/trip/${id}`}
@@ -69,9 +101,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
         >
           ← Back to trip
         </Link>
-        <span className="text-xs text-[#b8b0a2] font-mono uppercase tracking-widest">
-          Share card
-        </span>
+        <CopyLinkButtonCard tripId={id} />
       </div>
 
       {/* Card — 390×844 fixed, screenshot-ready */}
@@ -88,6 +118,35 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
         }}
       >
 
+        {/* Destination photo background */}
+        {destinationPhoto && (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none"
+            style={{ zIndex: 0 }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={destinationPhoto}
+              alt=""
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                opacity: 0.18,
+              }}
+            />
+            {/* Dark overlay so text stays readable */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(180deg, rgba(5,5,4,0.55) 0%, rgba(5,5,4,0.82) 45%, rgba(5,5,4,0.97) 100%)',
+              }}
+            />
+          </div>
+        )}
+
         {/* Watermark destination text */}
         <div
           aria-hidden="true"
@@ -98,7 +157,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             style={{
               fontSize: 'clamp(72px, 18vw, 110px)',
               fontWeight: 900,
-              color: 'rgba(232,98,58,0.06)',
+              color: 'rgba(232,98,58,0.05)',
               letterSpacing: '-0.03em',
               lineHeight: 1,
               textAlign: 'center',
@@ -118,7 +177,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
           className="absolute top-0 left-0 right-0 pointer-events-none"
           style={{
             height: 200,
-            background: 'linear-gradient(180deg, rgba(232,98,58,0.12) 0%, transparent 100%)',
+            background: 'linear-gradient(180deg, rgba(232,98,58,0.10) 0%, transparent 100%)',
             zIndex: 1,
           }}
         />
@@ -147,18 +206,19 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             </p>
             <h1
               style={{
-                fontSize: 48,
-                fontWeight: 800,
+                fontSize: 68,
+                fontWeight: 900,
                 color: '#f2ede4',
-                lineHeight: 1.0,
-                letterSpacing: '-0.02em',
+                lineHeight: 0.95,
+                letterSpacing: '-0.03em',
+                textTransform: 'uppercase',
               }}
             >
               {trip.destination}
             </h1>
           </div>
 
-          {/* Trip meta */}
+          {/* Trip meta + vibe badge */}
           <div className="mt-4 flex items-center gap-2 flex-wrap">
             <span
               className="font-mono uppercase"
@@ -188,6 +248,23 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             >
               {trip.budget_tier}
             </span>
+            {vibeLabel && (
+              <span
+                className="font-mono"
+                style={{
+                  fontSize: 10,
+                  letterSpacing: '0.06em',
+                  color: '#e8623a',
+                  background: 'rgba(232,98,58,0.10)',
+                  borderRadius: 6,
+                  padding: '4px 10px',
+                  border: '1px solid rgba(232,98,58,0.22)',
+                  fontWeight: 600,
+                }}
+              >
+                {vibeLabel}
+              </span>
+            )}
           </div>
 
           {/* Trip title */}
@@ -373,8 +450,8 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
           {/* Branding footer */}
           <div
             style={{
-              borderTop: '1px solid rgba(242,237,228,0.07)',
-              paddingTop: 20,
+              borderTop: '1px solid rgba(242,237,228,0.10)',
+              paddingTop: 22,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -383,14 +460,14 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             <div>
               <p
                 className="font-mono"
-                style={{ fontSize: 12, color: '#b8b0a2', marginBottom: 2 }}
+                style={{ fontSize: 15, fontWeight: 700, color: '#f2ede4', marginBottom: 3, letterSpacing: '-0.01em' }}
               >
                 Planned on{' '}
-                <span style={{ color: '#e8623a', fontWeight: 600 }}>OutTheChat</span>
+                <span style={{ color: '#e8623a' }}>OutTheChat</span>
               </p>
               <p
                 className="font-mono"
-                style={{ fontSize: 10, color: 'rgba(184,176,162,0.5)', letterSpacing: '0.05em' }}
+                style={{ fontSize: 11, color: 'rgba(184,176,162,0.7)', letterSpacing: '0.05em' }}
               >
                 outthechat.vercel.app
               </p>
@@ -399,18 +476,19 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             {/* Mini logo mark */}
             <div
               style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
+                width: 42,
+                height: 42,
+                borderRadius: 12,
                 background: '#e8623a',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                boxShadow: '0 4px 16px rgba(232,98,58,0.35)',
               }}
             >
               <span
                 className="font-mono"
-                style={{ fontSize: 14, fontWeight: 800, color: 'white', letterSpacing: '-0.04em' }}
+                style={{ fontSize: 15, fontWeight: 800, color: 'white', letterSpacing: '-0.04em' }}
               >
                 OC
               </span>
