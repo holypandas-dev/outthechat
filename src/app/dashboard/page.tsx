@@ -15,21 +15,34 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
-  // Fetch trips where user is a member
+  // Fetch trips where user is a member (joined trips)
   const { data: memberRows } = await supabase
     .from('trip_members')
     .select('trip_id')
     .eq('user_id', user.id)
 
-  const tripIds = memberRows?.map(r => r.trip_id) ?? []
+  const memberTripIds = memberRows?.map(r => r.trip_id) ?? []
 
-  const { data: trips } = tripIds.length > 0
+  // Fetch trips user created
+  const { data: createdTrips } = await supabase
+    .from('trips')
+    .select('*, trip_members(count)')
+    .eq('creator_id', user.id)
+    .order('created_at', { ascending: false })
+
+  // Fetch joined trips not already in createdTrips
+  const createdIds = new Set((createdTrips ?? []).map((t: any) => t.id))
+  const joinedOnlyIds = memberTripIds.filter(id => !createdIds.has(id))
+
+  const { data: joinedTrips } = joinedOnlyIds.length > 0
     ? await supabase
         .from('trips')
         .select('*, trip_members(count)')
-        .in('id', tripIds)
+        .in('id', joinedOnlyIds)
         .order('created_at', { ascending: false })
     : { data: [] as any[] }
+
+  const trips = [...(createdTrips ?? []), ...(joinedTrips ?? [])]
 
   const firstName = profile?.display_name?.split(' ')[0] || 'there'
 
