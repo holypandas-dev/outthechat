@@ -189,12 +189,22 @@ export function ItinerarySection({ days, voteMap, tripId, destination }: Itinera
                               <p className="text-xs text-[#b8b0a2] italic">{activity.insider_tip}</p>
                             </div>
                           )}
-                          <VoteButtons
-                            activityId={activity.id}
-                            tripId={tripId}
-                            initialScore={activity.vote_score ?? 0}
-                            initialVote={voteMap[activity.id] ?? 0}
-                          />
+                          <div className="flex items-center gap-3">
+                            <VoteButtons
+                              activityId={activity.id}
+                              tripId={tripId}
+                              initialScore={activity.vote_score ?? 0}
+                              initialVote={voteMap[activity.id] ?? 0}
+                            />
+                            <button
+                              onClick={() => window.dispatchEvent(new CustomEvent('share-activity-to-chat', {
+                                detail: { activity }
+                              }))}
+                              className="text-[11px] text-[#b8b0a2] hover:text-[#e8623a] transition-colors flex items-center gap-1 ml-auto"
+                            >
+                              💬 Share
+                            </button>
+                          </div>
                         </div>
                         <div className="flex flex-col items-end gap-2 flex-shrink-0">
                           {photoMap[activity.id] && (

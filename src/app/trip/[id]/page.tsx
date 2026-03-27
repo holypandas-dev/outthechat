@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { InviteButton } from '@/components/InviteButton'
 import { SendNudgesButton } from '@/components/SendNudgesButton'
 import { TripAIChat } from '@/components/TripAIChat'
+import { TripGroupChat } from '@/components/TripGroupChat'
+import { TripChatNavButton } from '@/components/TripChatNavButton'
 import { ItinerarySection } from '@/components/ItinerarySection'
 import { WhatToWear } from '@/components/WhatToWear'
 
@@ -64,6 +66,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
           <span className="text-[#f2ede4]">TheChat</span>
         </Link>
         <div className="flex items-center gap-3">
+          <TripChatNavButton />
           <Link href="/plan" className="text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors">
             + New trip
           </Link>
@@ -211,6 +214,14 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
       </main>
 
       <TripAIChat tripId={id} />
+      <TripGroupChat
+        tripId={id}
+        currentUserId={user.id}
+        memberProfiles={(members || []).map(m => ({
+          user_id: m.user_id,
+          display_name: (m.profiles as { display_name: string } | null)?.display_name || null,
+        }))}
+      />
     </div>
   )
 }
