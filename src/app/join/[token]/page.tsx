@@ -22,69 +22,39 @@ export default function JoinTripPage() {
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) {
-        // Save token and redirect to login
         router.push(`/login?next=/join/${token}`)
         return
       }
 
       setStatus('joining')
 
-      // Look up invite link
-      const { data: invite, error: inviteError } = await supabase
-        .from('invite_links')
-        .select('*, trips(id, title)')
-        .eq('token', token)
-        .maybeSingle()
+      // Call server-side API to validate token and join (bypasses RLS)
+      const res = await fetch('/api/join-trip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, user_id: user.id }),
+      })
 
-      if (inviteError || !invite) {
-        setError('This invite link is invalid or has expired.')
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'This invite link is invalid or has expired.')
         setStatus('error')
         return
       }
 
-      const trip = invite.trips as { id: string; title: string }
-      setTripTitle(trip.title)
-      setTripId(trip.id)
+      setTripTitle(data.trip_title)
+      setTripId(data.trip_id)
 
-      // Check if already a member
-      const { data: existing } = await supabase
-        .from('trip_members')
-        .select('id')
-        .eq('trip_id', trip.id)
-        .eq('user_id', user.id)
-        .maybeSingle()
-
-      if (existing) {
+      if (data.already_member) {
         setStatus('already')
         return
       }
 
-      // Add user as trip member
-      const { error: joinError } = await supabase
-        .from('trip_members')
-        .insert({
-          trip_id: trip.id,
-          user_id: user.id,
-          role: 'member',
-          interest_status: 'in',
-        })
-
-      if (joinError) {
-        setError('Failed to join trip. Please try again.')
-        setStatus('error')
-        return
-      }
-
-      // Update invite use count
-      await supabase
-        .from('invite_links')
-        .update({ use_count: (invite.use_count || 0) + 1 })
-        .eq('id', invite.id)
-
       setStatus('success')
 
       // Redirect to trip after short delay
-      setTimeout(() => router.push(`/trip/${trip.id}`), 1500)
+      setTimeout(() => router.push(`/trip/${data.trip_id}`), 1500)
     }
 
     joinTrip()
