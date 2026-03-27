@@ -15,15 +15,21 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
-  // Fetch user's trips
-  const { data: trips } = await supabase
-    .from('trips')
-    .select(`
-      *,
-      trip_members(count)
-    `)
-    .eq('creator_id', user.id)
-    .order('created_at', { ascending: false })
+  // Fetch trips where user is a member
+  const { data: memberRows } = await supabase
+    .from('trip_members')
+    .select('trip_id')
+    .eq('user_id', user.id)
+
+  const tripIds = memberRows?.map(r => r.trip_id) ?? []
+
+  const { data: trips } = tripIds.length > 0
+    ? await supabase
+        .from('trips')
+        .select('*, trip_members(count)')
+        .in('id', tripIds)
+        .order('created_at', { ascending: false })
+    : { data: [] as any[] }
 
   const firstName = profile?.display_name?.split(' ')[0] || 'there'
 

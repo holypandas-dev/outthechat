@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
   const [email, setEmail] = useState('')
@@ -27,7 +28,8 @@ export default function LoginPage() {
       return
     }
 
-    router.push('/dashboard')
+    const next = searchParams.get('next') || '/dashboard'
+    router.push(next)
     router.refresh()
   }
 
