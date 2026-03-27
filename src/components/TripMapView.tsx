@@ -114,15 +114,7 @@ export function TripMapView({ activities, destination, onActivityClick }: TripMa
             border: 2px solid rgba(255,255,255,0.25);
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-            transition: transform 0.15s ease;
           `
-
-          el.addEventListener('mouseenter', () => {
-            el.style.transform = 'rotate(-45deg) scale(1.2)'
-          })
-          el.addEventListener('mouseleave', () => {
-            el.style.transform = 'rotate(-45deg) scale(1)'
-          })
 
           el.addEventListener('click', (e) => {
             e.stopPropagation()
