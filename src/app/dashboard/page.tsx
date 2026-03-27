@@ -17,6 +17,9 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
+  // Redirect new users to set up their profile
+  if (!profile?.display_name) redirect('/profile/setup')
+
   // Step 1: get all trip_ids where this user is a member
   const { data: memberRows, error: memberError } = await supabase
     .from('trip_members')
@@ -50,6 +53,7 @@ export default async function DashboardPage() {
   console.log('[dashboard] step2 trips detail:', trips?.map((t: any) => ({ id: t.id, title: t.title, creator_id: t.creator_id })))
 
   const firstName = profile?.display_name?.split(' ')[0] || 'there'
+  const initials = getInitials(profile?.display_name, user.email!)
 
   return (
     <div className="min-h-screen bg-[#0a0a09]">
@@ -61,9 +65,22 @@ export default async function DashboardPage() {
           <span className="text-[#f2ede4]">TheChat</span>
         </span>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-[#b8b0a2]">
-            {profile?.display_name || user.email}
-          </span>
+          <Link href="/profile" className="flex items-center gap-2.5 group">
+            {profile?.avatar_url ? (
+              <img
+                src={profile.avatar_url}
+                alt={profile.display_name || 'Profile'}
+                className="w-8 h-8 rounded-full object-cover border border-[rgba(242,237,228,0.1)] group-hover:border-[#e8623a] transition-colors"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-[#e8623a]/15 border border-[rgba(242,237,228,0.1)] group-hover:border-[#e8623a] transition-colors flex items-center justify-center">
+                <span className="text-xs font-semibold text-[#e8623a]">{initials}</span>
+              </div>
+            )}
+            <span className="text-sm text-[#b8b0a2] group-hover:text-[#f2ede4] transition-colors">
+              {profile?.display_name || user.email}
+            </span>
+          </Link>
           <form action="/api/auth/signout" method="POST">
             <button
               type="submit"
@@ -175,6 +192,15 @@ export default async function DashboardPage() {
       </main>
     </div>
   )
+}
+
+function getInitials(name: string | null | undefined, email: string): string {
+  if (name) {
+    const parts = name.trim().split(/\s+/).filter(Boolean)
+    if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+    return parts[0][0].toUpperCase()
+  }
+  return email[0].toUpperCase()
 }
 
 function StatusBadge({ status }: { status: string }) {
