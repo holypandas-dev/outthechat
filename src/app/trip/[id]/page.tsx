@@ -2,8 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { InviteButton } from '@/components/InviteButton'
-import { VoteButtons } from '@/components/VoteButtons'
 import { TripAIChat } from '@/components/TripAIChat'
+import { ItinerarySection } from '@/components/ItinerarySection'
 
 export default async function TripPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -51,17 +51,6 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
   }
 
   const commitment = commitmentLabel(trip.commitment_score || 0)
-
-  const categoryEmoji: Record<string, string> = {
-    food: '🍜',
-    activity: '🎯',
-    nightlife: '🎉',
-    culture: '🏛️',
-    nature: '🌿',
-    hidden_gem: '💎',
-    hotel: '🏨',
-    transport: '🚗',
-  }
 
   return (
     <div className="min-h-screen bg-[#0a0a09]">
@@ -172,91 +161,12 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
         </div>
 
         {/* Days */}
-        <div className="space-y-8">
-          {days?.map(day => (
-            <div key={day.id}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-[#e8623a] flex items-center justify-center text-xs font-mono font-medium text-white flex-shrink-0">
-                  {day.day_number}
-                </div>
-                <div>
-                  <h2 className="text-base font-medium text-[#f2ede4]">Day {day.day_number}</h2>
-                  {day.theme && <p className="text-xs text-[#b8b0a2]">{day.theme}</p>}
-                </div>
-              </div>
-
-              <div className="space-y-3 ml-11">
-                {(['morning', 'afternoon', 'evening'] as const).map(slot => {
-                  const activity = (day.activities as {
-                    id: string
-                    time_slot: string
-                    title: string
-                    description: string
-                    location: string
-                    cost_estimate: number
-                    category: string
-                    insider_tip: string
-                    duration_minutes: number
-                    vote_score: number
-                  }[])?.find(a => a.time_slot === slot)
-
-                  if (!activity) return null
-
-                  return (
-                    <div
-                      key={activity.id}
-                      className="bg-[#141412] border border-[rgba(242,237,228,0.06)] rounded-xl p-4 hover:border-[rgba(232,98,58,0.2)] transition-colors"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] font-mono text-[#b8b0a2] uppercase tracking-widest">
-                              {slot}
-                            </span>
-                            <span className="text-[10px] font-mono text-[#e8623a]">
-                              {categoryEmoji[activity.category] || '📍'} {activity.category}
-                            </span>
-                          </div>
-                          <h3 className="text-[#f2ede4] font-medium text-sm">{activity.title}</h3>
-                          {activity.location && (
-                            <p className="text-xs text-[#b8b0a2] mt-0.5">📍 {activity.location}</p>
-                          )}
-                          {activity.description && (
-                            <p className="text-xs text-[#b8b0a2] mt-2 leading-relaxed">{activity.description}</p>
-                          )}
-                          {activity.insider_tip && (
-                            <div className="mt-2 flex gap-1.5">
-                              <span className="text-[#e8623a] text-xs flex-shrink-0">💡</span>
-                              <p className="text-xs text-[#b8b0a2] italic">{activity.insider_tip}</p>
-                            </div>
-                          )}
-                          <VoteButtons
-                            activityId={activity.id}
-                            tripId={id}
-                            initialScore={activity.vote_score ?? 0}
-                            initialVote={voteMap[activity.id] ?? 0}
-                          />
-                        </div>
-                        <div className="text-right flex-shrink-0">
-                          {activity.cost_estimate > 0 && (
-                            <p className="text-sm font-mono text-[#f2ede4]">~${activity.cost_estimate}</p>
-                          )}
-                          {activity.duration_minutes > 0 && (
-                            <p className="text-xs text-[#b8b0a2] mt-0.5">
-                              {activity.duration_minutes >= 60
-                                ? `${Math.floor(activity.duration_minutes / 60)}h${activity.duration_minutes % 60 > 0 ? ` ${activity.duration_minutes % 60}m` : ''}`
-                                : `${activity.duration_minutes}m`}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
+        <ItinerarySection
+          days={(days ?? []) as Parameters<typeof ItinerarySection>[0]['days']}
+          voteMap={voteMap}
+          tripId={id}
+          destination={trip.destination}
+        />
 
         {/* Bottom actions */}
         <div className="mt-12 pt-8 border-t border-[rgba(242,237,228,0.08)] flex gap-3 flex-wrap">

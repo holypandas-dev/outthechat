@@ -3,7 +3,9 @@
     "allow": [
       "Bash(/dev/null -type f)",
       "Bash(npx tsc:*)",
-      "Bash(find C:UsersangelDocumentsoutthchat -name .env* -type f)"
+      "Bash(find C:UsersangelDocumentsoutthchat -name .env* -type f)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)"
     ]
   }
 }
