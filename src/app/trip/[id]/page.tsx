@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { InviteButton } from '@/components/InviteButton'
+import { SendNudgesButton } from '@/components/SendNudgesButton'
 import { TripAIChat } from '@/components/TripAIChat'
 import { ItinerarySection } from '@/components/ItinerarySection'
 import { WhatToWear } from '@/components/WhatToWear'
@@ -180,6 +181,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
         {/* Bottom actions */}
         <div className="mt-12 pt-8 border-t border-[rgba(242,237,228,0.08)] flex gap-3 flex-wrap">
           <InviteButton tripId={id} />
+          {trip.creator_id === user.id && <SendNudgesButton tripId={id} />}
           <Link
             href={`/trip/${id}/fund`}
             className="border border-[#e8623a] text-[#e8623a] hover:bg-[rgba(232,98,58,0.08)] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"

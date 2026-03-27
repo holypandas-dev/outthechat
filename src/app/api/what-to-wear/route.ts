@@ -20,20 +20,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'tripId is required' }, { status: 400 })
     }
 
-    // Fetch the trip
+    // Fetch the trip (basic columns first)
     const { data: trip, error } = await supabase
       .from('trips')
-      .select('id, destination, duration_days, vibe_preset, start_date, what_to_wear')
+      .select('id, destination, duration_days, vibe_preset, start_date')
       .eq('id', tripId)
       .single()
 
     if (error || !trip) {
+      console.error('Trip fetch error:', error)
       return NextResponse.json({ error: 'Trip not found' }, { status: 404 })
     }
 
-    // Return cached result if available
-    if (trip.what_to_wear) {
-      return NextResponse.json({ data: trip.what_to_wear })
+    // Return cached result if available (what_to_wear may not exist yet)
+    const { data: cached } = await supabase
+      .from('trips')
+      .select('what_to_wear')
+      .eq('id', tripId)
+      .single()
+
+    if (cached?.what_to_wear) {
+      return NextResponse.json({ data: cached.what_to_wear })
     }
 
     // Build context for the prompt
@@ -109,11 +116,15 @@ Be specific and opinionated — no generic advice.`
       data = JSON.parse(match[0])
     }
 
-    // Cache in trips table
-    await supabase
+    // Cache in trips table (ignore error if column doesn't exist yet)
+    const { error: updateError } = await supabase
       .from('trips')
       .update({ what_to_wear: data })
       .eq('id', tripId)
+
+    if (updateError) {
+      console.warn('Could not cache what_to_wear (column may not exist):', updateError.message)
+    }
 
     return NextResponse.json({ data })
 
