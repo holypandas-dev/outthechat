@@ -189,6 +189,12 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
             💰 Group fund
           </Link>
           <Link
+            href={`/trip/${id}/card`}
+            className="border border-[rgba(242,237,228,0.15)] text-[#f2ede4] hover:border-[#e8623a] hover:text-[#e8623a] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+          >
+            🪄 Share card
+          </Link>
+          <Link
             href="/plan"
             className="bg-[#e8623a] hover:bg-[#c44d28] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
           >
