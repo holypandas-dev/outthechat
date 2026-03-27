@@ -116,17 +116,11 @@ export function TripMapView({ activities, destination }: TripMapViewProps) {
             box-shadow: 0 2px 8px rgba(0,0,0,0.6);
             transition: transform 0.15s ease;
           `
-          el.addEventListener('mouseenter', () => {
-            el.style.transform = 'rotate(-45deg) scale(1.2)'
-          })
-          el.addEventListener('mouseleave', () => {
-            el.style.transform = 'rotate(-45deg) scale(1)'
-          })
-
           const popup = new mapboxgl.Popup({
             anchor: 'bottom',
-            offset: [0, -14],
+            offset: [0, -32],
             closeButton: false,
+            closeOnClick: false,
             maxWidth: '220px',
           }).setHTML(`
             <div>
@@ -138,9 +132,19 @@ export function TripMapView({ activities, destination }: TripMapViewProps) {
             </div>
           `)
 
+          popup.setLngLat(coords)
+
+          el.addEventListener('mouseenter', () => {
+            el.style.transform = 'rotate(-45deg) scale(1.2)'
+            popup.addTo(map)
+          })
+          el.addEventListener('mouseleave', () => {
+            el.style.transform = 'rotate(-45deg) scale(1)'
+            popup.remove()
+          })
+
           new mapboxgl.Marker({ element: el })
             .setLngLat(coords)
-            .setPopup(popup)
             .addTo(map)
         })
 

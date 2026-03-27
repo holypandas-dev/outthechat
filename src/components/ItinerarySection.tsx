@@ -58,7 +58,16 @@ export function ItinerarySection({ days, voteMap, tripId, destination }: Itinera
           `https://api.unsplash.com/search/photos?query=${query}&per_page=1&client_id=${key}`
         )
         const data = await res.json()
-        const url = data.results?.[0]?.urls?.small
+        let url = data.results?.[0]?.urls?.small
+        if (!url) {
+          // Fall back to destination city name only
+          const fallbackQuery = encodeURIComponent(destination)
+          const fallbackRes = await fetch(
+            `https://api.unsplash.com/search/photos?query=${fallbackQuery}&per_page=1&client_id=${key}`
+          )
+          const fallbackData = await fallbackRes.json()
+          url = fallbackData.results?.[0]?.urls?.small
+        }
         if (url) setPhotoMap(prev => ({ ...prev, [activity.id]: url }))
       } catch {
         // skip failed photo fetch
