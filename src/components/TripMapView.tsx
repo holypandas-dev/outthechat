@@ -15,6 +15,7 @@ export interface ActivityPin {
 interface TripMapViewProps {
   activities: ActivityPin[]
   destination: string
+  onActivityClick?: (activityId: string) => void
 }
 
 const TIME_SLOT_COLORS: Record<string, string> = {
@@ -23,7 +24,7 @@ const TIME_SLOT_COLORS: Record<string, string> = {
   evening: '#8b5cf6',
 }
 
-export function TripMapView({ activities, destination }: TripMapViewProps) {
+export function TripMapView({ activities, destination, onActivityClick }: TripMapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null)
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const [loading, setLoading] = useState(true)
@@ -99,8 +100,6 @@ export function TripMapView({ activities, destination }: TripMapViewProps) {
       const addMarkersToMap = () => {
         const bounds = new mapboxgl.LngLatBounds()
 
-        let activePopup: mapboxgl.Popup | null = null
-
         pinned.forEach(({ coords, activity }) => {
           bounds.extend(coords)
 
@@ -127,42 +126,12 @@ export function TripMapView({ activities, destination }: TripMapViewProps) {
 
           el.addEventListener('click', (e) => {
             e.stopPropagation()
-            if (activePopup) {
-              activePopup.remove()
-              activePopup = null
-            }
-            const popup = new mapboxgl.Popup({
-              anchor: 'bottom',
-              offset: [0, -32],
-              closeButton: true,
-              closeOnClick: true,
-              maxWidth: '240px',
-            })
-              .setLngLat(coords)
-              .setHTML(`
-                <div>
-                  <div style="font-size:10px;color:#e8623a;text-transform:uppercase;letter-spacing:0.08em;font-family:monospace;margin-bottom:4px;">
-                    Day ${activity.day_number} &middot; ${activity.time_slot}
-                  </div>
-                  <div style="font-size:13px;font-weight:600;color:#f2ede4;line-height:1.3;margin-bottom:4px;">${activity.title}</div>
-                  <div style="font-size:11px;color:#b8b0a2;">&#128205; ${activity.location}</div>
-                </div>
-              `)
-              .addTo(map)
-            activePopup = popup
-            popup.on('close', () => { activePopup = null })
+            onActivityClick?.(activity.id)
           })
 
           new mapboxgl.Marker({ element: el })
             .setLngLat(coords)
             .addTo(map)
-        })
-
-        map.on('click', () => {
-          if (activePopup) {
-            activePopup.remove()
-            activePopup = null
-          }
         })
 
         if (pinned.length === 1) {
@@ -226,18 +195,6 @@ export function TripMapView({ activities, destination }: TripMapViewProps) {
       )}
 
       <style>{`
-        .mapboxgl-popup-content {
-          background: #1c1c19 !important;
-          border: 1px solid rgba(242,237,228,0.1) !important;
-          border-radius: 10px !important;
-          box-shadow: 0 4px 24px rgba(0,0,0,0.6) !important;
-          padding: 10px 12px !important;
-          font-family: inherit !important;
-        }
-        .mapboxgl-popup-tip {
-          border-top-color: #1c1c19 !important;
-          border-bottom-color: #1c1c19 !important;
-        }
         .mapboxgl-ctrl-group {
           background: #1c1c19 !important;
           border: 1px solid rgba(242,237,228,0.1) !important;

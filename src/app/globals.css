@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css');
+@import "tailwindcss";
 
 :root {
   --background: #ffffff;
@@ -24,4 +24,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes activity-highlight-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(232, 98, 58, 0.5); }
+  40%  { box-shadow: 0 0 0 8px rgba(232, 98, 58, 0.15); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 98, 58, 0); }
+}
+
+.activity-highlight {
+  animation: activity-highlight-pulse 1.6s ease-out forwards;
 }

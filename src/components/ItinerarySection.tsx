@@ -45,6 +45,18 @@ const categoryEmoji: Record<string, string> = {
 export function ItinerarySection({ days, voteMap, tripId, destination }: ItinerarySectionProps) {
   const [view, setView] = useState<'list' | 'map'>('list')
   const [photoMap, setPhotoMap] = useState<Record<string, string>>({})
+  const [highlightedId, setHighlightedId] = useState<string | null>(null)
+
+  function handleActivityClick(activityId: string) {
+    setView('list')
+    setHighlightedId(activityId)
+    // Scroll after the list renders
+    setTimeout(() => {
+      document.getElementById(`activity-${activityId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      // Remove highlight after animation completes
+      setTimeout(() => setHighlightedId(null), 1800)
+    }, 50)
+  }
 
   useEffect(() => {
     const key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
@@ -121,7 +133,7 @@ export function ItinerarySection({ days, voteMap, tripId, destination }: Itinera
 
       {/* Map view */}
       {view === 'map' && (
-        <TripMapView activities={mapActivities} destination={destination} />
+        <TripMapView activities={mapActivities} destination={destination} onActivityClick={handleActivityClick} />
       )}
 
       {/* List view */}
@@ -147,7 +159,12 @@ export function ItinerarySection({ days, voteMap, tripId, destination }: Itinera
                   return (
                     <div
                       key={activity.id}
-                      className="bg-[#141412] border border-[rgba(242,237,228,0.06)] rounded-xl p-4 hover:border-[rgba(232,98,58,0.2)] transition-colors"
+                      id={`activity-${activity.id}`}
+                      className={`bg-[#141412] border rounded-xl p-4 hover:border-[rgba(232,98,58,0.2)] transition-colors ${
+                        highlightedId === activity.id
+                          ? 'border-[#e8623a] activity-highlight'
+                          : 'border-[rgba(242,237,228,0.06)]'
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1">
