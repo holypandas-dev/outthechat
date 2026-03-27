@@ -8,6 +8,8 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  console.log('[dashboard] user.id:', user.id)
+
   // Fetch user profile
   const { data: profile } = await supabase
     .from('profiles')
@@ -15,34 +17,37 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
-  // Fetch trips where user is a member (joined trips)
-  const { data: memberRows } = await supabase
+  // Step 1: get all trip_ids where this user is a member
+  const { data: memberRows, error: memberError } = await supabase
     .from('trip_members')
     .select('trip_id')
     .eq('user_id', user.id)
 
-  const memberTripIds = memberRows?.map(r => r.trip_id) ?? []
+  console.log('[dashboard] step1 trip_members result:', { memberRows, memberError })
 
-  // Fetch trips user created
-  const { data: createdTrips } = await supabase
+  const memberTripIds: string[] = memberRows?.map(r => r.trip_id) ?? []
+
+  console.log('[dashboard] step1 memberTripIds:', memberTripIds, '| count:', memberTripIds.length)
+
+  // Step 2: get all trips where creator_id = user OR id IN memberTripIds
+  // If memberTripIds is empty, only query by creator_id to avoid empty-IN issues
+  let tripsQuery = supabase
     .from('trips')
     .select('*, trip_members(count)')
-    .eq('creator_id', user.id)
     .order('created_at', { ascending: false })
 
-  // Fetch joined trips not already in createdTrips
-  const createdIds = new Set((createdTrips ?? []).map((t: any) => t.id))
-  const joinedOnlyIds = memberTripIds.filter(id => !createdIds.has(id))
+  if (memberTripIds.length > 0) {
+    console.log('[dashboard] step2 querying with OR: creator_id =', user.id, 'OR id IN', memberTripIds)
+    tripsQuery = tripsQuery.or(`creator_id.eq.${user.id},id.in.(${memberTripIds.join(',')})`)
+  } else {
+    console.log('[dashboard] step2 memberTripIds is empty — querying only by creator_id:', user.id)
+    tripsQuery = tripsQuery.eq('creator_id', user.id)
+  }
 
-  const { data: joinedTrips } = joinedOnlyIds.length > 0
-    ? await supabase
-        .from('trips')
-        .select('*, trip_members(count)')
-        .in('id', joinedOnlyIds)
-        .order('created_at', { ascending: false })
-    : { data: [] as any[] }
+  const { data: trips, error: tripsError } = await tripsQuery
 
-  const trips = [...(createdTrips ?? []), ...(joinedTrips ?? [])]
+  console.log('[dashboard] step2 trips result:', { tripsError, count: trips?.length })
+  console.log('[dashboard] step2 trips detail:', trips?.map((t: any) => ({ id: t.id, title: t.title, creator_id: t.creator_id })))
 
   const firstName = profile?.display_name?.split(' ')[0] || 'there'
 
