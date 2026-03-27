@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
 
 export interface ActivityPin {
   id: string
@@ -100,6 +99,8 @@ export function TripMapView({ activities, destination }: TripMapViewProps) {
       const addMarkersToMap = () => {
         const bounds = new mapboxgl.LngLatBounds()
 
+        let activePopup: mapboxgl.Popup | null = null
+
         pinned.forEach(({ coords, activity }) => {
           bounds.extend(coords)
 
@@ -116,36 +117,52 @@ export function TripMapView({ activities, destination }: TripMapViewProps) {
             box-shadow: 0 2px 8px rgba(0,0,0,0.6);
             transition: transform 0.15s ease;
           `
-          const popup = new mapboxgl.Popup({
-            anchor: 'bottom',
-            offset: [0, -32],
-            closeButton: false,
-            closeOnClick: false,
-            maxWidth: '220px',
-          }).setHTML(`
-            <div>
-              <div style="font-size:10px;color:#e8623a;text-transform:uppercase;letter-spacing:0.08em;font-family:monospace;margin-bottom:4px;">
-                Day ${activity.day_number} &middot; ${activity.time_slot}
-              </div>
-              <div style="font-size:13px;font-weight:500;color:#f2ede4;line-height:1.3;">${activity.title}</div>
-              <div style="font-size:11px;color:#b8b0a2;margin-top:3px;">&#128205; ${activity.location}</div>
-            </div>
-          `)
-
-          popup.setLngLat(coords)
 
           el.addEventListener('mouseenter', () => {
             el.style.transform = 'rotate(-45deg) scale(1.2)'
-            popup.addTo(map)
           })
           el.addEventListener('mouseleave', () => {
             el.style.transform = 'rotate(-45deg) scale(1)'
-            popup.remove()
+          })
+
+          el.addEventListener('click', (e) => {
+            e.stopPropagation()
+            if (activePopup) {
+              activePopup.remove()
+              activePopup = null
+            }
+            const popup = new mapboxgl.Popup({
+              anchor: 'bottom',
+              offset: [0, -32],
+              closeButton: true,
+              closeOnClick: true,
+              maxWidth: '240px',
+            })
+              .setLngLat(coords)
+              .setHTML(`
+                <div>
+                  <div style="font-size:10px;color:#e8623a;text-transform:uppercase;letter-spacing:0.08em;font-family:monospace;margin-bottom:4px;">
+                    Day ${activity.day_number} &middot; ${activity.time_slot}
+                  </div>
+                  <div style="font-size:13px;font-weight:600;color:#f2ede4;line-height:1.3;margin-bottom:4px;">${activity.title}</div>
+                  <div style="font-size:11px;color:#b8b0a2;">&#128205; ${activity.location}</div>
+                </div>
+              `)
+              .addTo(map)
+            activePopup = popup
+            popup.on('close', () => { activePopup = null })
           })
 
           new mapboxgl.Marker({ element: el })
             .setLngLat(coords)
             .addTo(map)
+        })
+
+        map.on('click', () => {
+          if (activePopup) {
+            activePopup.remove()
+            activePopup = null
+          }
         })
 
         if (pinned.length === 1) {
