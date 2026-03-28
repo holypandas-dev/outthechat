@@ -47,9 +47,7 @@ Return ONLY a JSON object with this exact structure:
         "description": "2-3 sentence description",
         "location": "specific place name",
         "cost_estimate": 25,
-        "duration_minutes": 120,
         "category": "food",
-        "map_search_query": "search term for maps",
         "insider_tip": "local tip"
       },
       "afternoon": { same structure },
@@ -76,7 +74,7 @@ Generate exactly ${days} days. Make it specific, authentic, and exciting.`
         { role: 'user', content: userPrompt },
       ],
       temperature: 0.8,
-      max_tokens: 4000,
+      max_tokens: 8000,
     })
 
     const content = completion.choices[0].message.content
