@@ -79,25 +79,20 @@ export default function ProfilePage() {
       setAvatarFile(null)
     }
 
-    try {
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          display_name: displayName.trim(),
-          bio: bio.trim() || null,
-        })
-        .eq('id', userId)
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { setError('Not authenticated'); setSaving(false); return }
 
-      if (updateError) {
-        console.error('Profile upsert error:', updateError)
-        setError(`Save failed: ${updateError.message} (code: ${updateError.code})`)
-      } else {
-        setSuccess(true)
-        setTimeout(() => setSuccess(false), 3000)
-      }
-    } catch (err) {
-      console.error('Profile save exception:', err)
-      setError(`Save failed: ${err instanceof Error ? err.message : String(err)}`)
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({ display_name: displayName, bio: bio })
+      .eq('id', user.id)
+
+    if (updateError) {
+      console.error('Profile update error:', updateError)
+      setError(JSON.stringify(updateError, null, 2))
+    } else {
+      setSuccess(true)
+      setTimeout(() => setSuccess(false), 3000)
     }
 
     setSaving(false)
@@ -212,7 +207,7 @@ export default function ProfilePage() {
 
           {error && (
             <div className="bg-red-950/60 border border-red-800/40 rounded-lg px-4 py-3 text-red-400 text-sm">
-              {error}
+              <pre className="whitespace-pre-wrap break-all font-mono text-xs">{error}</pre>
             </div>
           )}
 
