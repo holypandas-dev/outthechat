@@ -92,7 +92,7 @@ export default function ProfilePage() {
       }, { onConflict: 'id' })
 
     if (updateError) {
-      setError('Failed to save profile. Please try again.')
+      setError(`Failed to save profile: ${updateError.message}`)
     } else {
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
