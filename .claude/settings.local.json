@@ -9,7 +9,8 @@
       "Bash(find /c/Users/angel/Documents/outthchat -type f \\\\\\(-name *.prisma -o -name *schema* -o -name *migration* -o -name *.sql \\\\\\))",
       "Bash(find /c/Users/angel/Documents/outthchat -type f -name schema.sql -o -name *.prisma -o -name *migration*)",
       "Bash(npx supabase:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git log:*)"
     ]
   }
 }

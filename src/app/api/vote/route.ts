@@ -38,6 +38,19 @@ export async function POST(request: Request) {
 
     if (error) throw error
 
+    // Get updated vote count (non-zero voters only)
+    const { count: voteCount } = await supabase
+      .from('votes')
+      .select('*', { count: 'exact', head: true })
+      .eq('activity_id', activityId)
+      .neq('value', 0)
+
+    // Persist vote_count on the activity row
+    await supabase
+      .from('activities')
+      .update({ vote_count: voteCount ?? 0 })
+      .eq('id', activityId)
+
     // Get updated vote score
     const { data: activity } = await supabase
       .from('activities')
@@ -45,7 +58,7 @@ export async function POST(request: Request) {
       .eq('id', activityId)
       .single()
 
-    return NextResponse.json({ score: activity?.vote_score ?? 0 })
+    return NextResponse.json({ score: activity?.vote_score ?? 0, voteCount: voteCount ?? 0 })
 
   } catch (error) {
     console.error('Vote error:', error)

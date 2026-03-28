@@ -7,11 +7,21 @@ interface VoteButtonsProps {
   tripId: string
   initialScore: number
   initialVote?: number // -1, 0, or 1
+  initialVoteCount?: number
+  onScoreChange?: (score: number, voteCount: number) => void
 }
 
-export function VoteButtons({ activityId, tripId, initialScore, initialVote = 0 }: VoteButtonsProps) {
+export function VoteButtons({
+  activityId,
+  tripId,
+  initialScore,
+  initialVote = 0,
+  initialVoteCount = 0,
+  onScoreChange,
+}: VoteButtonsProps) {
   const [score, setScore] = useState(initialScore)
   const [currentVote, setCurrentVote] = useState(initialVote)
+  const [voteCount, setVoteCount] = useState(initialVoteCount)
   const [loading, setLoading] = useState(false)
 
   async function handleVote(value: number) {
@@ -22,10 +32,16 @@ export function VoteButtons({ activityId, tripId, initialScore, initialVote = 0 
 
     setLoading(true)
 
-    // Optimistic update
+    // Optimistic updates
     const scoreDiff = newValue - currentVote
     setScore(prev => prev + scoreDiff)
     setCurrentVote(newValue)
+
+    // Optimistic vote count update
+    const wasVoting = currentVote !== 0
+    const willVote = newValue !== 0
+    if (!wasVoting && willVote) setVoteCount(prev => prev + 1)
+    else if (wasVoting && !willVote) setVoteCount(prev => Math.max(0, prev - 1))
 
     try {
       const res = await fetch('/api/vote', {
@@ -35,15 +51,18 @@ export function VoteButtons({ activityId, tripId, initialScore, initialVote = 0 
       })
 
       const data = await res.json()
-
       if (!res.ok) throw new Error(data.error)
 
-      // Sync with server score
+      // Sync with server values
       setScore(data.score)
+      setVoteCount(data.voteCount ?? voteCount)
+      onScoreChange?.(data.score, data.voteCount ?? voteCount)
     } catch {
       // Revert on error
       setScore(prev => prev - scoreDiff)
       setCurrentVote(currentVote)
+      if (!wasVoting && willVote) setVoteCount(prev => Math.max(0, prev - 1))
+      else if (wasVoting && !willVote) setVoteCount(prev => prev + 1)
     }
 
     setLoading(false)

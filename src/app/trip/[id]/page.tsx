@@ -46,6 +46,28 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
     (userVotes || []).map(v => [v.activity_id, v.value])
   )
 
+  // Fetch suggestions (activities that are suggestions, keyed by parent_activity_id)
+  const { data: suggestions } = await supabase
+    .from('activities')
+    .select('*')
+    .eq('trip_id', id)
+    .eq('is_suggestion', true)
+    .order('created_at', { ascending: true })
+
+  type SuggestionActivity = NonNullable<typeof suggestions>[number]
+  const suggestionsMap = (suggestions || []).reduce((acc, s) => {
+    if (s.parent_activity_id) {
+      acc[s.parent_activity_id] = [...(acc[s.parent_activity_id] || []), s]
+    }
+    return acc
+  }, {} as Record<string, SuggestionActivity[]>)
+
+  const memberProfiles = (members || []).map(m => ({
+    user_id: m.user_id,
+    display_name: (m.profiles as { display_name: string } | null)?.display_name || null,
+  }))
+
+
   const commitmentLabel = (score: number) => {
     if (score >= 91) return { text: 'Locked in 🔒', color: 'text-green-400' }
     if (score >= 76) return { text: 'This is happening ✈️', color: 'text-[#e8623a]' }
@@ -179,6 +201,10 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
           voteMap={voteMap}
           tripId={id}
           destination={trip.destination}
+          memberCount={members?.length ?? 1}
+          currentUserId={user.id}
+          memberProfiles={memberProfiles}
+          initialSuggestionsMap={suggestionsMap as Parameters<typeof ItinerarySection>[0]['initialSuggestionsMap']}
         />
 
         {/* Bottom actions */}
