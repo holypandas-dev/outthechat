@@ -70,7 +70,7 @@ Generate exactly ${days} days. Make it specific, authentic, and exciting.`
 
     // Call OpenAI
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
@@ -85,12 +85,28 @@ Generate exactly ${days} days. Make it specific, authentic, and exciting.`
     // Parse JSON response
     let itinerary
     try {
-      itinerary = JSON.parse(content)
+      // Strip control characters and clean up common JSON issues
+      const cleaned = content
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '') // strip control chars except \t \n \r
+        .replace(/,\s*([}\]])/g, '$1')                       // trailing commas
+        .trim()
+      itinerary = JSON.parse(cleaned)
     } catch {
-      // Try to extract JSON if wrapped in markdown
+      // Try to extract just the JSON object using regex
       const match = content.match(/\{[\s\S]*\}/)
-      if (!match) throw new Error('Invalid JSON from OpenAI')
-      itinerary = JSON.parse(match[0])
+      if (!match) {
+        console.error('Raw OpenAI response (no JSON found):', content)
+        throw new Error('Invalid JSON from OpenAI')
+      }
+      try {
+        const extracted = match[0]
+          .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+          .replace(/,\s*([}\]])/g, '$1')
+        itinerary = JSON.parse(extracted)
+      } catch (e2) {
+        console.error('Raw OpenAI response (parse failed):', content)
+        throw new Error(`Failed to parse OpenAI JSON: ${e2}`)
+      }
     }
 
     // Save trip to Supabase
