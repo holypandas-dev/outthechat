@@ -3,22 +3,23 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   const supabase = await createClient()
-
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-  if (authError || !user) {
-    return NextResponse.json({ error: 'Not authenticated', authError }, { status: 401 })
+  
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) {
+    return NextResponse.json({ error: 'Not logged in', user: null })
   }
 
-  const { data, error: updateError } = await supabase
+  const { data, error } = await supabase
     .from('profiles')
     .update({ display_name: 'Test Update' })
     .eq('id', user.id)
     .select()
 
-  return NextResponse.json({
-    userId: user.id,
-    updateResult: data,
-    updateError,
+  return NextResponse.json({ 
+    user_id: user.id,
+    update_result: data,
+    update_error: error,
+    error_details: error ? JSON.stringify(error) : null
   })
 }
