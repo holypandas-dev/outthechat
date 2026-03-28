@@ -82,20 +82,26 @@ export default function ProfilePage() {
       setAvatarFile(null)
     }
 
-    const { error: updateError } = await supabase
-      .from('profiles')
-      .upsert({
-        id: userId,
-        display_name: displayName.trim(),
-        bio: bio.trim() || null,
-        avatar_url: newAvatarUrl,
-      }, { onConflict: 'id' })
+    try {
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: userId,
+          display_name: displayName.trim(),
+          bio: bio.trim() || null,
+          avatar_url: newAvatarUrl,
+        }, { onConflict: 'id' })
 
-    if (updateError) {
-      setError(`Failed to save profile: ${updateError.message}`)
-    } else {
-      setSuccess(true)
-      setTimeout(() => setSuccess(false), 3000)
+      if (updateError) {
+        console.error('Profile upsert error:', updateError)
+        setError(`Save failed: ${updateError.message} (code: ${updateError.code})`)
+      } else {
+        setSuccess(true)
+        setTimeout(() => setSuccess(false), 3000)
+      }
+    } catch (err) {
+      console.error('Profile save exception:', err)
+      setError(`Save failed: ${err instanceof Error ? err.message : String(err)}`)
     }
 
     setSaving(false)
