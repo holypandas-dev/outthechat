@@ -19,12 +19,20 @@ export default function PlanPage() {
 
   const [destination, setDestination] = useState('')
   const [days, setDays] = useState('5')
-  const [vibe, setVibe] = useState('')
+  const [vibes, setVibes] = useState<string[]>([])
   const [budget, setBudget] = useState('mid')
   const [groupSize, setGroupSize] = useState('2')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  function toggleVibe(id: string) {
+    setVibes(prev =>
+      prev.includes(id) ? prev.filter(v => v !== id) : [...prev, id]
+    )
+  }
 
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault()
@@ -36,7 +44,16 @@ export default function PlanPage() {
       const res = await fetch('/api/generate-trip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, destination, days, vibe, budget, groupSize }),
+        body: JSON.stringify({
+          prompt,
+          destination,
+          days,
+          vibe: vibes.join(', '),
+          budget,
+          groupSize,
+          startDate: startDate || null,
+          endDate: endDate || null,
+        }),
       })
 
       const data = await res.json()
@@ -128,6 +145,38 @@ export default function PlanPage() {
             </div>
           </div>
 
+          {/* Trip dates */}
+          <div>
+            <label className="block text-xs font-medium text-[#b8b0a2] mb-2 uppercase tracking-wide">
+              Trip dates <span className="normal-case font-normal">(optional)</span>
+            </label>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] text-[#b8b0a2]/60 mb-1.5 uppercase tracking-wide">
+                  Start date
+                </label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={e => setStartDate(e.target.value)}
+                  className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors [color-scheme:dark]"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] text-[#b8b0a2]/60 mb-1.5 uppercase tracking-wide">
+                  End date
+                </label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={e => setEndDate(e.target.value)}
+                  min={startDate || undefined}
+                  className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors [color-scheme:dark]"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Budget */}
           <div>
             <label className="block text-xs font-medium text-[#b8b0a2] mb-2 uppercase tracking-wide">
@@ -143,9 +192,9 @@ export default function PlanPage() {
                   key={b.id}
                   type="button"
                   onClick={() => setBudget(b.id)}
-                  className={`p-3 rounded-lg border text-left transition-all ${
+                  className={`p-3 rounded-lg border text-left transition-all duration-150 active:scale-95 ${
                     budget === b.id
-                      ? 'border-[#e8623a] bg-[rgba(232,98,58,0.08)]'
+                      ? 'border-[#e8623a] bg-[rgba(232,98,58,0.08)] scale-[1.02]'
                       : 'border-[rgba(242,237,228,0.08)] bg-[#141412] hover:border-[rgba(242,237,228,0.2)]'
                   }`}
                 >
@@ -156,27 +205,33 @@ export default function PlanPage() {
             </div>
           </div>
 
-          {/* Vibe */}
+          {/* Vibe — multi-select */}
           <div>
             <label className="block text-xs font-medium text-[#b8b0a2] mb-2 uppercase tracking-wide">
-              Vibe <span className="text-[#b8b0a2] normal-case font-normal">(optional)</span>
+              Vibe{' '}
+              <span className="text-[#b8b0a2] normal-case font-normal">
+                (optional — pick as many as you want)
+              </span>
             </label>
             <div className="grid grid-cols-2 gap-2">
-              {VIBES.map(v => (
-                <button
-                  key={v.id}
-                  type="button"
-                  onClick={() => setVibe(vibe === v.id ? '' : v.id)}
-                  className={`p-3 rounded-lg border text-left transition-all ${
-                    vibe === v.id
-                      ? 'border-[#e8623a] bg-[rgba(232,98,58,0.08)]'
-                      : 'border-[rgba(242,237,228,0.08)] bg-[#141412] hover:border-[rgba(242,237,228,0.2)]'
-                  }`}
-                >
-                  <div className="text-sm text-[#f2ede4]">{v.label}</div>
-                  <div className="text-xs text-[#b8b0a2] mt-0.5">{v.desc}</div>
-                </button>
-              ))}
+              {VIBES.map(v => {
+                const selected = vibes.includes(v.id)
+                return (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => toggleVibe(v.id)}
+                    className={`p-3 rounded-lg border text-left transition-all duration-150 active:scale-95 ${
+                      selected
+                        ? 'border-[#e8623a] bg-[rgba(232,98,58,0.08)] scale-[1.02]'
+                        : 'border-[rgba(242,237,228,0.08)] bg-[#141412] hover:border-[rgba(242,237,228,0.2)]'
+                    }`}
+                  >
+                    <div className="text-sm text-[#f2ede4]">{v.label}</div>
+                    <div className="text-xs text-[#b8b0a2] mt-0.5">{v.desc}</div>
+                  </button>
+                )
+              })}
             </div>
           </div>
 

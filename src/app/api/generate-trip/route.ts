@@ -16,7 +16,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { prompt, destination, days, vibe, budget, groupSize } = await request.json()
+    const { prompt, destination, days, vibe, budget, groupSize, startDate, endDate } = await request.json()
+
+    const dateContext = startDate && endDate
+      ? `Travel dates: ${startDate} to ${endDate}`
+      : startDate
+        ? `Trip starts: ${startDate}`
+        : ''
 
     // Build the AI prompt
     const systemPrompt = `You are OutTheChat's AI travel planner. Generate detailed, locally-authentic travel itineraries with hidden gems beyond tourist traps. Always respond with valid JSON only — no markdown, no extra text.`
@@ -24,7 +30,7 @@ export async function POST(request: Request) {
     const userPrompt = `Generate a ${days}-day trip to ${destination}.
 Vibe: ${vibe || 'balanced mix of culture, food, and exploration'}
 Budget tier: ${budget || 'mid'}
-Group size: ${groupSize || 2} people
+Group size: ${groupSize || 2} people${dateContext ? `\n${dateContext}` : ''}
 Additional notes: ${prompt || ''}
 
 Return ONLY a JSON object with this exact structure:
