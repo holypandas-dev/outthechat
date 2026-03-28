@@ -152,7 +152,7 @@ export function TripMapView({ activities, destination, onActivityClick }: TripMa
   }, [])
 
   return (
-    <div className="relative w-full rounded-xl overflow-hidden border border-[rgba(242,237,228,0.08)]" style={{ height: 520 }}>
+    <div className="relative w-full rounded-xl overflow-hidden border border-[rgba(242,237,228,0.08)] h-[300px] sm:h-[520px]">
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
 
       {loading && (

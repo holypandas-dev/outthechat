@@ -14,6 +14,7 @@ interface TripAIChatProps {
 
 export function TripAIChat({ tripId }: TripAIChatProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -25,6 +26,13 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   useEffect(() => {
     if (isOpen) {
@@ -95,8 +103,8 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
         style={{
           position: 'fixed',
           top: 0,
-          right: isOpen ? 0 : '-420px',
-          width: '400px',
+          right: isOpen ? 0 : (isMobile ? '-105vw' : '-420px'),
+          width: isMobile ? '100vw' : '400px',
           height: '100dvh',
           background: '#0f0f0d',
           borderLeft: '1px solid rgba(242,237,228,0.08)',

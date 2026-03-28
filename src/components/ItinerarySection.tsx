@@ -291,7 +291,7 @@ export function ItinerarySection({
                 <img
                   src={photoMap[activity.id]}
                   alt={activity.title}
-                  className="w-20 h-20 object-cover rounded-lg"
+                  className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
                 />
               )}
               {activity.cost_estimate > 0 && (
@@ -310,7 +310,7 @@ export function ItinerarySection({
 
         {/* Inline suggest replacement form */}
         {showSuggestForm && (
-          <div className="ml-4 bg-[#141412] border border-[rgba(232,98,58,0.2)] rounded-xl p-4">
+          <div className="bg-[#141412] border border-[rgba(232,98,58,0.2)] rounded-xl p-4">
             <p className="text-xs font-mono text-[#e8623a] uppercase tracking-widest mb-3">
               ✏️ Suggest a replacement
             </p>
@@ -344,7 +344,7 @@ export function ItinerarySection({
 
         {/* Suggestions for this activity */}
         {suggestions.length > 0 && (
-          <div className="ml-4 space-y-2">
+          <div className="space-y-2">
             {suggestions.map(suggestion => renderActivityCard(suggestion, undefined, undefined, true))}
           </div>
         )}
@@ -355,16 +355,16 @@ export function ItinerarySection({
   return (
     <div>
       {/* View toggle header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <p className="text-xs font-mono text-[#b8b0a2] uppercase tracking-widest">
           {days.length} {days.length === 1 ? 'day' : 'days'} · {mapActivities.length} activities
         </p>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* List / Map toggle */}
           <div className="flex items-center gap-0.5 p-1 bg-[#141412] border border-[rgba(242,237,228,0.08)] rounded-lg">
             <button
               onClick={() => setView('list')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+              className={`px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                 view === 'list' && !finalizedView
                   ? 'bg-[#e8623a] text-white shadow-sm'
                   : 'text-[#b8b0a2] hover:text-[#f2ede4]'
@@ -374,7 +374,7 @@ export function ItinerarySection({
             </button>
             <button
               onClick={() => { setView('map'); setFinalizedView(false) }}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+              className={`px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                 view === 'map'
                   ? 'bg-[#e8623a] text-white shadow-sm'
                   : 'text-[#b8b0a2] hover:text-[#f2ede4]'
@@ -387,7 +387,7 @@ export function ItinerarySection({
           {/* Finalized toggle */}
           <button
             onClick={() => { setFinalizedView(v => !v); setView('list') }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-lg border transition-all whitespace-nowrap ${
               finalizedView
                 ? 'bg-green-950/60 border-green-700/50 text-green-400'
                 : 'bg-[#141412] border-[rgba(242,237,228,0.08)] text-[#b8b0a2] hover:border-green-700/40 hover:text-green-400'
@@ -439,7 +439,7 @@ export function ItinerarySection({
                   </div>
                 </div>
 
-                <div className="space-y-3 ml-11">
+                <div className="space-y-3 ml-0 sm:ml-11">
                   {slots.map(slot => {
                     const activity = visibleActivities.find(a => a.time_slot === slot)
                     if (!activity) return null

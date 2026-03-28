@@ -71,7 +71,7 @@ export default function PlanPage() {
     <div className="min-h-screen bg-[#0a0a09]">
 
       {/* Nav */}
-      <nav className="border-b border-[rgba(242,237,228,0.08)] px-6 py-4 flex items-center justify-between">
+      <nav className="border-b border-[rgba(242,237,228,0.08)] px-4 sm:px-6 py-4 flex items-center justify-between">
         <a href="/dashboard" className="font-mono text-sm">
           <span className="text-[#e8623a]">Out</span>
           <span className="text-[#f2ede4]">TheChat</span>
@@ -81,7 +81,7 @@ export default function PlanPage() {
         </a>
       </nav>
 
-      <main className="max-w-2xl mx-auto px-6 py-12">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
 
         {/* Header */}
         <div className="mb-10">
@@ -213,7 +213,7 @@ export default function PlanPage() {
                 (optional — pick as many as you want)
               </span>
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {VIBES.map(v => {
                 const selected = vibes.includes(v.id)
                 return (

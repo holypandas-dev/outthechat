@@ -82,23 +82,24 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
     <div className="min-h-screen bg-[#0a0a09]">
 
       {/* Nav */}
-      <nav className="border-b border-[rgba(242,237,228,0.08)] px-6 py-4 flex items-center justify-between sticky top-0 bg-[#0a0a09] z-10">
+      <nav className="border-b border-[rgba(242,237,228,0.08)] px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 bg-[#0a0a09] z-10">
         <Link href="/dashboard" className="font-mono text-sm">
           <span className="text-[#e8623a]">Out</span>
           <span className="text-[#f2ede4]">TheChat</span>
         </Link>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <TripChatNavButton />
-          <Link href="/plan" className="text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors">
+          <Link href="/plan" className="hidden sm:inline text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors">
             + New trip
           </Link>
           <Link href="/dashboard" className="text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors">
-            Dashboard
+            <span className="hidden sm:inline">Dashboard</span>
+            <span className="sm:hidden">← Back</span>
           </Link>
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-6 py-10">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
 
         {/* Trip header */}
         <div className="mb-10">
@@ -110,7 +111,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
               <h1 className="text-3xl font-semibold text-[#f2ede4] leading-tight">
                 {trip.title}
               </h1>
-              <div className="mt-4 max-w-sm">
+              <div className="mt-4 w-full sm:max-w-sm">
                 <div className="flex justify-between items-center mb-1.5">
                   <span className={`text-sm font-medium ${commitment.color}`}>
                     {commitment.text}
@@ -208,30 +209,30 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
         />
 
         {/* Bottom actions */}
-        <div className="mt-12 pt-8 border-t border-[rgba(242,237,228,0.08)] flex gap-3 flex-wrap">
+        <div className="mt-12 pt-8 border-t border-[rgba(242,237,228,0.08)] flex flex-col sm:flex-row gap-3 flex-wrap">
           <InviteButton tripId={id} />
           {trip.creator_id === user.id && <SendNudgesButton tripId={id} />}
           <Link
             href={`/trip/${id}/fund`}
-            className="border border-[#e8623a] text-[#e8623a] hover:bg-[rgba(232,98,58,0.08)] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+            className="border border-[#e8623a] text-[#e8623a] hover:bg-[rgba(232,98,58,0.08)] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
           >
             💰 Group fund
           </Link>
           <Link
             href={`/trip/${id}/card`}
-            className="border border-[rgba(242,237,228,0.15)] text-[#f2ede4] hover:border-[#e8623a] hover:text-[#e8623a] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+            className="border border-[rgba(242,237,228,0.15)] text-[#f2ede4] hover:border-[#e8623a] hover:text-[#e8623a] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
           >
             🪄 Share card
           </Link>
           <Link
             href="/plan"
-            className="bg-[#e8623a] hover:bg-[#c44d28] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+            className="bg-[#e8623a] hover:bg-[#c44d28] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
           >
             + Generate another trip
           </Link>
           <Link
             href="/dashboard"
-            className="border border-[rgba(242,237,228,0.1)] text-[#b8b0a2] hover:text-[#f2ede4] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+            className="border border-[rgba(242,237,228,0.1)] text-[#b8b0a2] hover:text-[#f2ede4] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
           >
             Back to dashboard
           </Link>

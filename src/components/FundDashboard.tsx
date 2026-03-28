@@ -163,13 +163,12 @@ export function FundDashboard({
         </p>
 
         {/* Quick amounts */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
           {suggestions.map(s => (
             <button
               key={s}
               onClick={() => setAmount(String(s))}
               style={{
-                flex: 1,
                 padding: '8px',
                 borderRadius: '8px',
                 border: `1px solid ${amount === String(s) ? '#e8623a' : 'rgba(242,237,228,0.08)'}`,

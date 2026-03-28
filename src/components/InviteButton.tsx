@@ -29,7 +29,7 @@ export function InviteButton({ tripId }: { tripId: string }) {
     <button
       onClick={handleInvite}
       disabled={loading}
-      className="bg-[#141412] border border-[rgba(242,237,228,0.1)] hover:border-[rgba(232,98,58,0.4)] text-[#f2ede4] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors disabled:opacity-50"
+      className="bg-[#141412] border border-[rgba(242,237,228,0.1)] hover:border-[rgba(232,98,58,0.4)] text-[#f2ede4] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors disabled:opacity-50 w-full sm:w-auto text-center"
     >
       {loading ? 'Generating...' : copied ? '✓ Link copied!' : '🔗 Invite friends'}
     </button>

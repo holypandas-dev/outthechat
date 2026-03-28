@@ -91,10 +91,10 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
   const vibeLabel = trip.vibe_preset ? (vibeLabels[trip.vibe_preset] ?? trip.vibe_preset) : null
 
   return (
-    <div className="min-h-screen bg-[#050504] flex flex-col items-center justify-start py-10 px-4">
+    <div className="min-h-screen bg-[#050504] flex flex-col items-center justify-start py-6 sm:py-10 px-0 sm:px-4 overflow-x-hidden">
 
       {/* Back link + copy button */}
-      <div className="w-full max-w-[390px] mb-4 flex items-center justify-between">
+      <div className="w-full max-w-[390px] mb-4 flex items-center justify-between px-4 sm:px-0">
         <Link
           href={`/trip/${id}`}
           className="text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors font-mono"
@@ -104,12 +104,12 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
         <CopyLinkButtonCard tripId={id} />
       </div>
 
-      {/* Card — 390×844 fixed, screenshot-ready */}
+      {/* Card — 390×844, screenshot-ready */}
       <div
         id="trip-card"
-        className="relative overflow-hidden flex flex-col"
+        className="relative overflow-hidden flex flex-col w-full"
         style={{
-          width: 390,
+          maxWidth: 390,
           minHeight: 844,
           background: 'linear-gradient(160deg, #111110 0%, #0a0a09 40%, #0d0c0a 100%)',
           borderRadius: 24,
@@ -499,7 +499,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* Hint below card */}
-      <p className="mt-6 text-xs text-[#b8b0a2] font-mono text-center max-w-[390px]">
+      <p className="mt-6 text-xs text-[#b8b0a2] font-mono text-center max-w-[390px] px-4 sm:px-0">
         Screenshot this card to share on Instagram Stories or TikTok
       </p>
 

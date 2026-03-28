@@ -59,12 +59,12 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-[#0a0a09]">
 
       {/* Nav */}
-      <nav className="border-b border-[rgba(242,237,228,0.08)] px-6 py-4 flex items-center justify-between">
+      <nav className="border-b border-[rgba(242,237,228,0.08)] px-4 sm:px-6 py-4 flex items-center justify-between">
         <span className="font-mono text-sm">
           <span className="text-[#e8623a]">Out</span>
           <span className="text-[#f2ede4]">TheChat</span>
         </span>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <Link href="/profile" className="flex items-center gap-2.5 group">
             {profile?.avatar_url ? (
               <img
@@ -77,7 +77,7 @@ export default async function DashboardPage() {
                 <span className="text-xs font-semibold text-[#e8623a]">{initials}</span>
               </div>
             )}
-            <span className="text-sm text-[#b8b0a2] group-hover:text-[#f2ede4] transition-colors">
+            <span className="hidden sm:inline text-sm text-[#b8b0a2] group-hover:text-[#f2ede4] transition-colors">
               {profile?.display_name || user.email}
             </span>
           </Link>
@@ -93,12 +93,12 @@ export default async function DashboardPage() {
       </nav>
 
       {/* Main */}
-      <main className="max-w-5xl mx-auto px-6 py-12">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-3xl font-semibold text-[#f2ede4]">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-[#f2ede4]">
               Hey {firstName} 👋
             </h1>
             <p className="text-[#b8b0a2] mt-1 text-sm">
@@ -109,7 +109,7 @@ export default async function DashboardPage() {
           </div>
           <Link
             href="/plan"
-            className="bg-[#e8623a] hover:bg-[#c44d28] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+            className="bg-[#e8623a] hover:bg-[#c44d28] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors self-start sm:self-auto whitespace-nowrap"
           >
             + New trip
           </Link>
@@ -172,7 +172,7 @@ export default async function DashboardPage() {
           </div>
         ) : (
           /* Empty state */
-          <div className="border border-dashed border-[rgba(242,237,228,0.12)] rounded-2xl p-16 text-center">
+          <div className="border border-dashed border-[rgba(242,237,228,0.12)] rounded-2xl p-8 sm:p-16 text-center">
             <div className="text-5xl mb-4">✈️</div>
             <h2 className="text-xl font-medium text-[#f2ede4] mb-2">
               No trips yet

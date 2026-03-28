@@ -72,7 +72,7 @@ export default async function FundPage({
       <nav
         style={{
           borderBottom: '1px solid rgba(242,237,228,0.08)',
-          padding: '16px 24px',
+          padding: '16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -97,7 +97,7 @@ export default async function FundPage({
         </Link>
       </nav>
 
-      <main style={{ maxWidth: '560px', margin: '0 auto', padding: '40px 24px 80px' }}>
+      <main style={{ maxWidth: '560px', margin: '0 auto', padding: '32px 16px 80px' }}>
         <div style={{ marginBottom: '32px' }}>
           <p
             style={{
