@@ -44,7 +44,7 @@ export async function POST(request: Request) {
   }
 
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
-  const path = `${user.id}/avatar.${ext}`
+  const path = `${user.id}.${ext}`
   const bytes = await file.arrayBuffer()
 
   const { error: uploadError } = await admin.storage
@@ -64,6 +64,15 @@ export async function POST(request: Request) {
 
   // Append cache-busting param so the browser picks up the new image
   const url = `${publicUrl}?v=${Date.now()}`
+
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .update({ avatar_url: url })
+    .eq('id', user.id)
+
+  if (profileError) {
+    return NextResponse.json({ error: profileError.message }, { status: 500 })
+  }
 
   return NextResponse.json({ url })
 }

@@ -62,8 +62,6 @@ export default function ProfilePage() {
     setError(null)
     setSuccess(false)
 
-    let newAvatarUrl = avatarUrl
-
     if (avatarFile) {
       const form = new FormData()
       form.append('file', avatarFile)
@@ -77,20 +75,18 @@ export default function ProfilePage() {
         return
       }
 
-      newAvatarUrl = data.url
-      setAvatarUrl(newAvatarUrl)
+      setAvatarUrl(data.url)
       setAvatarFile(null)
     }
 
     try {
       const { error: updateError } = await supabase
         .from('profiles')
-        .upsert({
-          id: userId,
+        .update({
           display_name: displayName.trim(),
           bio: bio.trim() || null,
-          avatar_url: newAvatarUrl,
-        }, { onConflict: 'id' })
+        })
+        .eq('id', userId)
 
       if (updateError) {
         console.error('Profile upsert error:', updateError)
