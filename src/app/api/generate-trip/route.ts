@@ -16,13 +16,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { prompt, destination, days, vibe, budget, groupSize, startDate, endDate } = await request.json()
+    const { prompt, destination, days, vibe, budget, groupSize, startDate, endDate, departureCity, travelMonth } = await request.json()
 
     const dateContext = startDate && endDate
       ? `Travel dates: ${startDate} to ${endDate}`
       : startDate
         ? `Trip starts: ${startDate}`
-        : ''
+        : travelMonth
+          ? `Approximate travel month: ${travelMonth}`
+          : ''
 
     // Build the AI prompt
     const systemPrompt = `You are OutTheChat's AI travel planner. Generate detailed, locally-authentic travel itineraries with hidden gems beyond tourist traps. Always respond with valid JSON only — no markdown, no extra text.`
@@ -30,7 +32,7 @@ export async function POST(request: Request) {
     const userPrompt = `Generate a ${days}-day trip to ${destination}.
 Vibe: ${vibe || 'balanced mix of culture, food, and exploration'}
 Budget tier: ${budget || 'mid'}
-Group size: ${groupSize || 2} people${dateContext ? `\n${dateContext}` : ''}
+Group size: ${groupSize || 2} people${dateContext ? `\n${dateContext}` : ''}${departureCity ? `\nDeparture city: ${departureCity} (factor in realistic flight costs from here when estimating budget)` : ''}
 Additional notes: ${prompt || ''}
 
 Return ONLY a JSON object with this exact structure:
@@ -120,6 +122,7 @@ Generate exactly ${days} days. Make it specific, authentic, and exciting.`
         budget_tier: budget || 'mid',
         group_size: parseInt(groupSize) || 2,
         ai_prompt: prompt,
+        start_date: startDate || null,
         local_tips: itinerary.local_tips || [],
         estimated_cost: itinerary.estimated_cost || {},
         commitment_state: {

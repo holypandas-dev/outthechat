@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { InviteButton } from '@/components/InviteButton'
 import { SendNudgesButton } from '@/components/SendNudgesButton'
+import { DeleteTripButton } from '@/components/DeleteTripButton'
 import { TripAIChat } from '@/components/TripAIChat'
 import { TripGroupChat } from '@/components/TripGroupChat'
 import { TripChatNavButton } from '@/components/TripChatNavButton'
@@ -236,6 +237,9 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
           >
             Back to dashboard
           </Link>
+          {trip.creator_id === user.id && (
+            <DeleteTripButton tripId={id} variant="action" />
+          )}
         </div>
 
       </main>

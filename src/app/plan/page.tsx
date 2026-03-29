@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 const VIBES = [
@@ -14,19 +14,51 @@ const VIBES = [
   { id: 'adventure', label: '🏄 Adventure', desc: 'Hiking, surfing, and adrenaline' },
 ]
 
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+
 export default function PlanPage() {
   const router = useRouter()
 
   const [destination, setDestination] = useState('')
+  const [departureCity, setDepartureCity] = useState('')
   const [days, setDays] = useState('5')
   const [vibes, setVibes] = useState<string[]>([])
   const [budget, setBudget] = useState('mid')
   const [groupSize, setGroupSize] = useState('2')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [travelMonth, setTravelMonth] = useState('')
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const [bestTimeHint, setBestTimeHint] = useState('')
+  const [bestTimeLoading, setBestTimeLoading] = useState(false)
+
+  // Fetch "best time to visit" hint when destination changes
+  useEffect(() => {
+    if (!destination.trim() || destination.trim().length < 3) {
+      setBestTimeHint('')
+      setBestTimeLoading(false)
+      return
+    }
+    setBestTimeLoading(true)
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/best-time?destination=${encodeURIComponent(destination.trim())}`)
+        const data = await res.json()
+        setBestTimeHint(data.hint || '')
+      } catch {
+        setBestTimeHint('')
+      } finally {
+        setBestTimeLoading(false)
+      }
+    }, 900)
+    return () => clearTimeout(timer)
+  }, [destination])
 
   function toggleVibe(id: string) {
     setVibes(prev =>
@@ -47,12 +79,14 @@ export default function PlanPage() {
         body: JSON.stringify({
           prompt,
           destination,
+          departureCity: departureCity || null,
           days,
           vibe: vibes.join(', '),
           budget,
           groupSize,
           startDate: startDate || null,
           endDate: endDate || null,
+          travelMonth: (!startDate && !endDate && travelMonth) ? travelMonth : null,
         }),
       })
 
@@ -111,6 +145,38 @@ export default function PlanPage() {
               placeholder="Tokyo, Japan"
               className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-base placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
             />
+            {/* Best time to visit hint */}
+            <div className="min-h-[28px] mt-2">
+              {bestTimeLoading && destination.trim().length >= 3 && (
+                <div className="flex items-center gap-2 text-xs text-[#b8b0a2]/60">
+                  <span className="animate-pulse">⏳</span>
+                  <span>Looking up best time to visit...</span>
+                </div>
+              )}
+              {!bestTimeLoading && bestTimeHint && (
+                <div className="flex items-start gap-2 text-xs text-[#b8b0a2] bg-[rgba(232,98,58,0.06)] border border-[rgba(232,98,58,0.15)] rounded-lg px-3 py-2">
+                  <span className="text-[#e8623a] flex-shrink-0 mt-px">💡</span>
+                  <span>{bestTimeHint}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Departure city */}
+          <div>
+            <label className="block text-xs font-medium text-[#b8b0a2] mb-2 uppercase tracking-wide">
+              Departure city <span className="normal-case font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              value={departureCity}
+              onChange={e => setDepartureCity(e.target.value)}
+              placeholder="New York, NY"
+              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+            />
+            <p className="text-[10px] text-[#b8b0a2]/50 mt-1.5">
+              Helps the AI estimate realistic flight costs in your budget
+            </p>
           </div>
 
           {/* Days + Group size */}
@@ -158,7 +224,7 @@ export default function PlanPage() {
                 <input
                   type="date"
                   value={startDate}
-                  onChange={e => setStartDate(e.target.value)}
+                  onChange={e => { setStartDate(e.target.value); if (e.target.value) setTravelMonth('') }}
                   className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors [color-scheme:dark]"
                 />
               </div>
@@ -169,13 +235,35 @@ export default function PlanPage() {
                 <input
                   type="date"
                   value={endDate}
-                  onChange={e => setEndDate(e.target.value)}
+                  onChange={e => { setEndDate(e.target.value); if (e.target.value) setTravelMonth('') }}
                   min={startDate || undefined}
                   className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors [color-scheme:dark]"
                 />
               </div>
             </div>
           </div>
+
+          {/* Travel month — shown only when no specific dates set */}
+          {!startDate && !endDate && (
+            <div>
+              <label className="block text-xs font-medium text-[#b8b0a2] mb-2 uppercase tracking-wide">
+                Thinking of going in... <span className="normal-case font-normal">(optional)</span>
+              </label>
+              <select
+                value={travelMonth}
+                onChange={e => setTravelMonth(e.target.value)}
+                className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+              >
+                <option value="">Not sure yet</option>
+                {MONTHS.map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
+              <p className="text-[10px] text-[#b8b0a2]/50 mt-1.5">
+                Helps the AI factor in seasonal events, weather, and pricing
+              </p>
+            </div>
+          )}
 
           {/* Budget */}
           <div>

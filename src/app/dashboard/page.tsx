@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { DeleteTripButton } from '@/components/DeleteTripButton'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -119,55 +120,63 @@ export default async function DashboardPage() {
         {trips && trips.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {trips.map(trip => (
-              <Link
-                key={trip.id}
-                href={`/trip/${trip.id}`}
-                className="group block bg-[#141412] border border-[rgba(242,237,228,0.08)] rounded-xl p-5 hover:border-[rgba(232,98,58,0.3)] transition-all hover:-translate-y-0.5"
-              >
-                {/* Trip header */}
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <p className="font-mono text-[10px] text-[#e8623a] uppercase tracking-widest mb-1">
-                      {trip.duration_days} days · {trip.budget_tier}
-                    </p>
-                    <h3 className="text-[#f2ede4] font-medium text-base leading-tight">
-                      {trip.title}
-                    </h3>
-                    <p className="text-[#b8b0a2] text-sm mt-0.5">{trip.destination}</p>
+              <div key={trip.id} className="relative group">
+                <Link
+                  href={`/trip/${trip.id}`}
+                  className="block bg-[#141412] border border-[rgba(242,237,228,0.08)] rounded-xl p-5 hover:border-[rgba(232,98,58,0.3)] transition-all hover:-translate-y-0.5"
+                >
+                  {/* Trip header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <p className="font-mono text-[10px] text-[#e8623a] uppercase tracking-widest mb-1">
+                        {trip.duration_days} days · {trip.budget_tier}
+                      </p>
+                      <h3 className="text-[#f2ede4] font-medium text-base leading-tight">
+                        {trip.title}
+                      </h3>
+                      <p className="text-[#b8b0a2] text-sm mt-0.5">{trip.destination}</p>
+                    </div>
+                    <StatusBadge status={trip.status} />
                   </div>
-                  <StatusBadge status={trip.status} />
-                </div>
 
-                {/* Commitment meter */}
-                <div className="mt-4">
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[10px] text-[#b8b0a2] font-mono uppercase tracking-wide">
-                      Commitment
-                    </span>
-                    <span className="text-[10px] text-[#e8623a] font-mono">
-                      {trip.commitment_score}%
-                    </span>
+                  {/* Commitment meter */}
+                  <div className="mt-4">
+                    <div className="flex justify-between items-center mb-1.5">
+                      <span className="text-[10px] text-[#b8b0a2] font-mono uppercase tracking-wide">
+                        Commitment
+                      </span>
+                      <span className="text-[10px] text-[#e8623a] font-mono">
+                        {trip.commitment_score}%
+                      </span>
+                    </div>
+                    <div className="h-1 bg-[rgba(242,237,228,0.06)] rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[#e8623a] rounded-full transition-all"
+                        style={{ width: `${trip.commitment_score}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="h-1 bg-[rgba(242,237,228,0.06)] rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[#e8623a] rounded-full transition-all"
-                      style={{ width: `${trip.commitment_score}%` }}
-                    />
-                  </div>
-                </div>
 
-                {/* Footer */}
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-xs text-[#b8b0a2]">
-                    {trip.start_date
-                      ? new Date(trip.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                      : 'Dates TBD'}
-                  </span>
-                  <span className="text-xs text-[#b8b0a2] group-hover:text-[#e8623a] transition-colors">
-                    View →
-                  </span>
-                </div>
-              </Link>
+                  {/* Footer */}
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="text-xs text-[#b8b0a2]">
+                      {trip.start_date
+                        ? new Date(trip.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                        : 'Dates TBD'}
+                    </span>
+                    <span className="text-xs text-[#b8b0a2] group-hover:text-[#e8623a] transition-colors">
+                      View →
+                    </span>
+                  </div>
+                </Link>
+
+                {/* Delete button — only for trip creator, visible on card hover */}
+                {trip.creator_id === user.id && (
+                  <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                    <DeleteTripButton tripId={trip.id} variant="card" />
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         ) : (
