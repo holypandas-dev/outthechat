@@ -68,11 +68,11 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
     ? (trip.estimated_cost as Record<string, number>)[trip.budget_tier]
     : null
 
-  const avatarColors = ['#e8623a', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a']
+  const avatarColors = ['#C4563A', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a']
 
   const commitmentColor =
     trip.commitment_score >= 91 ? '#4ade80'
-    : trip.commitment_score >= 76 ? '#e8623a'
+    : trip.commitment_score >= 76 ? '#C4563A'
     : trip.commitment_score >= 51 ? '#fbbf24'
     : trip.commitment_score >= 26 ? '#60a5fa'
     : '#b8b0a2'
@@ -97,7 +97,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
       <div className="w-full max-w-[390px] mb-4 flex items-center justify-between px-4 sm:px-0">
         <Link
           href={`/trip/${id}`}
-          className="text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors font-mono"
+          className="text-sm text-[#b8b0a2] hover:text-[#f5efe6] transition-colors font-mono"
         >
           ← Back to trip
         </Link>
@@ -111,7 +111,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
         style={{
           maxWidth: 390,
           minHeight: 844,
-          background: 'linear-gradient(160deg, #111110 0%, #0a0a09 40%, #0d0c0a 100%)',
+          background: 'linear-gradient(160deg, #111110 0%, #0f0d0b 40%, #0d0c0a 100%)',
           borderRadius: 24,
           boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(242,237,228,0.07)',
           fontFamily: 'var(--font-geist-sans, system-ui, sans-serif)',
@@ -157,7 +157,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             style={{
               fontSize: 'clamp(72px, 18vw, 110px)',
               fontWeight: 900,
-              color: 'rgba(232,98,58,0.05)',
+              color: 'rgba(196,86,58,0.05)',
               letterSpacing: '-0.03em',
               lineHeight: 1,
               textAlign: 'center',
@@ -177,7 +177,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
           className="absolute top-0 left-0 right-0 pointer-events-none"
           style={{
             height: 200,
-            background: 'linear-gradient(180deg, rgba(232,98,58,0.10) 0%, transparent 100%)',
+            background: 'linear-gradient(180deg, rgba(196,86,58,0.10) 0%, transparent 100%)',
             zIndex: 1,
           }}
         />
@@ -185,7 +185,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
         {/* Orange top bar */}
         <div
           className="absolute top-0 left-0 right-0"
-          style={{ height: 3, background: '#e8623a', zIndex: 2 }}
+          style={{ height: 3, background: '#C4563A', zIndex: 2 }}
         />
 
         {/* Content */}
@@ -198,7 +198,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
               style={{
                 fontSize: 11,
                 letterSpacing: '0.18em',
-                color: '#e8623a',
+                color: '#C4563A',
                 marginBottom: 10,
               }}
             >
@@ -208,7 +208,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
               style={{
                 fontSize: 68,
                 fontWeight: 900,
-                color: '#f2ede4',
+                color: '#f5efe6',
                 lineHeight: 0.95,
                 letterSpacing: '-0.03em',
                 textTransform: 'uppercase',
@@ -254,11 +254,11 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                 style={{
                   fontSize: 10,
                   letterSpacing: '0.06em',
-                  color: '#e8623a',
-                  background: 'rgba(232,98,58,0.10)',
+                  color: '#C4563A',
+                  background: 'rgba(196,86,58,0.10)',
                   borderRadius: 6,
                   padding: '4px 10px',
-                  border: '1px solid rgba(232,98,58,0.22)',
+                  border: '1px solid rgba(196,86,58,0.22)',
                   fontWeight: 600,
                 }}
               >
@@ -292,7 +292,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             <div className="mb-6">
               <p
                 className="font-mono uppercase mb-3"
-                style={{ fontSize: 10, letterSpacing: '0.18em', color: '#e8623a' }}
+                style={{ fontSize: 10, letterSpacing: '0.18em', color: '#C4563A' }}
               >
                 Highlights
               </p>
@@ -315,7 +315,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                       style={{
                         fontSize: 14,
                         fontWeight: 500,
-                        color: '#f2ede4',
+                        color: '#f5efe6',
                         lineHeight: 1.3,
                       }}
                     >
@@ -324,7 +324,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                     {act.vote_score > 0 && (
                       <span
                         className="ml-auto font-mono flex-shrink-0"
-                        style={{ fontSize: 11, color: '#e8623a' }}
+                        style={{ fontSize: 11, color: '#C4563A' }}
                       >
                         +{act.vote_score}
                       </span>
@@ -362,7 +362,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                             width: 34,
                             height: 34,
                             borderRadius: '50%',
-                            border: '2px solid #0a0a09',
+                            border: '2px solid #0f0d0b',
                             background: avatarColors[i % 5],
                             display: 'flex',
                             alignItems: 'center',
@@ -396,7 +396,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                     style={{
                       fontSize: 22,
                       fontWeight: 700,
-                      color: '#f2ede4',
+                      color: '#f5efe6',
                       letterSpacing: '-0.02em',
                     }}
                   >
@@ -436,7 +436,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                 style={{
                   height: '100%',
                   width: `${trip.commitment_score ?? 0}%`,
-                  background: `linear-gradient(90deg, #e8623a, ${commitmentColor})`,
+                  background: `linear-gradient(90deg, #C4563A, ${commitmentColor})`,
                   borderRadius: 99,
                   transition: 'width 0.5s ease',
                 }}
@@ -460,10 +460,10 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             <div>
               <p
                 className="font-mono"
-                style={{ fontSize: 15, fontWeight: 700, color: '#f2ede4', marginBottom: 3, letterSpacing: '-0.01em' }}
+                style={{ fontSize: 15, fontWeight: 700, color: '#f5efe6', marginBottom: 3, letterSpacing: '-0.01em' }}
               >
                 Planned on{' '}
-                <span style={{ color: '#e8623a' }}>OutTheChat</span>
+                <span style={{ color: '#C4563A' }}>OutTheChat</span>
               </p>
               <p
                 className="font-mono"
@@ -479,11 +479,11 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                 width: 42,
                 height: 42,
                 borderRadius: 12,
-                background: '#e8623a',
+                background: '#C4563A',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 16px rgba(232,98,58,0.35)',
+                boxShadow: '0 4px 16px rgba(196,86,58,0.35)',
               }}
             >
               <span

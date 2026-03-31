@@ -198,7 +198,7 @@ export function ItinerarySection({
     const showSuggestForm = suggestFormOpen === activity.id
 
     let borderClass = 'border-[rgba(242,237,228,0.06)]'
-    if (highlightedId === activity.id) borderClass = 'border-[#e8623a] activity-highlight'
+    if (highlightedId === activity.id) borderClass = 'border-[#C4563A] activity-highlight'
     else if (outcome === 'favorite') borderClass = 'border-green-600/50'
     else if (outcome === 'replace') borderClass = 'border-red-600/50'
 
@@ -206,7 +206,7 @@ export function ItinerarySection({
       <div key={activity.id} className="space-y-2">
         <div
           id={`activity-${activity.id}`}
-          className={`bg-[#141412] border rounded-xl p-4 hover:border-[rgba(232,98,58,0.2)] transition-colors ${borderClass}`}
+          className={`bg-[#1a1612] border rounded-xl p-4 hover:border-[rgba(196,86,58,0.2)] transition-colors ${borderClass}`}
         >
           {/* Vote outcome badge */}
           {outcome === 'favorite' && (
@@ -224,7 +224,7 @@ export function ItinerarySection({
 
           {/* Suggestion attribution */}
           {isSuggestion && (
-            <div className="flex items-center gap-1.5 mb-3 text-[#e8623a] text-xs">
+            <div className="flex items-center gap-1.5 mb-3 text-[#C4563A] text-xs">
               💡 Suggested by {getDisplayName(activity.suggested_by)}
             </div>
           )}
@@ -237,11 +237,11 @@ export function ItinerarySection({
                     {slot}
                   </span>
                 )}
-                <span className="text-[10px] font-mono text-[#e8623a]">
+                <span className="text-[10px] font-mono text-[#C4563A]">
                   {categoryEmoji[activity.category] || '📍'} {activity.category}
                 </span>
               </div>
-              <h3 className="text-[#f2ede4] font-medium text-sm">{activity.title}</h3>
+              <h3 className="text-[#f5efe6] font-medium text-sm">{activity.title}</h3>
               {activity.location && (
                 <p className="text-xs text-[#b8b0a2] mt-0.5">📍 {activity.location}</p>
               )}
@@ -250,7 +250,7 @@ export function ItinerarySection({
               )}
               {activity.insider_tip && (
                 <div className="mt-2 flex gap-1.5">
-                  <span className="text-[#e8623a] text-xs flex-shrink-0">💡</span>
+                  <span className="text-[#C4563A] text-xs flex-shrink-0">💡</span>
                   <p className="text-xs text-[#b8b0a2] italic">{activity.insider_tip}</p>
                 </div>
               )}
@@ -268,7 +268,7 @@ export function ItinerarySection({
                     onClick={() => window.dispatchEvent(new CustomEvent('share-activity-to-chat', {
                       detail: { activity }
                     }))}
-                    className="text-[11px] text-[#b8b0a2] hover:text-[#e8623a] transition-colors flex items-center gap-1 ml-auto"
+                    className="text-[11px] text-[#b8b0a2] hover:text-[#C4563A] transition-colors flex items-center gap-1 ml-auto"
                   >
                     💬 Share
                   </button>
@@ -279,7 +279,7 @@ export function ItinerarySection({
                       setSuggestFormOpen(showSuggestForm ? null : activity.id)
                       setSuggestMessage('')
                     }}
-                    className="text-[11px] text-[#b8b0a2] hover:text-[#e8623a] transition-colors flex items-center gap-1"
+                    className="text-[11px] text-[#b8b0a2] hover:text-[#C4563A] transition-colors flex items-center gap-1"
                   >
                     ✏️ Suggest replacement
                   </button>
@@ -295,7 +295,7 @@ export function ItinerarySection({
                 />
               )}
               {activity.cost_estimate > 0 && (
-                <p className="text-sm font-mono text-[#f2ede4]">~${activity.cost_estimate}</p>
+                <p className="text-sm font-mono text-[#f5efe6]">~${activity.cost_estimate}</p>
               )}
               {activity.duration_minutes > 0 && (
                 <p className="text-xs text-[#b8b0a2]">
@@ -310,8 +310,8 @@ export function ItinerarySection({
 
         {/* Inline suggest replacement form */}
         {showSuggestForm && (
-          <div className="bg-[#141412] border border-[rgba(232,98,58,0.2)] rounded-xl p-4">
-            <p className="text-xs font-mono text-[#e8623a] uppercase tracking-widest mb-3">
+          <div className="bg-[#1a1612] border border-[rgba(196,86,58,0.2)] rounded-xl p-4">
+            <p className="text-xs font-mono text-[#C4563A] uppercase tracking-widest mb-3">
               ✏️ Suggest a replacement
             </p>
             <textarea
@@ -319,19 +319,19 @@ export function ItinerarySection({
               onChange={e => setSuggestMessage(e.target.value)}
               placeholder={`e.g. "suggest a better restaurant in this area" or "find a cheaper alternative"`}
               rows={2}
-              className="w-full bg-[#0a0a09] border border-[rgba(242,237,228,0.1)] rounded-lg px-3 py-2 text-sm text-[#f2ede4] placeholder-[#b8b0a2] focus:outline-none focus:border-[#e8623a] resize-none"
+              className="w-full bg-[#0f0d0b] border border-[rgba(242,237,228,0.1)] rounded-lg px-3 py-2 text-sm text-[#f5efe6] placeholder-[#b8b0a2] focus:outline-none focus:border-[#C4563A] resize-none"
             />
             <div className="flex items-center gap-2 mt-2">
               <button
                 onClick={() => { setSuggestFormOpen(null); setSuggestMessage('') }}
-                className="text-xs text-[#b8b0a2] hover:text-[#f2ede4] transition-colors px-3 py-1.5"
+                className="text-xs text-[#b8b0a2] hover:text-[#f5efe6] transition-colors px-3 py-1.5"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleSuggestReplacement(activity.id)}
                 disabled={suggestLoading || !suggestMessage.trim()}
-                className="flex items-center gap-1.5 bg-[#e8623a] hover:bg-[#c44d28] disabled:opacity-50 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 bg-[#C4563A] hover:bg-[#a64428] disabled:opacity-50 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
               >
                 {suggestLoading ? (
                   <span className="inline-block w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />
@@ -361,13 +361,13 @@ export function ItinerarySection({
         </p>
         <div className="flex items-center gap-2 flex-shrink-0">
           {/* List / Map toggle */}
-          <div className="flex items-center gap-0.5 p-1 bg-[#141412] border border-[rgba(242,237,228,0.08)] rounded-lg">
+          <div className="flex items-center gap-0.5 p-1 bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-lg">
             <button
               onClick={() => setView('list')}
               className={`px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                 view === 'list' && !finalizedView
-                  ? 'bg-[#e8623a] text-white shadow-sm'
-                  : 'text-[#b8b0a2] hover:text-[#f2ede4]'
+                  ? 'bg-[#C4563A] text-white shadow-sm'
+                  : 'text-[#b8b0a2] hover:text-[#f5efe6]'
               }`}
             >
               ☰ List
@@ -376,8 +376,8 @@ export function ItinerarySection({
               onClick={() => { setView('map'); setFinalizedView(false) }}
               className={`px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                 view === 'map'
-                  ? 'bg-[#e8623a] text-white shadow-sm'
-                  : 'text-[#b8b0a2] hover:text-[#f2ede4]'
+                  ? 'bg-[#C4563A] text-white shadow-sm'
+                  : 'text-[#b8b0a2] hover:text-[#f5efe6]'
               }`}
             >
               🗺 Map
@@ -390,7 +390,7 @@ export function ItinerarySection({
             className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-lg border transition-all whitespace-nowrap ${
               finalizedView
                 ? 'bg-green-950/60 border-green-700/50 text-green-400'
-                : 'bg-[#141412] border-[rgba(242,237,228,0.08)] text-[#b8b0a2] hover:border-green-700/40 hover:text-green-400'
+                : 'bg-[#1a1612] border-[rgba(242,237,228,0.08)] text-[#b8b0a2] hover:border-green-700/40 hover:text-green-400'
             }`}
           >
             Finalized ✓
@@ -430,11 +430,11 @@ export function ItinerarySection({
             return (
               <div key={day.id}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-[#e8623a] flex items-center justify-center text-xs font-mono font-medium text-white flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#C4563A] flex items-center justify-center text-xs font-mono font-medium text-white flex-shrink-0">
                     {day.day_number}
                   </div>
                   <div>
-                    <h2 className="text-base font-medium text-[#f2ede4]">Day {day.day_number}</h2>
+                    <h2 className="text-base font-medium text-[#f5efe6]">Day {day.day_number}</h2>
                     {day.theme && <p className="text-xs text-[#b8b0a2]">{day.theme}</p>}
                   </div>
                 </div>

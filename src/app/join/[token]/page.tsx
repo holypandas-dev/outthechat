@@ -61,18 +61,18 @@ export default function JoinTripPage() {
   }, [token])
 
   return (
-    <div className="min-h-screen bg-[#0a0a09] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
       <div className="w-full max-w-sm text-center">
 
         {/* Logo */}
         <div className="mb-10">
           <span className="font-mono text-lg">
-            <span className="text-[#e8623a]">Out</span>
-            <span className="text-[#f2ede4]">TheChat</span>
+            <span className="text-[#C4563A]">Out</span>
+            <span className="text-[#f5efe6]">TheChat</span>
           </span>
         </div>
 
-        <div className="bg-[#141412] border border-[rgba(242,237,228,0.08)] rounded-2xl p-8">
+        <div className="bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-2xl p-8">
 
           {status === 'loading' && (
             <div>
@@ -84,7 +84,7 @@ export default function JoinTripPage() {
           {status === 'joining' && (
             <div>
               <div className="text-3xl mb-4 animate-pulse">🔗</div>
-              <p className="text-[#f2ede4] font-medium mb-1">Joining trip...</p>
+              <p className="text-[#f5efe6] font-medium mb-1">Joining trip...</p>
               <p className="text-[#b8b0a2] text-sm">{tripTitle}</p>
             </div>
           )}
@@ -92,7 +92,7 @@ export default function JoinTripPage() {
           {status === 'success' && (
             <div>
               <div className="text-3xl mb-4">🎉</div>
-              <p className="text-[#f2ede4] font-medium mb-1">You're in!</p>
+              <p className="text-[#f5efe6] font-medium mb-1">You're in!</p>
               <p className="text-[#b8b0a2] text-sm mb-4">{tripTitle}</p>
               <p className="text-xs text-[#b8b0a2] animate-pulse">
                 Taking you to the trip...
@@ -103,11 +103,11 @@ export default function JoinTripPage() {
           {status === 'already' && (
             <div>
               <div className="text-3xl mb-4">👋</div>
-              <p className="text-[#f2ede4] font-medium mb-1">You're already in!</p>
+              <p className="text-[#f5efe6] font-medium mb-1">You're already in!</p>
               <p className="text-[#b8b0a2] text-sm mb-6">{tripTitle}</p>
               <Link
                 href={`/trip/${tripId}`}
-                className="inline-block bg-[#e8623a] text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-[#c44d28] transition-colors"
+                className="inline-block bg-[#C4563A] text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-[#a64428] transition-colors"
               >
                 View trip →
               </Link>
@@ -117,11 +117,11 @@ export default function JoinTripPage() {
           {status === 'error' && (
             <div>
               <div className="text-3xl mb-4">😕</div>
-              <p className="text-[#f2ede4] font-medium mb-1">Something went wrong</p>
+              <p className="text-[#f5efe6] font-medium mb-1">Something went wrong</p>
               <p className="text-[#b8b0a2] text-sm mb-6">{error}</p>
               <Link
                 href="/dashboard"
-                className="inline-block border border-[rgba(242,237,228,0.1)] text-[#b8b0a2] text-sm font-medium px-6 py-2.5 rounded-lg hover:text-[#f2ede4] transition-colors"
+                className="inline-block border border-[rgba(242,237,228,0.1)] text-[#b8b0a2] text-sm font-medium px-6 py-2.5 rounded-lg hover:text-[#f5efe6] transition-colors"
               >
                 Back to dashboard
               </Link>

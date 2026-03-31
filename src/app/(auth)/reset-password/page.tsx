@@ -61,16 +61,16 @@ export default function ResetPasswordPage() {
 
   if (error === 'invalid_link') {
     return (
-      <div className="min-h-screen bg-[#0a0a09] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
           <Link href="/" className="inline-block mb-8">
-            <span className="font-mono text-sm tracking-widest text-[#e8623a]">Out</span>
-            <span className="font-mono text-sm tracking-widest text-[#f2ede4]">TheChat</span>
+            <span className="font-mono text-sm tracking-widest text-[#C4563A]">Out</span>
+            <span className="font-mono text-sm tracking-widest text-[#f5efe6]">TheChat</span>
           </Link>
           <div className="bg-red-950/50 border border-red-800/50 rounded-lg px-4 py-4 text-sm text-red-300 mb-6">
             This password reset link is invalid or has expired.
           </div>
-          <Link href="/forgot-password" className="text-sm text-[#e8623a] hover:text-[#c44d28] transition-colors">
+          <Link href="/forgot-password" className="text-sm text-[#C4563A] hover:text-[#a64428] transition-colors">
             Request a new reset link
           </Link>
         </div>
@@ -79,16 +79,16 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a09] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
-            <span className="font-mono text-sm tracking-widest text-[#e8623a]">Out</span>
-            <span className="font-mono text-sm tracking-widest text-[#f2ede4]">TheChat</span>
+            <span className="font-mono text-sm tracking-widest text-[#C4563A]">Out</span>
+            <span className="font-mono text-sm tracking-widest text-[#f5efe6]">TheChat</span>
           </Link>
-          <h1 className="mt-6 text-2xl font-semibold text-[#f2ede4]">Set new password</h1>
+          <h1 className="mt-6 text-2xl font-semibold text-[#f5efe6]">Set new password</h1>
           <p className="mt-2 text-sm text-[#b8b0a2]">Choose a strong password for your account</p>
         </div>
 
@@ -106,7 +106,7 @@ export default function ResetPasswordPage() {
               minLength={6}
               disabled={!sessionReady}
               placeholder="Min. 6 characters"
-              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f2ede4] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors disabled:opacity-50"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f5efe6] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors disabled:opacity-50"
             />
           </div>
 
@@ -122,7 +122,7 @@ export default function ResetPasswordPage() {
               minLength={6}
               disabled={!sessionReady}
               placeholder="••••••••"
-              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f2ede4] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors disabled:opacity-50"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f5efe6] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors disabled:opacity-50"
             />
           </div>
 
@@ -135,7 +135,7 @@ export default function ResetPasswordPage() {
           <button
             type="submit"
             disabled={loading || !sessionReady}
-            className="w-full bg-[#e8623a] hover:bg-[#c44d28] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-3 text-sm transition-colors"
+            className="w-full bg-[#C4563A] hover:bg-[#a64428] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-3 text-sm transition-colors"
           >
             {loading ? 'Updating...' : !sessionReady ? 'Verifying link...' : 'Update password'}
           </button>

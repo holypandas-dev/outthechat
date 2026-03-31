@@ -68,7 +68,7 @@ export default async function FundPage({
   const goalAmount = Math.max(midCost * (trip.group_size ?? 1), 500)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a09' }}>
+    <div style={{ minHeight: '100vh', background: '#0f0d0b' }}>
       <nav
         style={{
           borderBottom: '1px solid rgba(242,237,228,0.08)',
@@ -78,7 +78,7 @@ export default async function FundPage({
           justifyContent: 'space-between',
           position: 'sticky',
           top: 0,
-          background: '#0a0a09',
+          background: '#0f0d0b',
           zIndex: 10,
         }}
       >
@@ -86,8 +86,8 @@ export default async function FundPage({
           href="/dashboard"
           style={{ fontFamily: 'var(--font-geist-mono)', fontSize: '14px', textDecoration: 'none' }}
         >
-          <span style={{ color: '#e8623a' }}>Out</span>
-          <span style={{ color: '#f2ede4' }}>TheChat</span>
+          <span style={{ color: '#C4563A' }}>Out</span>
+          <span style={{ color: '#f5efe6' }}>TheChat</span>
         </Link>
         <Link
           href={`/trip/${id}`}
@@ -103,7 +103,7 @@ export default async function FundPage({
             style={{
               fontFamily: 'var(--font-geist-mono)',
               fontSize: '11px',
-              color: '#e8623a',
+              color: '#C4563A',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               marginBottom: '6px',
@@ -111,7 +111,7 @@ export default async function FundPage({
           >
             {trip.destination}
           </p>
-          <h1 style={{ fontSize: '24px', fontWeight: 600, color: '#f2ede4', marginBottom: '4px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 600, color: '#f5efe6', marginBottom: '4px' }}>
             {trip.title}
           </h1>
           <p style={{ fontSize: '14px', color: '#b8b0a2' }}>Group travel fund</p>

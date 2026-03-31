@@ -20,7 +20,7 @@ interface TripMapViewProps {
 
 const TIME_SLOT_COLORS: Record<string, string> = {
   morning: '#f59e0b',
-  afternoon: '#e8623a',
+  afternoon: '#C4563A',
   evening: '#8b5cf6',
 }
 
@@ -104,7 +104,7 @@ export function TripMapView({ activities, destination, onActivityClick }: TripMa
           bounds.extend(coords)
 
           const el = document.createElement('div')
-          const color = TIME_SLOT_COLORS[activity.time_slot] || '#e8623a'
+          const color = TIME_SLOT_COLORS[activity.time_slot] || '#C4563A'
           el.style.cssText = `
             width: 26px;
             height: 26px;
@@ -156,17 +156,17 @@ export function TripMapView({ activities, destination, onActivityClick }: TripMa
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
 
       {loading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#141412]">
-          <div className="w-6 h-6 border-2 border-[#e8623a] border-t-transparent rounded-full animate-spin mb-3" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#1a1612]">
+          <div className="w-6 h-6 border-2 border-[#C4563A] border-t-transparent rounded-full animate-spin mb-3" />
           <p className="text-sm text-[#b8b0a2]">{geocodeStatus || 'Loading map...'}</p>
         </div>
       )}
 
       {configError && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#141412]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#1a1612]">
           <p className="text-2xl mb-2">🗺️</p>
           <p className="text-sm text-[#b8b0a2] text-center max-w-xs">
-            Add <code className="text-[#e8623a]">NEXT_PUBLIC_MAPBOX_TOKEN</code> to your environment to enable the map view.
+            Add <code className="text-[#C4563A]">NEXT_PUBLIC_MAPBOX_TOKEN</code> to your environment to enable the map view.
           </p>
         </div>
       )}

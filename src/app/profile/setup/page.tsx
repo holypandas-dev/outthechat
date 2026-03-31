@@ -104,27 +104,27 @@ export default function ProfileSetupPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a09] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center">
         <div className="text-[#b8b0a2] text-sm font-mono animate-pulse">Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a09] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
 
         {/* Logo */}
         <div className="text-center mb-10">
           <span className="font-mono text-lg">
-            <span className="text-[#e8623a]">Out</span>
-            <span className="text-[#f2ede4]">TheChat</span>
+            <span className="text-[#C4563A]">Out</span>
+            <span className="text-[#f5efe6]">TheChat</span>
           </span>
         </div>
 
         {/* Card */}
-        <div className="bg-[#141412] border border-[rgba(242,237,228,0.08)] rounded-2xl p-8">
-          <h1 className="text-xl font-semibold text-[#f2ede4] mb-1">Set up your profile</h1>
+        <div className="bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-2xl p-8">
+          <h1 className="text-xl font-semibold text-[#f5efe6] mb-1">Set up your profile</h1>
           <p className="text-[#b8b0a2] text-sm mb-8">
             Let your travel crew know who you are
           </p>
@@ -142,11 +142,11 @@ export default function ProfileSetupPage() {
                   <img
                     src={avatarPreview}
                     alt="Your photo"
-                    className="w-20 h-20 rounded-full object-cover border-2 border-[rgba(242,237,228,0.1)] group-hover:border-[#e8623a] transition-colors"
+                    className="w-20 h-20 rounded-full object-cover border-2 border-[rgba(242,237,228,0.1)] group-hover:border-[#C4563A] transition-colors"
                   />
                 ) : (
-                  <div className="w-20 h-20 rounded-full bg-[#e8623a]/15 border-2 border-dashed border-[rgba(242,237,228,0.2)] group-hover:border-[#e8623a] transition-colors flex items-center justify-center">
-                    <span className="text-2xl font-semibold text-[#e8623a]">{initials}</span>
+                  <div className="w-20 h-20 rounded-full bg-[#C4563A]/15 border-2 border-dashed border-[rgba(242,237,228,0.2)] group-hover:border-[#C4563A] transition-colors flex items-center justify-center">
+                    <span className="text-2xl font-semibold text-[#C4563A]">{initials}</span>
                   </div>
                 )}
                 <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -168,7 +168,7 @@ export default function ProfileSetupPage() {
             {/* Display name */}
             <div>
               <label className="block text-xs font-mono text-[#b8b0a2] uppercase tracking-wider mb-2">
-                Your name <span className="text-[#e8623a]">*</span>
+                Your name <span className="text-[#C4563A]">*</span>
               </label>
               <input
                 type="text"
@@ -177,7 +177,7 @@ export default function ProfileSetupPage() {
                 placeholder="How should we call you?"
                 required
                 autoFocus
-                className="w-full bg-[#0a0a09] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-[#e8623a] transition-colors"
+                className="w-full bg-[#0f0d0b] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-[#C4563A] transition-colors"
               />
             </div>
 
@@ -192,7 +192,7 @@ export default function ProfileSetupPage() {
                 placeholder="Spontaneous traveller, always down for food..."
                 rows={2}
                 maxLength={200}
-                className="w-full bg-[#0a0a09] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-[#e8623a] transition-colors resize-none"
+                className="w-full bg-[#0f0d0b] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-[#C4563A] transition-colors resize-none"
               />
             </div>
 
@@ -205,7 +205,7 @@ export default function ProfileSetupPage() {
             <button
               type="submit"
               disabled={saving}
-              className="w-full bg-[#e8623a] hover:bg-[#c44d28] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors text-sm mt-2"
+              className="w-full bg-[#C4563A] hover:bg-[#a64428] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors text-sm mt-2"
             >
               {saving ? 'Saving...' : 'Continue to dashboard →'}
             </button>

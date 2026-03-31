@@ -50,7 +50,7 @@ export function WhatToWear({ tripId, initialData }: WhatToWearProps) {
   }
 
   return (
-    <div className="bg-[#141412] border border-[rgba(242,237,228,0.08)] rounded-xl overflow-hidden">
+    <div className="bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-xl overflow-hidden">
       {/* Header */}
       <button
         onClick={handleToggle}
@@ -58,7 +58,7 @@ export function WhatToWear({ tripId, initialData }: WhatToWearProps) {
       >
         <div className="flex items-center gap-2">
           <span className="text-base">👗</span>
-          <p className="text-xs font-mono text-[#e8623a] uppercase tracking-widest">
+          <p className="text-xs font-mono text-[#C4563A] uppercase tracking-widest">
             What to wear
           </p>
         </div>
@@ -72,7 +72,7 @@ export function WhatToWear({ tripId, initialData }: WhatToWearProps) {
         <div className="px-4 pb-4 border-t border-[rgba(242,237,228,0.06)]">
           {loading && (
             <div className="pt-4 flex items-center gap-2 text-sm text-[#b8b0a2]">
-              <span className="inline-block w-3 h-3 border border-[#e8623a] border-t-transparent rounded-full animate-spin" />
+              <span className="inline-block w-3 h-3 border border-[#C4563A] border-t-transparent rounded-full animate-spin" />
               Generating packing advice…
             </div>
           )}
@@ -82,7 +82,7 @@ export function WhatToWear({ tripId, initialData }: WhatToWearProps) {
               {error}
               <button
                 onClick={() => { setData(null); setLoading(false); setError(null); handleToggle() }}
-                className="ml-2 text-[#e8623a] underline"
+                className="ml-2 text-[#C4563A] underline"
               >
                 Retry
               </button>
@@ -96,7 +96,7 @@ export function WhatToWear({ tripId, initialData }: WhatToWearProps) {
                 <p className="text-xs font-mono text-[#b8b0a2] uppercase tracking-widest mb-1.5">
                   ☁️ Weather
                 </p>
-                <p className="text-sm text-[#f2ede4] leading-relaxed">
+                <p className="text-sm text-[#f5efe6] leading-relaxed">
                   {data.weather_expectations}
                 </p>
               </div>
@@ -109,7 +109,7 @@ export function WhatToWear({ tripId, initialData }: WhatToWearProps) {
                 <ul className="space-y-1">
                   {data.recommended_clothing.map((item, i) => (
                     <li key={i} className="text-sm text-[#b8b0a2] flex gap-2">
-                      <span className="text-[#e8623a] flex-shrink-0">→</span>
+                      <span className="text-[#C4563A] flex-shrink-0">→</span>
                       {item}
                     </li>
                   ))}
@@ -124,7 +124,7 @@ export function WhatToWear({ tripId, initialData }: WhatToWearProps) {
                 <ul className="space-y-1">
                   {data.what_not_to_bring.map((item, i) => (
                     <li key={i} className="text-sm text-[#b8b0a2] flex gap-2">
-                      <span className="text-[rgba(232,98,58,0.5)] flex-shrink-0">✕</span>
+                      <span className="text-[rgba(196,86,58,0.5)] flex-shrink-0">✕</span>
                       {item}
                     </li>
                   ))}
@@ -146,7 +146,7 @@ export function WhatToWear({ tripId, initialData }: WhatToWearProps) {
                     ] as const
                   ).map(({ key, label }) => (
                     <div key={key}>
-                      <p className="text-xs text-[#e8623a] font-mono mb-1">{label}</p>
+                      <p className="text-xs text-[#C4563A] font-mono mb-1">{label}</p>
                       <ul className="space-y-1">
                         {data.packing_checklist[key].map((item, i) => (
                           <li key={i} className="text-xs text-[#b8b0a2] flex gap-1.5 items-start">

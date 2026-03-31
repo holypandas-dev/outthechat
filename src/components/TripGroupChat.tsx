@@ -25,7 +25,7 @@ interface TripGroupChatProps {
   memberProfiles: MemberProfile[]
 }
 
-const MEMBER_COLORS = ['#e8623a', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a']
+const MEMBER_COLORS = ['#C4563A', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a']
 
 const CATEGORY_EMOJI: Record<string, string> = {
   food: '🍜', activity: '🎯', nightlife: '🎉', culture: '🏛️',
@@ -206,7 +206,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
           right: panelRight,
           width: panelWidth,
           height: '100dvh',
-          background: '#0f0f0d',
+          background: '#0f0d0b',
           borderLeft: '1px solid rgba(242,237,228,0.08)',
           display: 'flex',
           flexDirection: 'column',
@@ -232,8 +232,8 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
                 width: '28px',
                 height: '28px',
                 borderRadius: '50%',
-                background: 'rgba(232,98,58,0.15)',
-                border: '1px solid rgba(232,98,58,0.3)',
+                background: 'rgba(196,86,58,0.15)',
+                border: '1px solid rgba(196,86,58,0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -243,7 +243,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
               💬
             </div>
             <div>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: '#f2ede4', margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 600, color: '#f5efe6', margin: 0 }}>
                 Group Chat
               </p>
               <p style={{ fontSize: '11px', color: '#b8b0a2', margin: 0 }}>
@@ -328,29 +328,29 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
                     )}
                     <div style={{
                       maxWidth: '270px',
-                      background: '#141412',
-                      border: '1px solid rgba(232,98,58,0.25)',
+                      background: '#1a1612',
+                      border: '1px solid rgba(196,86,58,0.25)',
                       borderRadius: '12px',
                       overflow: 'hidden',
                     }}>
                       <div style={{
                         padding: '7px 12px',
-                        borderBottom: '1px solid rgba(232,98,58,0.15)',
-                        background: 'rgba(232,98,58,0.07)',
+                        borderBottom: '1px solid rgba(196,86,58,0.15)',
+                        background: 'rgba(196,86,58,0.07)',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
                       }}>
-                        <span style={{ fontSize: '10px', color: '#e8623a', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        <span style={{ fontSize: '10px', color: '#C4563A', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                           {emoji} {activity.category as string}
                         </span>
-                        <span style={{ fontSize: '10px', color: 'rgba(232,98,58,0.6)' }}>·</span>
-                        <span style={{ fontSize: '10px', color: 'rgba(232,98,58,0.7)', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        <span style={{ fontSize: '10px', color: 'rgba(196,86,58,0.6)' }}>·</span>
+                        <span style={{ fontSize: '10px', color: 'rgba(196,86,58,0.7)', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                           {activity.time_slot as string}
                         </span>
                       </div>
                       <div style={{ padding: '10px 12px' }}>
-                        <p style={{ fontSize: '13px', fontWeight: 600, color: '#f2ede4', margin: '0 0 3px' }}>
+                        <p style={{ fontSize: '13px', fontWeight: 600, color: '#f5efe6', margin: '0 0 3px' }}>
                           {activity.title as string}
                         </p>
                         {activity.location && (
@@ -359,7 +359,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
                           </p>
                         )}
                         {(activity.cost_estimate as number) > 0 && (
-                          <p style={{ fontSize: '11px', color: '#f2ede4', margin: 0, fontFamily: 'monospace' }}>
+                          <p style={{ fontSize: '11px', color: '#f5efe6', margin: 0, fontFamily: 'monospace' }}>
                             ~${activity.cost_estimate as number}
                           </p>
                         )}
@@ -393,9 +393,9 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
                     maxWidth: '250px',
                     padding: '9px 13px',
                     borderRadius: isOwn ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                    background: isOwn ? '#e8623a' : '#1a1a17',
+                    background: isOwn ? '#C4563A' : '#1a1612',
                     border: isOwn ? 'none' : '1px solid rgba(242,237,228,0.08)',
-                    color: '#f2ede4',
+                    color: '#f5efe6',
                     fontSize: '13px',
                     lineHeight: '1.5',
                     wordBreak: 'break-word',
@@ -439,7 +439,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
               display: 'flex',
               gap: '8px',
               alignItems: 'center',
-              background: '#141412',
+              background: '#1a1612',
               border: '1px solid rgba(242,237,228,0.1)',
               borderRadius: '12px',
               padding: '10px 12px',
@@ -458,7 +458,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
                 background: 'none',
                 border: 'none',
                 outline: 'none',
-                color: '#f2ede4',
+                color: '#f5efe6',
                 fontSize: '13px',
                 fontFamily: 'inherit',
               }}
@@ -470,7 +470,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
                 width: '30px',
                 height: '30px',
                 borderRadius: '8px',
-                background: input.trim() && !isSending ? '#e8623a' : 'rgba(232,98,58,0.2)',
+                background: input.trim() && !isSending ? '#C4563A' : 'rgba(196,86,58,0.2)',
                 border: 'none',
                 cursor: input.trim() && !isSending ? 'pointer' : 'not-allowed',
                 display: 'flex',
@@ -483,7 +483,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
-                  stroke={input.trim() && !isSending ? '#fff' : 'rgba(232,98,58,0.6)'}
+                  stroke={input.trim() && !isSending ? '#fff' : 'rgba(196,86,58,0.6)'}
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -515,7 +515,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
             position: absolute;
             top: -4px;
             right: -6px;
-            background: #e8623a;
+            background: #C4563A;
             color: #fff;
             font-size: 9px;
             font-weight: 700;

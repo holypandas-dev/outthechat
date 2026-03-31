@@ -34,16 +34,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a09] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
-            <span className="font-mono text-sm tracking-widest text-[#e8623a]">Out</span>
-            <span className="font-mono text-sm tracking-widest text-[#f2ede4]">TheChat</span>
+            <span className="font-mono text-sm tracking-widest text-[#C4563A]">Out</span>
+            <span className="font-mono text-sm tracking-widest text-[#f5efe6]">TheChat</span>
           </Link>
-          <h1 className="mt-6 text-2xl font-semibold text-[#f2ede4]">Welcome back</h1>
+          <h1 className="mt-6 text-2xl font-semibold text-[#f5efe6]">Welcome back</h1>
           <p className="mt-2 text-sm text-[#b8b0a2]">Sign in to your account</p>
         </div>
 
@@ -59,7 +59,7 @@ export default function LoginPage() {
               onChange={e => setEmail(e.target.value)}
               required
               placeholder="you@example.com"
-              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f2ede4] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f5efe6] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
             />
           </div>
 
@@ -68,7 +68,7 @@ export default function LoginPage() {
               <label className="block text-xs font-medium text-[#b8b0a2] tracking-wide uppercase">
                 Password
               </label>
-              <Link href="/forgot-password" className="text-xs text-[#e8623a] hover:underline">
+              <Link href="/forgot-password" className="text-xs text-[#C4563A] hover:underline">
                 Forgot password?
               </Link>
             </div>
@@ -78,7 +78,7 @@ export default function LoginPage() {
               onChange={e => setPassword(e.target.value)}
               required
               placeholder="••••••••"
-              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f2ede4] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f5efe6] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
             />
           </div>
 
@@ -91,7 +91,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#e8623a] hover:bg-[#c44d28] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-3 text-sm transition-colors"
+            className="w-full bg-[#C4563A] hover:bg-[#a64428] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-3 text-sm transition-colors"
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
@@ -100,7 +100,7 @@ export default function LoginPage() {
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-[#b8b0a2]">
           No account?{' '}
-          <Link href="/signup" className="text-[#e8623a] hover:underline">
+          <Link href="/signup" className="text-[#C4563A] hover:underline">
             Create one
           </Link>
         </p>

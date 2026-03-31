@@ -102,15 +102,15 @@ export default function PlanPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a09]">
+    <div className="min-h-screen bg-[#0f0d0b]">
 
       {/* Nav */}
       <nav className="border-b border-[rgba(242,237,228,0.08)] px-4 sm:px-6 py-4 flex items-center justify-between">
         <a href="/dashboard" className="font-mono text-sm">
-          <span className="text-[#e8623a]">Out</span>
-          <span className="text-[#f2ede4]">TheChat</span>
+          <span className="text-[#C4563A]">Out</span>
+          <span className="text-[#f5efe6]">TheChat</span>
         </a>
-        <a href="/dashboard" className="text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors">
+        <a href="/dashboard" className="text-sm text-[#b8b0a2] hover:text-[#f5efe6] transition-colors">
           ← Dashboard
         </a>
       </nav>
@@ -119,10 +119,10 @@ export default function PlanPage() {
 
         {/* Header */}
         <div className="mb-10">
-          <p className="font-mono text-[11px] text-[#e8623a] uppercase tracking-widest mb-3">
+          <p className="font-mono text-[11px] text-[#C4563A] uppercase tracking-widest mb-3">
             AI Trip Generator
           </p>
-          <h1 className="text-3xl font-semibold text-[#f2ede4] leading-tight">
+          <h1 className="text-3xl font-semibold text-[#f5efe6] leading-tight">
             Where are we going?
           </h1>
           <p className="text-[#b8b0a2] mt-2 text-sm">
@@ -143,7 +143,7 @@ export default function PlanPage() {
               onChange={e => setDestination(e.target.value)}
               required
               placeholder="Tokyo, Japan"
-              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-base placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] text-base placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
             />
             {/* Best time to visit hint */}
             <div className="min-h-[28px] mt-2">
@@ -154,8 +154,8 @@ export default function PlanPage() {
                 </div>
               )}
               {!bestTimeLoading && bestTimeHint && (
-                <div className="flex items-start gap-2 text-xs text-[#b8b0a2] bg-[rgba(232,98,58,0.06)] border border-[rgba(232,98,58,0.15)] rounded-lg px-3 py-2">
-                  <span className="text-[#e8623a] flex-shrink-0 mt-px">💡</span>
+                <div className="flex items-start gap-2 text-xs text-[#b8b0a2] bg-[rgba(196,86,58,0.06)] border border-[rgba(196,86,58,0.15)] rounded-lg px-3 py-2">
+                  <span className="text-[#C4563A] flex-shrink-0 mt-px">💡</span>
                   <span>{bestTimeHint}</span>
                 </div>
               )}
@@ -172,7 +172,7 @@ export default function PlanPage() {
               value={departureCity}
               onChange={e => setDepartureCity(e.target.value)}
               placeholder="New York, NY"
-              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] text-sm placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
             />
             <p className="text-[10px] text-[#b8b0a2]/50 mt-1.5">
               Helps the AI estimate realistic flight costs in your budget
@@ -188,7 +188,7 @@ export default function PlanPage() {
               <select
                 value={days}
                 onChange={e => setDays(e.target.value)}
-                className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+                className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] text-sm outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
               >
                 {[2,3,4,5,6,7,10,14].map(d => (
                   <option key={d} value={d}>{d} days</option>
@@ -202,7 +202,7 @@ export default function PlanPage() {
               <select
                 value={groupSize}
                 onChange={e => setGroupSize(e.target.value)}
-                className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+                className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] text-sm outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
               >
                 {[1,2,3,4,5,6,8,10].map(n => (
                   <option key={n} value={n}>{n} {n === 1 ? 'person' : 'people'}</option>
@@ -225,7 +225,7 @@ export default function PlanPage() {
                   type="date"
                   value={startDate}
                   onChange={e => { setStartDate(e.target.value); if (e.target.value) setTravelMonth('') }}
-                  className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors [color-scheme:dark]"
+                  className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] text-sm outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors [color-scheme:dark]"
                 />
               </div>
               <div>
@@ -237,7 +237,7 @@ export default function PlanPage() {
                   value={endDate}
                   onChange={e => { setEndDate(e.target.value); if (e.target.value) setTravelMonth('') }}
                   min={startDate || undefined}
-                  className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors [color-scheme:dark]"
+                  className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] text-sm outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors [color-scheme:dark]"
                 />
               </div>
             </div>
@@ -252,7 +252,7 @@ export default function PlanPage() {
               <select
                 value={travelMonth}
                 onChange={e => setTravelMonth(e.target.value)}
-                className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors"
+                className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] text-sm outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
               >
                 <option value="">Not sure yet</option>
                 {MONTHS.map(m => (
@@ -282,11 +282,11 @@ export default function PlanPage() {
                   onClick={() => setBudget(b.id)}
                   className={`p-3 rounded-lg border text-left transition-all duration-150 active:scale-95 ${
                     budget === b.id
-                      ? 'border-[#e8623a] bg-[rgba(232,98,58,0.08)] scale-[1.02]'
-                      : 'border-[rgba(242,237,228,0.08)] bg-[#141412] hover:border-[rgba(242,237,228,0.2)]'
+                      ? 'border-[#C4563A] bg-[rgba(196,86,58,0.08)] scale-[1.02]'
+                      : 'border-[rgba(242,237,228,0.08)] bg-[#1a1612] hover:border-[rgba(242,237,228,0.2)]'
                   }`}
                 >
-                  <div className="text-sm text-[#f2ede4]">{b.label}</div>
+                  <div className="text-sm text-[#f5efe6]">{b.label}</div>
                   <div className="text-xs text-[#b8b0a2] mt-0.5">{b.desc}</div>
                 </button>
               ))}
@@ -311,11 +311,11 @@ export default function PlanPage() {
                     onClick={() => toggleVibe(v.id)}
                     className={`p-3 rounded-lg border text-left transition-all duration-150 active:scale-95 ${
                       selected
-                        ? 'border-[#e8623a] bg-[rgba(232,98,58,0.08)] scale-[1.02]'
-                        : 'border-[rgba(242,237,228,0.08)] bg-[#141412] hover:border-[rgba(242,237,228,0.2)]'
+                        ? 'border-[#C4563A] bg-[rgba(196,86,58,0.08)] scale-[1.02]'
+                        : 'border-[rgba(242,237,228,0.08)] bg-[#1a1612] hover:border-[rgba(242,237,228,0.2)]'
                     }`}
                   >
-                    <div className="text-sm text-[#f2ede4]">{v.label}</div>
+                    <div className="text-sm text-[#f5efe6]">{v.label}</div>
                     <div className="text-xs text-[#b8b0a2] mt-0.5">{v.desc}</div>
                   </button>
                 )
@@ -333,7 +333,7 @@ export default function PlanPage() {
               onChange={e => setPrompt(e.target.value)}
               placeholder="e.g. We love ramen, hate touristy spots, and want to see cherry blossoms..."
               rows={3}
-              className="w-full bg-[#141412] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f2ede4] text-sm placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(232,98,58,0.5)] transition-colors resize-none"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] text-sm placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors resize-none"
             />
           </div>
 
@@ -348,7 +348,7 @@ export default function PlanPage() {
           <button
             type="submit"
             disabled={loading || !destination.trim()}
-            className="w-full bg-[#e8623a] hover:bg-[#c44d28] disabled:opacity-40 disabled:cursor-not-allowed text-white font-medium rounded-lg px-6 py-4 text-base transition-colors"
+            className="w-full bg-[#C4563A] hover:bg-[#a64428] disabled:opacity-40 disabled:cursor-not-allowed text-white font-medium rounded-lg px-6 py-4 text-base transition-colors"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">

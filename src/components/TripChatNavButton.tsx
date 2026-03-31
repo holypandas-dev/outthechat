@@ -8,7 +8,7 @@ export function TripChatNavButton() {
   return (
     <button
       onClick={handleClick}
-      className="text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors"
+      className="text-sm text-[#b8b0a2] hover:text-[#f5efe6] transition-colors"
     >
       💬 Chat
     </button>

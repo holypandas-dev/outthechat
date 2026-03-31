@@ -106,7 +106,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
           right: isOpen ? 0 : (isMobile ? '-105vw' : '-420px'),
           width: isMobile ? '100vw' : '400px',
           height: '100dvh',
-          background: '#0f0f0d',
+          background: '#0f0d0b',
           borderLeft: '1px solid rgba(242,237,228,0.08)',
           display: 'flex',
           flexDirection: 'column',
@@ -132,8 +132,8 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                 width: '28px',
                 height: '28px',
                 borderRadius: '50%',
-                background: 'rgba(232,98,58,0.15)',
-                border: '1px solid rgba(232,98,58,0.3)',
+                background: 'rgba(196,86,58,0.15)',
+                border: '1px solid rgba(196,86,58,0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -143,7 +143,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
               ✦
             </div>
             <div>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: '#f2ede4', margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 600, color: '#f5efe6', margin: 0 }}>
                 AI Trip Editor
               </p>
               <p style={{ fontSize: '11px', color: '#b8b0a2', margin: 0 }}>
@@ -191,9 +191,9 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                   maxWidth: '85%',
                   padding: '10px 14px',
                   borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                  background: msg.role === 'user' ? '#e8623a' : '#1a1a17',
+                  background: msg.role === 'user' ? '#C4563A' : '#1a1612',
                   border: msg.role === 'user' ? 'none' : '1px solid rgba(242,237,228,0.08)',
-                  color: msg.role === 'user' ? '#fff' : '#f2ede4',
+                  color: msg.role === 'user' ? '#fff' : '#f5efe6',
                   fontSize: '13px',
                   lineHeight: '1.5',
                   whiteSpace: 'pre-wrap',
@@ -211,7 +211,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                 style={{
                   padding: '10px 14px',
                   borderRadius: '16px 16px 16px 4px',
-                  background: '#1a1a17',
+                  background: '#1a1612',
                   border: '1px solid rgba(242,237,228,0.08)',
                   display: 'flex',
                   alignItems: 'center',
@@ -227,7 +227,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                         width: '4px',
                         height: '4px',
                         borderRadius: '50%',
-                        background: '#e8623a',
+                        background: '#C4563A',
                         display: 'inline-block',
                         animation: `pulse 1.2s ease-in-out ${n * 0.2}s infinite`,
                       }}
@@ -264,9 +264,9 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                   fontSize: '11px',
                   padding: '5px 10px',
                   borderRadius: '20px',
-                  border: '1px solid rgba(232,98,58,0.3)',
-                  background: 'rgba(232,98,58,0.06)',
-                  color: '#e8623a',
+                  border: '1px solid rgba(196,86,58,0.3)',
+                  background: 'rgba(196,86,58,0.06)',
+                  color: '#C4563A',
                   cursor: 'pointer',
                   transition: 'background 0.15s',
                 }}
@@ -290,7 +290,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
               display: 'flex',
               gap: '8px',
               alignItems: 'flex-end',
-              background: '#141412',
+              background: '#1a1612',
               border: '1px solid rgba(242,237,228,0.1)',
               borderRadius: '12px',
               padding: '10px 12px',
@@ -310,7 +310,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                 background: 'none',
                 border: 'none',
                 outline: 'none',
-                color: '#f2ede4',
+                color: '#f5efe6',
                 fontSize: '13px',
                 lineHeight: '1.5',
                 resize: 'none',
@@ -331,7 +331,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                 width: '30px',
                 height: '30px',
                 borderRadius: '8px',
-                background: input.trim() && !isLoading ? '#e8623a' : 'rgba(232,98,58,0.2)',
+                background: input.trim() && !isLoading ? '#C4563A' : 'rgba(196,86,58,0.2)',
                 border: 'none',
                 cursor: input.trim() && !isLoading ? 'pointer' : 'not-allowed',
                 display: 'flex',
@@ -344,7 +344,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
-                  stroke={input.trim() && !isLoading ? '#fff' : 'rgba(232,98,58,0.6)'}
+                  stroke={input.trim() && !isLoading ? '#fff' : 'rgba(196,86,58,0.6)'}
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -368,23 +368,23 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
           width: '52px',
           height: '52px',
           borderRadius: '50%',
-          background: '#e8623a',
+          background: '#C4563A',
           border: 'none',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 4px 20px rgba(232,98,58,0.4)',
+          boxShadow: '0 4px 20px rgba(196,86,58,0.4)',
           zIndex: 51,
           transition: 'transform 0.2s, box-shadow 0.2s',
         }}
         onMouseEnter={e => {
           e.currentTarget.style.transform = 'scale(1.08)'
-          e.currentTarget.style.boxShadow = '0 6px 28px rgba(232,98,58,0.55)'
+          e.currentTarget.style.boxShadow = '0 6px 28px rgba(196,86,58,0.55)'
         }}
         onMouseLeave={e => {
           e.currentTarget.style.transform = 'scale(1)'
-          e.currentTarget.style.boxShadow = '0 4px 20px rgba(232,98,58,0.4)'
+          e.currentTarget.style.boxShadow = '0 4px 20px rgba(196,86,58,0.4)'
         }}
         aria-label="AI Trip Editor"
       >

@@ -71,7 +71,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
 
   const commitmentLabel = (score: number) => {
     if (score >= 91) return { text: 'Locked in 🔒', color: 'text-green-400' }
-    if (score >= 76) return { text: 'This is happening ✈️', color: 'text-[#e8623a]' }
+    if (score >= 76) return { text: 'This is happening ✈️', color: 'text-[#C4563A]' }
     if (score >= 51) return { text: 'Getting real 🔥', color: 'text-amber-400' }
     if (score >= 26) return { text: 'Planning mode 📋', color: 'text-blue-400' }
     return { text: 'Just dreaming 💭', color: 'text-[#b8b0a2]' }
@@ -80,20 +80,20 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
   const commitment = commitmentLabel(trip.commitment_score || 0)
 
   return (
-    <div className="min-h-screen bg-[#0a0a09]">
+    <div className="min-h-screen bg-[#0f0d0b]">
 
       {/* Nav */}
-      <nav className="border-b border-[rgba(242,237,228,0.08)] px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 bg-[#0a0a09] z-10">
+      <nav className="border-b border-[rgba(242,237,228,0.08)] px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 bg-[#0f0d0b] z-10">
         <Link href="/dashboard" className="font-mono text-sm">
-          <span className="text-[#e8623a]">Out</span>
-          <span className="text-[#f2ede4]">TheChat</span>
+          <span className="text-[#C4563A]">Out</span>
+          <span className="text-[#f5efe6]">TheChat</span>
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
           <TripChatNavButton />
-          <Link href="/plan" className="hidden sm:inline text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors">
+          <Link href="/plan" className="hidden sm:inline text-sm text-[#b8b0a2] hover:text-[#f5efe6] transition-colors">
             + New trip
           </Link>
-          <Link href="/dashboard" className="text-sm text-[#b8b0a2] hover:text-[#f2ede4] transition-colors">
+          <Link href="/dashboard" className="text-sm text-[#b8b0a2] hover:text-[#f5efe6] transition-colors">
             <span className="hidden sm:inline">Dashboard</span>
             <span className="sm:hidden">← Back</span>
           </Link>
@@ -106,10 +106,10 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
         <div className="mb-10">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
-              <p className="font-mono text-[11px] text-[#e8623a] uppercase tracking-widest mb-2">
+              <p className="font-mono text-[11px] text-[#C4563A] uppercase tracking-widest mb-2">
                 {trip.duration_days} days · {trip.destination} · {trip.budget_tier}
               </p>
-              <h1 className="text-3xl font-semibold text-[#f2ede4] leading-tight">
+              <h1 className="text-3xl font-semibold text-[#f5efe6] leading-tight">
                 {trip.title}
               </h1>
               <div className="mt-4 w-full sm:max-w-sm">
@@ -123,7 +123,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
                 </div>
                 <div className="h-1.5 bg-[rgba(242,237,228,0.06)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[#e8623a] rounded-full transition-all duration-500"
+                    className="h-full bg-[#C4563A] rounded-full transition-all duration-500"
                     style={{ width: `${trip.commitment_score}%` }}
                   />
                 </div>
@@ -136,8 +136,8 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
                   {members.slice(0, 5).map((m, i) => (
                     <div
                       key={m.id}
-                      className="w-8 h-8 rounded-full border-2 border-[#0a0a09] flex items-center justify-center text-xs font-medium text-white"
-                      style={{ background: ['#e8623a', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a'][i % 5] }}
+                      className="w-8 h-8 rounded-full border-2 border-[#0f0d0b] flex items-center justify-center text-xs font-medium text-white"
+                      style={{ background: ['#C4563A', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a'][i % 5] }}
                     >
                       {(m.profiles as { display_name: string })?.display_name?.[0]?.toUpperCase() || '?'}
                     </div>
@@ -160,7 +160,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
                     key={tier}
                     className={`px-4 py-2 rounded-lg border text-sm ${
                       trip.budget_tier === tier
-                        ? 'border-[#e8623a] bg-[rgba(232,98,58,0.08)] text-[#f2ede4]'
+                        ? 'border-[#C4563A] bg-[rgba(196,86,58,0.08)] text-[#f5efe6]'
                         : 'border-[rgba(242,237,228,0.08)] text-[#b8b0a2]'
                     }`}
                   >
@@ -173,14 +173,14 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
           )}
 
           {trip.local_tips && (trip.local_tips as string[]).length > 0 && (
-            <div className="mt-6 bg-[#141412] border border-[rgba(242,237,228,0.08)] rounded-xl p-4">
-              <p className="text-xs font-mono text-[#e8623a] uppercase tracking-widest mb-3">
+            <div className="mt-6 bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-xl p-4">
+              <p className="text-xs font-mono text-[#C4563A] uppercase tracking-widest mb-3">
                 Local tips
               </p>
               <ul className="space-y-1.5">
                 {(trip.local_tips as string[]).map((tip, i) => (
                   <li key={i} className="text-sm text-[#b8b0a2] flex gap-2">
-                    <span className="text-[#e8623a] flex-shrink-0">→</span>
+                    <span className="text-[#C4563A] flex-shrink-0">→</span>
                     {tip}
                   </li>
                 ))}
@@ -215,25 +215,25 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
           {trip.creator_id === user.id && <SendNudgesButton tripId={id} />}
           <Link
             href={`/trip/${id}/fund`}
-            className="border border-[#e8623a] text-[#e8623a] hover:bg-[rgba(232,98,58,0.08)] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
+            className="border border-[#C4563A] text-[#C4563A] hover:bg-[rgba(196,86,58,0.08)] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
           >
             💰 Group fund
           </Link>
           <Link
             href={`/trip/${id}/card`}
-            className="border border-[rgba(242,237,228,0.15)] text-[#f2ede4] hover:border-[#e8623a] hover:text-[#e8623a] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
+            className="border border-[rgba(242,237,228,0.15)] text-[#f5efe6] hover:border-[#C4563A] hover:text-[#C4563A] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
           >
             🪄 Share card
           </Link>
           <Link
             href="/plan"
-            className="bg-[#e8623a] hover:bg-[#c44d28] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
+            className="bg-[#C4563A] hover:bg-[#a64428] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
           >
             + Generate another trip
           </Link>
           <Link
             href="/dashboard"
-            className="border border-[rgba(242,237,228,0.1)] text-[#b8b0a2] hover:text-[#f2ede4] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
+            className="border border-[rgba(242,237,228,0.1)] text-[#b8b0a2] hover:text-[#f5efe6] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors text-center"
           >
             Back to dashboard
           </Link>
