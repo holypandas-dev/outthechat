@@ -57,10 +57,10 @@ export default async function DashboardPage() {
   const initials = getInitials(profile?.display_name, user.email!)
 
   return (
-    <div className="min-h-screen bg-[#0f0d0b]">
+    <div className="min-h-screen bg-[#0f0c09]">
 
       {/* Nav */}
-      <nav className="border-b border-[rgba(242,237,228,0.08)] px-4 sm:px-6 py-4 flex items-center justify-between">
+      <nav className="border-b border-[rgba(245,239,230,0.1)] px-4 sm:px-6 py-4 flex items-center justify-between">
         <span className="font-mono text-sm">
           <span className="text-[#C4563A]">Out</span>
           <span className="text-[#f5efe6]">TheChat</span>
@@ -99,7 +99,7 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-[#f5efe6]">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-[#f5efe6] font-[family-name:var(--font-fraunces)]">
               Hey {firstName} 👋
             </h1>
             <p className="text-[#b8b0a2] mt-1 text-sm">
@@ -123,7 +123,7 @@ export default async function DashboardPage() {
               <div key={trip.id} className="relative group">
                 <Link
                   href={`/trip/${trip.id}`}
-                  className="block bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-xl p-5 hover:border-[rgba(196,86,58,0.3)] transition-all hover:-translate-y-0.5"
+                  className="block bg-[#1c1814] border border-[rgba(245,239,230,0.1)] rounded-xl p-5 hover:border-[rgba(196,86,58,0.3)] transition-all hover:-translate-y-0.5"
                 >
                   {/* Trip header */}
                   <div className="flex items-start justify-between mb-3">
@@ -131,7 +131,7 @@ export default async function DashboardPage() {
                       <p className="font-mono text-[10px] text-[#C4563A] uppercase tracking-widest mb-1">
                         {trip.duration_days} days · {trip.budget_tier}
                       </p>
-                      <h3 className="text-[#f5efe6] font-medium text-base leading-tight">
+                      <h3 className="text-[#f5efe6] font-medium text-base leading-tight font-[family-name:var(--font-fraunces)]">
                         {trip.title}
                       </h3>
                       <p className="text-[#b8b0a2] text-sm mt-0.5">{trip.destination}</p>
@@ -149,7 +149,7 @@ export default async function DashboardPage() {
                         {trip.commitment_score}%
                       </span>
                     </div>
-                    <div className="h-1 bg-[rgba(242,237,228,0.06)] rounded-full overflow-hidden">
+                    <div className="h-1 bg-[rgba(245,239,230,0.06)] rounded-full overflow-hidden">
                       <div
                         className="h-full bg-[#C4563A] rounded-full transition-all"
                         style={{ width: `${trip.commitment_score}%` }}
@@ -181,7 +181,7 @@ export default async function DashboardPage() {
           </div>
         ) : (
           /* Empty state */
-          <div className="border border-dashed border-[rgba(242,237,228,0.12)] rounded-2xl p-8 sm:p-16 text-center">
+          <div className="border border-dashed border-[rgba(245,239,230,0.12)] rounded-2xl p-8 sm:p-16 text-center">
             <div className="text-5xl mb-4">✈️</div>
             <h2 className="text-xl font-medium text-[#f5efe6] mb-2">
               No trips yet
@@ -214,7 +214,7 @@ function getInitials(name: string | null | undefined, email: string): string {
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    planning: 'bg-blue-950/60 text-blue-300 border-blue-800/40',
+    planning: 'bg-[#8B7355] text-[#f5efe6] border-[#8B7355]/60',
     locked:   'bg-green-950/60 text-green-300 border-green-800/40',
     completed: 'bg-[rgba(242,237,228,0.06)] text-[#b8b0a2] border-[rgba(242,237,228,0.1)]',
     cancelled: 'bg-red-950/60 text-red-300 border-red-800/40',
