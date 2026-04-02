@@ -20,7 +20,7 @@ interface TripMapViewProps {
 
 const TIME_SLOT_COLORS: Record<string, string> = {
   morning: '#f59e0b',
-  afternoon: '#C4563A',
+  afternoon: 'var(--accent)',
   evening: '#8b5cf6',
 }
 
@@ -104,7 +104,7 @@ export function TripMapView({ activities, destination, onActivityClick }: TripMa
           bounds.extend(coords)
 
           const el = document.createElement('div')
-          const color = TIME_SLOT_COLORS[activity.time_slot] || '#C4563A'
+          const color = TIME_SLOT_COLORS[activity.time_slot] || 'var(--accent)'
           el.style.cssText = `
             width: 26px;
             height: 26px;
@@ -157,16 +157,16 @@ export function TripMapView({ activities, destination, onActivityClick }: TripMa
 
       {loading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#1a1612]">
-          <div className="w-6 h-6 border-2 border-[#C4563A] border-t-transparent rounded-full animate-spin mb-3" />
-          <p className="text-sm text-[#b8b0a2]">{geocodeStatus || 'Loading map...'}</p>
+          <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin mb-3" />
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{geocodeStatus || 'Loading map...'}</p>
         </div>
       )}
 
       {configError && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#1a1612]">
           <p className="text-2xl mb-2">🗺️</p>
-          <p className="text-sm text-[#b8b0a2] text-center max-w-xs">
-            Add <code className="text-[#C4563A]">NEXT_PUBLIC_MAPBOX_TOKEN</code> to your environment to enable the map view.
+          <p className="text-sm text-center max-w-xs" style={{ color: 'var(--text-secondary)' }}>
+            Add <code style={{ color: 'var(--accent)' }}>NEXT_PUBLIC_MAPBOX_TOKEN</code> to your environment to enable the map view.
           </p>
         </div>
       )}
@@ -180,7 +180,7 @@ export function TripMapView({ activities, destination, onActivityClick }: TripMa
                 className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                 style={{ background: TIME_SLOT_COLORS[slot] }}
               />
-              <span className="text-[10px] text-[#b8b0a2] capitalize font-mono">{slot}</span>
+              <span className="text-[10px] capitalize font-mono" style={{ color: 'var(--text-secondary)' }}>{slot}</span>
             </div>
           ))}
         </div>

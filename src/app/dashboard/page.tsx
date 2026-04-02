@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { DeleteTripButton } from '@/components/DeleteTripButton'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -9,61 +10,46 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  console.log('[dashboard] user.id:', user.id)
-
-  // Fetch user profile
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
 
-  // Redirect new users to set up their profile
   if (!profile?.display_name) redirect('/profile/setup')
 
-  // Step 1: get all trip_ids where this user is a member
   const { data: memberRows, error: memberError } = await supabase
     .from('trip_members')
     .select('trip_id')
     .eq('user_id', user.id)
 
-  console.log('[dashboard] step1 trip_members result:', { memberRows, memberError })
-
   const memberTripIds: string[] = memberRows?.map(r => r.trip_id) ?? []
 
-  console.log('[dashboard] step1 memberTripIds:', memberTripIds, '| count:', memberTripIds.length)
-
-  // Step 2: get all trips where creator_id = user OR id IN memberTripIds
-  // If memberTripIds is empty, only query by creator_id to avoid empty-IN issues
   let tripsQuery = supabase
     .from('trips')
     .select('*, trip_members(count)')
     .order('created_at', { ascending: false })
 
   if (memberTripIds.length > 0) {
-    console.log('[dashboard] step2 querying with OR: creator_id =', user.id, 'OR id IN', memberTripIds)
     tripsQuery = tripsQuery.or(`creator_id.eq.${user.id},id.in.(${memberTripIds.join(',')})`)
   } else {
-    console.log('[dashboard] step2 memberTripIds is empty — querying only by creator_id:', user.id)
     tripsQuery = tripsQuery.eq('creator_id', user.id)
   }
 
-  const { data: trips, error: tripsError } = await tripsQuery
-
-  console.log('[dashboard] step2 trips result:', { tripsError, count: trips?.length })
-  console.log('[dashboard] step2 trips detail:', trips?.map((t: any) => ({ id: t.id, title: t.title, creator_id: t.creator_id })))
+  const { data: trips } = await tripsQuery
 
   const firstName = profile?.display_name?.split(' ')[0] || 'there'
   const initials = getInitials(profile?.display_name, user.email!)
 
   return (
-    <div className="min-h-screen bg-[#0f0c09]">
+    <div className="min-h-screen" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
 
       {/* Nav */}
-      <nav className="border-b border-[rgba(245,239,230,0.1)] px-4 sm:px-6 py-4 flex items-center justify-between">
-        <span className="font-mono text-sm">
-          <span className="text-[#C4563A]">Out</span>
-          <span className="text-[#f5efe6]">TheChat</span>
+      <nav style={{ borderBottom: '1px solid var(--border)', background: 'var(--background)' }}
+        className="px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+        <span className="text-sm tracking-tight">
+          <span className="font-medium" style={{ color: 'var(--accent)', fontFamily: 'var(--font-fraunces)' }}>Out</span>
+          <span style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-fraunces)' }}>TheChat</span>
         </span>
         <div className="flex items-center gap-3 sm:gap-4">
           <Link href="/profile" className="flex items-center gap-2.5 group">
@@ -71,21 +57,25 @@ export default async function DashboardPage() {
               <img
                 src={profile.avatar_url}
                 alt={profile.display_name || 'Profile'}
-                className="w-8 h-8 rounded-full object-cover border border-[rgba(242,237,228,0.1)] group-hover:border-[#C4563A] transition-colors"
+                className="w-8 h-8 rounded-full object-cover transition-colors"
+                style={{ border: '1px solid var(--border)' }}
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-[#C4563A]/15 border border-[rgba(242,237,228,0.1)] group-hover:border-[#C4563A] transition-colors flex items-center justify-center">
-                <span className="text-xs font-semibold text-[#C4563A]">{initials}</span>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                style={{ background: 'var(--accent-muted)', border: '1px solid var(--border)' }}>
+                <span className="text-xs font-semibold" style={{ color: 'var(--accent)' }}>{initials}</span>
               </div>
             )}
-            <span className="hidden sm:inline text-sm text-[#b8b0a2] group-hover:text-[#f5efe6] transition-colors">
+            <span className="hidden sm:inline text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
               {profile?.display_name || user.email}
             </span>
           </Link>
+          <ThemeToggle />
           <form action="/api/auth/signout" method="POST">
             <button
               type="submit"
-              className="text-sm text-[#b8b0a2] hover:text-[#f5efe6] transition-colors"
+              className="text-sm transition-colors"
+              style={{ color: 'var(--text-secondary)' }}
             >
               Sign out
             </button>
@@ -99,10 +89,11 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-[#f5efe6] font-[family-name:var(--font-fraunces)]">
+            <h1 className="text-2xl sm:text-3xl font-medium"
+              style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-fraunces)' }}>
               Hey {firstName} 👋
             </h1>
-            <p className="text-[#b8b0a2] mt-1 text-sm">
+            <p className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
               {trips && trips.length > 0
                 ? `You have ${trips.length} trip${trips.length > 1 ? 's' : ''} in the works`
                 : "Let's get your first trip out of the chat"}
@@ -110,7 +101,8 @@ export default async function DashboardPage() {
           </div>
           <Link
             href="/plan"
-            className="bg-[#C4563A] hover:bg-[#a64428] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors self-start sm:self-auto whitespace-nowrap"
+            className="text-sm font-medium px-5 py-2.5 rounded-lg transition-colors self-start sm:self-auto whitespace-nowrap"
+            style={{ background: 'var(--accent)', color: 'var(--background)' }}
           >
             + New trip
           </Link>
@@ -123,18 +115,26 @@ export default async function DashboardPage() {
               <div key={trip.id} className="relative group">
                 <Link
                   href={`/trip/${trip.id}`}
-                  className="block bg-[#1c1814] border border-[rgba(245,239,230,0.1)] rounded-xl p-5 hover:border-[rgba(196,86,58,0.3)] transition-all hover:-translate-y-0.5"
+                  className="block rounded-xl p-5 transition-all hover:-translate-y-0.5"
+                  style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                  }}
                 >
                   {/* Trip header */}
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <p className="font-mono text-[10px] text-[#C4563A] uppercase tracking-widest mb-1">
+                      <p className="text-[10px] uppercase tracking-widest mb-1 font-medium"
+                        style={{ color: 'var(--accent)', fontFamily: 'var(--font-dm-sans)' }}>
                         {trip.duration_days} days · {trip.budget_tier}
                       </p>
-                      <h3 className="text-[#f5efe6] font-medium text-base leading-tight font-[family-name:var(--font-fraunces)]">
+                      <h3 className="font-medium text-base leading-tight"
+                        style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-fraunces)' }}>
                         {trip.title}
                       </h3>
-                      <p className="text-[#b8b0a2] text-sm mt-0.5">{trip.destination}</p>
+                      <p className="text-sm mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+                        {trip.destination}
+                      </p>
                     </div>
                     <StatusBadge status={trip.status} />
                   </div>
@@ -142,35 +142,35 @@ export default async function DashboardPage() {
                   {/* Commitment meter */}
                   <div className="mt-4">
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-[10px] text-[#b8b0a2] font-mono uppercase tracking-wide">
+                      <span className="text-[10px] uppercase tracking-wide font-medium"
+                        style={{ color: 'var(--text-muted)' }}>
                         Commitment
                       </span>
-                      <span className="text-[10px] text-[#C4563A] font-mono">
+                      <span className="text-[10px] font-medium" style={{ color: 'var(--accent)' }}>
                         {trip.commitment_score}%
                       </span>
                     </div>
-                    <div className="h-1 bg-[rgba(245,239,230,0.06)] rounded-full overflow-hidden">
+                    <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
                       <div
-                        className="h-full bg-[#C4563A] rounded-full transition-all"
-                        style={{ width: `${trip.commitment_score}%` }}
+                        className="h-full rounded-full transition-all"
+                        style={{ width: `${trip.commitment_score}%`, background: 'var(--accent)' }}
                       />
                     </div>
                   </div>
 
                   {/* Footer */}
                   <div className="mt-4 flex items-center justify-between">
-                    <span className="text-xs text-[#b8b0a2]">
+                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
                       {trip.start_date
                         ? new Date(trip.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                         : 'Dates TBD'}
                     </span>
-                    <span className="text-xs text-[#b8b0a2] group-hover:text-[#C4563A] transition-colors">
+                    <span className="text-xs transition-colors" style={{ color: 'var(--text-muted)' }}>
                       View →
                     </span>
                   </div>
                 </Link>
 
-                {/* Delete button — only for trip creator, visible on card hover */}
                 {trip.creator_id === user.id && (
                   <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <DeleteTripButton tripId={trip.id} variant="card" />
@@ -180,18 +180,19 @@ export default async function DashboardPage() {
             ))}
           </div>
         ) : (
-          /* Empty state */
-          <div className="border border-dashed border-[rgba(245,239,230,0.12)] rounded-2xl p-8 sm:p-16 text-center">
+          <div className="rounded-2xl p-8 sm:p-16 text-center"
+            style={{ border: '1px dashed var(--border)' }}>
             <div className="text-5xl mb-4">✈️</div>
-            <h2 className="text-xl font-medium text-[#f5efe6] mb-2">
+            <h2 className="text-xl font-medium mb-2" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-fraunces)' }}>
               No trips yet
             </h2>
-            <p className="text-[#b8b0a2] text-sm mb-8 max-w-xs mx-auto">
+            <p className="text-sm mb-8 max-w-xs mx-auto" style={{ color: 'var(--text-secondary)' }}>
               You have trips stuck in a group chat somewhere. Let's get them out.
             </p>
             <Link
               href="/plan"
-              className="inline-block bg-[#C4563A] hover:bg-[#a64428] text-white text-sm font-medium px-6 py-3 rounded-lg transition-colors"
+              className="inline-block text-sm font-medium px-6 py-3 rounded-lg transition-colors"
+              style={{ background: 'var(--accent)', color: 'var(--background)' }}
             >
               Generate my first trip →
             </Link>
@@ -213,14 +214,15 @@ function getInitials(name: string | null | undefined, email: string): string {
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    planning: 'bg-[#8B7355] text-[#f5efe6] border-[#8B7355]/60',
-    locked:   'bg-green-950/60 text-green-300 border-green-800/40',
-    completed: 'bg-[rgba(242,237,228,0.06)] text-[#b8b0a2] border-[rgba(242,237,228,0.1)]',
-    cancelled: 'bg-red-950/60 text-red-300 border-red-800/40',
+  const styles: Record<string, React.CSSProperties> = {
+    planning:  { background: 'var(--accent-muted)', color: 'var(--accent-text)', border: '1px solid var(--border)' },
+    locked:    { background: '#DCFCE7', color: '#166534', border: '1px solid #BBF7D0' },
+    completed: { background: 'var(--surface-raised)', color: 'var(--text-muted)', border: '1px solid var(--border)' },
+    cancelled: { background: '#FEE2E2', color: '#991B1B', border: '1px solid #FECACA' },
   }
   return (
-    <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${styles[status] || styles.planning}`}>
+    <span className="text-[10px] font-medium px-2 py-0.5 rounded"
+      style={styles[status] || styles.planning}>
       {status}
     </span>
   )

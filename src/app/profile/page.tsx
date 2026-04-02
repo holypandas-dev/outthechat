@@ -103,7 +103,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center">
-        <div className="text-[#b8b0a2] text-sm font-mono animate-pulse">Loading...</div>
+        <div className="text-sm font-mono animate-pulse" style={{ color: 'var(--text-secondary)' }}>Loading...</div>
       </div>
     )
   }
@@ -113,20 +113,21 @@ export default function ProfilePage() {
       {/* Nav */}
       <nav className="border-b border-[rgba(242,237,228,0.08)] px-6 py-4 flex items-center justify-between">
         <span className="font-mono text-sm">
-          <span className="text-[#C4563A]">Out</span>
-          <span className="text-[#f5efe6]">TheChat</span>
+          <span style={{ color: 'var(--accent)' }}>Out</span>
+          <span style={{ color: 'var(--text-primary)' }}>TheChat</span>
         </span>
         <Link
           href="/dashboard"
-          className="text-sm text-[#b8b0a2] hover:text-[#f5efe6] transition-colors"
+          className="text-sm hover:text-text-primary transition-colors"
+          style={{ color: 'var(--text-secondary)' }}
         >
           ← Dashboard
         </Link>
       </nav>
 
       <main className="max-w-lg mx-auto px-6 py-12">
-        <h1 className="text-2xl font-semibold text-[#f5efe6] mb-1">Profile</h1>
-        <p className="text-[#b8b0a2] text-sm mb-8">Your display info shown to your travel crew</p>
+        <h1 className="text-2xl font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>Profile</h1>
+        <p className="text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>Your display info shown to your travel crew</p>
 
         <form onSubmit={handleSave} className="space-y-6">
 
@@ -141,11 +142,11 @@ export default function ProfilePage() {
                 <img
                   src={avatarPreview || avatarUrl!}
                   alt="Profile photo"
-                  className="w-20 h-20 rounded-full object-cover border-2 border-[rgba(242,237,228,0.1)] group-hover:border-[#C4563A] transition-colors"
+                  className="w-20 h-20 rounded-full object-cover border-2 border-[rgba(242,237,228,0.1)] group-hover:border-accent transition-colors"
                 />
               ) : (
-                <div className="w-20 h-20 rounded-full bg-[#C4563A]/15 border-2 border-[rgba(242,237,228,0.1)] group-hover:border-[#C4563A] transition-colors flex items-center justify-center">
-                  <span className="text-2xl font-semibold text-[#C4563A]">{initials}</span>
+                <div className="w-20 h-20 rounded-full bg-accent/15 border-2 border-border/40 group-hover:border-accent transition-colors flex items-center justify-center">
+                  <span className="text-2xl font-semibold" style={{ color: 'var(--accent)' }}>{initials}</span>
                 </div>
               )}
               <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -154,12 +155,13 @@ export default function ProfilePage() {
             </button>
 
             <div>
-              <p className="text-sm text-[#f5efe6] font-medium">Profile photo</p>
-              <p className="text-xs text-[#b8b0a2] mt-0.5">JPG, PNG or WebP · Max 5MB</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Profile photo</p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>JPG, PNG or WebP · Max 5MB</p>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="mt-2 text-xs text-[#C4563A] hover:text-[#a64428] transition-colors"
+                className="mt-2 text-xs hover:text-accent-hover transition-colors"
+                style={{ color: 'var(--accent)' }}
               >
                 {avatarPreview || avatarUrl ? 'Replace photo' : 'Upload photo'}
               </button>
@@ -176,8 +178,8 @@ export default function ProfilePage() {
 
           {/* Display name */}
           <div>
-            <label className="block text-xs font-mono text-[#b8b0a2] uppercase tracking-wider mb-2">
-              Display name <span className="text-[#C4563A]">*</span>
+            <label className="block text-xs font-mono uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>
+              Display name <span style={{ color: 'var(--accent)' }}>*</span>
             </label>
             <input
               type="text"
@@ -185,13 +187,14 @@ export default function ProfilePage() {
               onChange={e => setDisplayName(e.target.value)}
               placeholder="Your name"
               required
-              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-[#C4563A] transition-colors"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-accent transition-colors"
+              style={{ color: 'var(--text-primary)' }}
             />
           </div>
 
           {/* Bio */}
           <div>
-            <label className="block text-xs font-mono text-[#b8b0a2] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-mono uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>
               Bio
             </label>
             <textarea
@@ -200,9 +203,10 @@ export default function ProfilePage() {
               placeholder="Tell your travel crew about yourself..."
               rows={3}
               maxLength={200}
-              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-[#f5efe6] placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-[#C4563A] transition-colors resize-none"
+              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-accent transition-colors resize-none"
+              style={{ color: 'var(--text-primary)' }}
             />
-            <p className="text-right text-xs text-[#b8b0a2] mt-1">{bio.length}/200</p>
+            <p className="text-right text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>{bio.length}/200</p>
           </div>
 
           {error && (
@@ -220,7 +224,8 @@ export default function ProfilePage() {
           <button
             type="submit"
             disabled={saving}
-            className="w-full bg-[#C4563A] hover:bg-[#a64428] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors text-sm"
+            className="w-full hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors text-sm"
+            style={{ background: 'var(--accent)' }}
           >
             {saving ? 'Saving...' : 'Save profile'}
           </button>

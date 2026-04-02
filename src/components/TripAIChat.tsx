@@ -106,7 +106,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
           right: isOpen ? 0 : (isMobile ? '-105vw' : '-420px'),
           width: isMobile ? '100vw' : '400px',
           height: '100dvh',
-          background: '#0f0d0b',
+          background: 'var(--background)',
           borderLeft: '1px solid rgba(242,237,228,0.08)',
           display: 'flex',
           flexDirection: 'column',
@@ -143,10 +143,10 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
               ✦
             </div>
             <div>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: '#f5efe6', margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>
                 AI Trip Editor
               </p>
-              <p style={{ fontSize: '11px', color: '#b8b0a2', margin: 0 }}>
+              <p style={{ fontSize: '11px', color: 'var(--text-secondary)', margin: 0 }}>
                 Modify your itinerary with natural language
               </p>
             </div>
@@ -156,7 +156,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
             style={{
               background: 'none',
               border: 'none',
-              color: '#b8b0a2',
+              color: 'var(--text-secondary)',
               cursor: 'pointer',
               fontSize: '18px',
               lineHeight: 1,
@@ -191,9 +191,9 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                   maxWidth: '85%',
                   padding: '10px 14px',
                   borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                  background: msg.role === 'user' ? '#C4563A' : '#1a1612',
-                  border: msg.role === 'user' ? 'none' : '1px solid rgba(242,237,228,0.08)',
-                  color: msg.role === 'user' ? '#fff' : '#f5efe6',
+                  background: msg.role === 'user' ? 'var(--accent)' : 'var(--surface)',
+                  border: msg.role === 'user' ? 'none' : '1px solid var(--border)',
+                  color: msg.role === 'user' ? '#fff' : 'var(--text-primary)',
                   fontSize: '13px',
                   lineHeight: '1.5',
                   whiteSpace: 'pre-wrap',
@@ -211,14 +211,14 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                 style={{
                   padding: '10px 14px',
                   borderRadius: '16px 16px 16px 4px',
-                  background: '#1a1612',
-                  border: '1px solid rgba(242,237,228,0.08)',
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
                 }}
               >
-                <span style={{ fontSize: '12px', color: '#b8b0a2' }}>Thinking</span>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Thinking</span>
                 <span style={{ display: 'flex', gap: '3px' }}>
                   {[0, 1, 2].map(n => (
                     <span
@@ -227,7 +227,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                         width: '4px',
                         height: '4px',
                         borderRadius: '50%',
-                        background: '#C4563A',
+                        background: 'var(--accent)',
                         display: 'inline-block',
                         animation: `pulse 1.2s ease-in-out ${n * 0.2}s infinite`,
                       }}
@@ -266,7 +266,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                   borderRadius: '20px',
                   border: '1px solid rgba(196,86,58,0.3)',
                   background: 'rgba(196,86,58,0.06)',
-                  color: '#C4563A',
+                  color: 'var(--accent)',
                   cursor: 'pointer',
                   transition: 'background 0.15s',
                 }}
@@ -290,8 +290,8 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
               display: 'flex',
               gap: '8px',
               alignItems: 'flex-end',
-              background: '#1a1612',
-              border: '1px solid rgba(242,237,228,0.1)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
               borderRadius: '12px',
               padding: '10px 12px',
               transition: 'border-color 0.15s',
@@ -310,7 +310,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                 background: 'none',
                 border: 'none',
                 outline: 'none',
-                color: '#f5efe6',
+                color: 'var(--text-primary)',
                 fontSize: '13px',
                 lineHeight: '1.5',
                 resize: 'none',
@@ -331,7 +331,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
                 width: '30px',
                 height: '30px',
                 borderRadius: '8px',
-                background: input.trim() && !isLoading ? '#C4563A' : 'rgba(196,86,58,0.2)',
+                background: input.trim() && !isLoading ? 'var(--accent)' : 'rgba(196,86,58,0.2)',
                 border: 'none',
                 cursor: input.trim() && !isLoading ? 'pointer' : 'not-allowed',
                 display: 'flex',
@@ -352,7 +352,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
               </svg>
             </button>
           </div>
-          <p style={{ fontSize: '10px', color: '#b8b0a2', marginTop: '6px', textAlign: 'center' }}>
+          <p style={{ fontSize: '10px', color: 'var(--text-secondary)', marginTop: '6px', textAlign: 'center' }}>
             Changes are saved automatically · Enter to send
           </p>
         </div>
@@ -368,7 +368,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
           width: '52px',
           height: '52px',
           borderRadius: '50%',
-          background: '#C4563A',
+          background: 'var(--accent)',
           border: 'none',
           cursor: 'pointer',
           display: 'flex',

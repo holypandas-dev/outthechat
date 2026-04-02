@@ -68,17 +68,17 @@ export default async function FundPage({
   const goalAmount = Math.max(midCost * (trip.group_size ?? 1), 500)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0f0d0b' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
       <nav
         style={{
-          borderBottom: '1px solid rgba(242,237,228,0.08)',
+          borderBottom: '1px solid var(--border)',
           padding: '16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           position: 'sticky',
           top: 0,
-          background: '#0f0d0b',
+          background: 'var(--background)',
           zIndex: 10,
         }}
       >
@@ -86,12 +86,12 @@ export default async function FundPage({
           href="/dashboard"
           style={{ fontFamily: 'var(--font-geist-mono)', fontSize: '14px', textDecoration: 'none' }}
         >
-          <span style={{ color: '#C4563A' }}>Out</span>
-          <span style={{ color: '#f5efe6' }}>TheChat</span>
+          <span style={{ color: 'var(--accent)' }}>Out</span>
+          <span style={{ color: 'var(--text-primary)' }}>TheChat</span>
         </Link>
         <Link
           href={`/trip/${id}`}
-          style={{ fontSize: '14px', color: '#b8b0a2', textDecoration: 'none' }}
+          style={{ fontSize: '14px', color: 'var(--text-secondary)', textDecoration: 'none' }}
         >
           ← Back to trip
         </Link>
@@ -103,7 +103,7 @@ export default async function FundPage({
             style={{
               fontFamily: 'var(--font-geist-mono)',
               fontSize: '11px',
-              color: '#C4563A',
+              color: 'var(--accent)',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               marginBottom: '6px',
@@ -111,10 +111,10 @@ export default async function FundPage({
           >
             {trip.destination}
           </p>
-          <h1 style={{ fontSize: '24px', fontWeight: 600, color: '#f5efe6', marginBottom: '4px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
             {trip.title}
           </h1>
-          <p style={{ fontSize: '14px', color: '#b8b0a2' }}>Group travel fund</p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>Group travel fund</p>
         </div>
 
         {cancelled && (
@@ -125,7 +125,7 @@ export default async function FundPage({
               borderRadius: '12px',
               padding: '14px 16px',
               fontSize: '14px',
-              color: '#b8b0a2',
+              color: 'var(--text-secondary)',
               marginBottom: '24px',
             }}
           >

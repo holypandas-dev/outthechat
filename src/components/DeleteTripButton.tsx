@@ -33,7 +33,8 @@ export function DeleteTripButton({ tripId, variant = 'action' }: {
       {variant === 'card' ? (
         <button
           onClick={e => { e.preventDefault(); e.stopPropagation(); setShowConfirm(true) }}
-          className="p-1.5 rounded-md bg-[#0f0d0b] border border-[rgba(242,237,228,0.12)] text-[#b8b0a2] hover:text-red-400 hover:border-red-800/60 transition-colors"
+          className="p-1.5 rounded-md bg-[#0f0d0b] border border-[rgba(242,237,228,0.12)] hover:text-red-400 hover:border-red-800/60 transition-colors"
+          style={{ color: 'var(--text-secondary)' }}
           title="Delete trip"
         >
           <TrashIcon />
@@ -57,13 +58,14 @@ export function DeleteTripButton({ tripId, variant = 'action' }: {
             className="bg-[#1a1612] border border-[rgba(242,237,228,0.12)] rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl"
             onClick={e => e.stopPropagation()}
           >
-            <h3 className="text-[#f5efe6] font-semibold text-base mb-1">Delete this trip?</h3>
-            <p className="text-[#b8b0a2] text-sm mb-6">This cannot be undone.</p>
+            <h3 className="font-semibold text-base mb-1" style={{ color: 'var(--text-primary)' }}>Delete this trip?</h3>
+            <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>This cannot be undone.</p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowConfirm(false)}
                 disabled={loading}
-                className="text-sm text-[#b8b0a2] hover:text-[#f5efe6] px-4 py-2 rounded-lg border border-[rgba(242,237,228,0.08)] transition-colors disabled:opacity-40"
+                className="text-sm hover:text-text-primary px-4 py-2 rounded-lg border border-border/30 transition-colors disabled:opacity-40"
+                style={{ color: 'var(--text-secondary)' }}
               >
                 Cancel
               </button>

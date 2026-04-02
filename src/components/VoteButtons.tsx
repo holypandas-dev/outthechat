@@ -77,16 +77,20 @@ export function VoteButtons({
         className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
           currentVote === 1
             ? 'bg-green-950/60 border border-green-700/50 text-green-400'
-            : 'bg-[rgba(242,237,228,0.04)] border border-[rgba(242,237,228,0.08)] text-[#b8b0a2] hover:border-green-700/40 hover:text-green-400'
+            : 'bg-[rgba(242,237,228,0.04)] border border-[rgba(242,237,228,0.08)] hover:border-green-700/40 hover:text-green-400'
         }`}
+        style={currentVote !== 1 ? { color: 'var(--text-secondary)' } : undefined}
       >
         👍 {currentVote === 1 ? 'In' : 'Up'}
       </button>
 
       {/* Score */}
-      <span className={`text-xs font-mono min-w-[20px] text-center ${
-        score > 0 ? 'text-green-400' : score < 0 ? 'text-red-400' : 'text-[#b8b0a2]'
-      }`}>
+      <span
+        className={`text-xs font-mono min-w-[20px] text-center ${
+          score > 0 ? 'text-green-400' : score < 0 ? 'text-red-400' : ''
+        }`}
+        style={score === 0 ? { color: 'var(--text-secondary)' } : undefined}
+      >
         {score > 0 ? `+${score}` : score}
       </span>
 
@@ -97,8 +101,9 @@ export function VoteButtons({
         className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
           currentVote === -1
             ? 'bg-red-950/60 border border-red-700/50 text-red-400'
-            : 'bg-[rgba(242,237,228,0.04)] border border-[rgba(242,237,228,0.08)] text-[#b8b0a2] hover:border-red-700/40 hover:text-red-400'
+            : 'bg-[rgba(242,237,228,0.04)] border border-[rgba(242,237,228,0.08)] hover:border-red-700/40 hover:text-red-400'
         }`}
+        style={currentVote !== -1 ? { color: 'var(--text-secondary)' } : undefined}
       >
         👎 {currentVote === -1 ? 'Out' : 'Down'}
       </button>

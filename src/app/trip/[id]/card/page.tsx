@@ -68,14 +68,14 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
     ? (trip.estimated_cost as Record<string, number>)[trip.budget_tier]
     : null
 
-  const avatarColors = ['#C4563A', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a']
+  const avatarColors = ['var(--accent)', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a']
 
   const commitmentColor =
     trip.commitment_score >= 91 ? '#4ade80'
-    : trip.commitment_score >= 76 ? '#C4563A'
+    : trip.commitment_score >= 76 ? 'var(--accent)'
     : trip.commitment_score >= 51 ? '#fbbf24'
     : trip.commitment_score >= 26 ? '#60a5fa'
-    : '#b8b0a2'
+    : 'var(--text-secondary)'
 
   const categoryEmoji: Record<string, string> = {
     food: '🍽',
@@ -97,7 +97,8 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
       <div className="w-full max-w-[390px] mb-4 flex items-center justify-between px-4 sm:px-0">
         <Link
           href={`/trip/${id}`}
-          className="text-sm text-[#b8b0a2] hover:text-[#f5efe6] transition-colors font-mono"
+          className="text-sm hover:text-text-primary transition-colors font-mono"
+          style={{ color: 'var(--text-secondary)' }}
         >
           ← Back to trip
         </Link>
@@ -185,7 +186,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
         {/* Orange top bar */}
         <div
           className="absolute top-0 left-0 right-0"
-          style={{ height: 3, background: '#C4563A', zIndex: 2 }}
+          style={{ height: 3, background: 'var(--accent)', zIndex: 2 }}
         />
 
         {/* Content */}
@@ -198,7 +199,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
               style={{
                 fontSize: 11,
                 letterSpacing: '0.18em',
-                color: '#C4563A',
+                color: 'var(--accent)',
                 marginBottom: 10,
               }}
             >
@@ -208,7 +209,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
               style={{
                 fontSize: 68,
                 fontWeight: 900,
-                color: '#f5efe6',
+                color: 'var(--text-primary)',
                 lineHeight: 0.95,
                 letterSpacing: '-0.03em',
                 textTransform: 'uppercase',
@@ -225,7 +226,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
               style={{
                 fontSize: 10,
                 letterSpacing: '0.12em',
-                color: '#b8b0a2',
+                color: 'var(--text-secondary)',
                 background: 'rgba(242,237,228,0.06)',
                 borderRadius: 6,
                 padding: '4px 10px',
@@ -239,7 +240,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
               style={{
                 fontSize: 10,
                 letterSpacing: '0.12em',
-                color: '#b8b0a2',
+                color: 'var(--text-secondary)',
                 background: 'rgba(242,237,228,0.06)',
                 borderRadius: 6,
                 padding: '4px 10px',
@@ -254,7 +255,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                 style={{
                   fontSize: 10,
                   letterSpacing: '0.06em',
-                  color: '#C4563A',
+                  color: 'var(--accent)',
                   background: 'rgba(196,86,58,0.10)',
                   borderRadius: 6,
                   padding: '4px 10px',
@@ -292,7 +293,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             <div className="mb-6">
               <p
                 className="font-mono uppercase mb-3"
-                style={{ fontSize: 10, letterSpacing: '0.18em', color: '#C4563A' }}
+                style={{ fontSize: 10, letterSpacing: '0.18em', color: 'var(--accent)' }}
               >
                 Highlights
               </p>
@@ -315,7 +316,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                       style={{
                         fontSize: 14,
                         fontWeight: 500,
-                        color: '#f5efe6',
+                        color: 'var(--text-primary)',
                         lineHeight: 1.3,
                       }}
                     >
@@ -324,7 +325,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                     {act.vote_score > 0 && (
                       <span
                         className="ml-auto font-mono flex-shrink-0"
-                        style={{ fontSize: 11, color: '#C4563A' }}
+                        style={{ fontSize: 11, color: 'var(--accent)' }}
                       >
                         +{act.vote_score}
                       </span>
@@ -347,7 +348,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
               <div>
                 <p
                   className="font-mono uppercase mb-2"
-                  style={{ fontSize: 10, letterSpacing: '0.18em', color: '#b8b0a2' }}
+                  style={{ fontSize: 10, letterSpacing: '0.18em', color: 'var(--text-secondary)' }}
                 >
                   The crew
                 </p>
@@ -377,7 +378,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                         </div>
                       ))}
                   </div>
-                  <span style={{ fontSize: 12, color: '#b8b0a2', marginLeft: 6 }}>
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)', marginLeft: 6 }}>
                     {members.length} {members.length === 1 ? 'person' : 'people'}
                   </span>
                 </div>
@@ -388,7 +389,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                 <div className="text-right">
                   <p
                     className="font-mono uppercase mb-1"
-                    style={{ fontSize: 10, letterSpacing: '0.18em', color: '#b8b0a2' }}
+                    style={{ fontSize: 10, letterSpacing: '0.18em', color: 'var(--text-secondary)' }}
                   >
                     Est. cost
                   </p>
@@ -396,13 +397,13 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                     style={{
                       fontSize: 22,
                       fontWeight: 700,
-                      color: '#f5efe6',
+                      color: 'var(--text-primary)',
                       letterSpacing: '-0.02em',
                     }}
                   >
                     ~${estimatedCost.toLocaleString()}
                   </p>
-                  <p style={{ fontSize: 11, color: '#b8b0a2' }}>per person</p>
+                  <p style={{ fontSize: 11, color: 'var(--text-secondary)' }}>per person</p>
                 </div>
               )}
             </div>
@@ -413,7 +414,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             <div className="flex items-center justify-between mb-2">
               <p
                 className="font-mono uppercase"
-                style={{ fontSize: 10, letterSpacing: '0.18em', color: '#b8b0a2' }}
+                style={{ fontSize: 10, letterSpacing: '0.18em', color: 'var(--text-secondary)' }}
               >
                 Commitment
               </p>
@@ -436,7 +437,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                 style={{
                   height: '100%',
                   width: `${trip.commitment_score ?? 0}%`,
-                  background: `linear-gradient(90deg, #C4563A, ${commitmentColor})`,
+                  background: `linear-gradient(90deg, var(--accent), ${commitmentColor})`,
                   borderRadius: 99,
                   transition: 'width 0.5s ease',
                 }}
@@ -460,10 +461,10 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
             <div>
               <p
                 className="font-mono"
-                style={{ fontSize: 15, fontWeight: 700, color: '#f5efe6', marginBottom: 3, letterSpacing: '-0.01em' }}
+                style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 3, letterSpacing: '-0.01em' }}
               >
                 Planned on{' '}
-                <span style={{ color: '#C4563A' }}>OutTheChat</span>
+                <span style={{ color: 'var(--accent)' }}>OutTheChat</span>
               </p>
               <p
                 className="font-mono"
@@ -479,7 +480,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                 width: 42,
                 height: 42,
                 borderRadius: 12,
-                background: '#C4563A',
+                background: 'var(--accent)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -499,7 +500,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* Hint below card */}
-      <p className="mt-6 text-xs text-[#b8b0a2] font-mono text-center max-w-[390px] px-4 sm:px-0">
+      <p className="mt-6 text-xs font-mono text-center max-w-[390px] px-4 sm:px-0" style={{ color: 'var(--text-secondary)' }}>
         Screenshot this card to share on Instagram Stories or TikTok
       </p>
 

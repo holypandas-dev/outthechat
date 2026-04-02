@@ -40,17 +40,17 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
-            <span className="font-mono text-sm tracking-widest text-[#C4563A]">Out</span>
-            <span className="font-mono text-sm tracking-widest text-[#f5efe6]">TheChat</span>
+            <span className="font-mono text-sm tracking-widest" style={{ color: 'var(--accent)' }}>Out</span>
+            <span className="font-mono text-sm tracking-widest" style={{ color: 'var(--text-primary)' }}>TheChat</span>
           </Link>
-          <h1 className="mt-6 text-2xl font-semibold text-[#f5efe6]">Welcome back</h1>
-          <p className="mt-2 text-sm text-[#b8b0a2]">Sign in to your account</p>
+          <h1 className="mt-6 text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>Welcome back</h1>
+          <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>Sign in to your account</p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-[#b8b0a2] mb-1.5 tracking-wide uppercase">
+            <label className="block text-xs font-medium mb-1.5 tracking-wide uppercase" style={{ color: 'var(--text-secondary)' }}>
               Email
             </label>
             <input
@@ -59,16 +59,17 @@ export default function LoginPage() {
               onChange={e => setEmail(e.target.value)}
               required
               placeholder="you@example.com"
-              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f5efe6] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
+              className="w-full bg-surface border border-border/40 rounded-lg px-4 py-3 text-sm placeholder-text-secondary/40 outline-none focus:border-accent/50 transition-colors"
+              style={{ color: 'var(--text-primary)' }}
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-medium text-[#b8b0a2] tracking-wide uppercase">
+              <label className="block text-xs font-medium tracking-wide uppercase" style={{ color: 'var(--text-secondary)' }}>
                 Password
               </label>
-              <Link href="/forgot-password" className="text-xs text-[#C4563A] hover:underline">
+              <Link href="/forgot-password" className="text-xs hover:underline" style={{ color: 'var(--accent)' }}>
                 Forgot password?
               </Link>
             </div>
@@ -78,7 +79,8 @@ export default function LoginPage() {
               onChange={e => setPassword(e.target.value)}
               required
               placeholder="••••••••"
-              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 text-sm text-[#f5efe6] placeholder-[#b8b0a2]/40 outline-none focus:border-[rgba(196,86,58,0.5)] transition-colors"
+              className="w-full bg-surface border border-border/40 rounded-lg px-4 py-3 text-sm placeholder-text-secondary/40 outline-none focus:border-accent/50 transition-colors"
+              style={{ color: 'var(--text-primary)' }}
             />
           </div>
 
@@ -91,16 +93,17 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#C4563A] hover:bg-[#a64428] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-3 text-sm transition-colors"
+            className="w-full hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-3 text-sm transition-colors"
+            style={{ background: 'var(--accent)' }}
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-sm text-[#b8b0a2]">
+        <p className="mt-6 text-center text-sm" style={{ color: 'var(--text-secondary)' }}>
           No account?{' '}
-          <Link href="/signup" className="text-[#C4563A] hover:underline">
+          <Link href="/signup" className="hover:underline" style={{ color: 'var(--accent)' }}>
             Create one
           </Link>
         </p>

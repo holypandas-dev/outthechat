@@ -67,8 +67,8 @@ export default function JoinTripPage() {
         {/* Logo */}
         <div className="mb-10">
           <span className="font-mono text-lg">
-            <span className="text-[#C4563A]">Out</span>
-            <span className="text-[#f5efe6]">TheChat</span>
+            <span style={{ color: 'var(--accent)' }}>Out</span>
+            <span style={{ color: 'var(--text-primary)' }}>TheChat</span>
           </span>
         </div>
 
@@ -77,24 +77,24 @@ export default function JoinTripPage() {
           {status === 'loading' && (
             <div>
               <div className="text-3xl mb-4 animate-pulse">✈️</div>
-              <p className="text-[#b8b0a2] text-sm">Loading invite...</p>
+              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Loading invite...</p>
             </div>
           )}
 
           {status === 'joining' && (
             <div>
               <div className="text-3xl mb-4 animate-pulse">🔗</div>
-              <p className="text-[#f5efe6] font-medium mb-1">Joining trip...</p>
-              <p className="text-[#b8b0a2] text-sm">{tripTitle}</p>
+              <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>Joining trip...</p>
+              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{tripTitle}</p>
             </div>
           )}
 
           {status === 'success' && (
             <div>
               <div className="text-3xl mb-4">🎉</div>
-              <p className="text-[#f5efe6] font-medium mb-1">You're in!</p>
-              <p className="text-[#b8b0a2] text-sm mb-4">{tripTitle}</p>
-              <p className="text-xs text-[#b8b0a2] animate-pulse">
+              <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>You're in!</p>
+              <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>{tripTitle}</p>
+              <p className="text-xs animate-pulse" style={{ color: 'var(--text-secondary)' }}>
                 Taking you to the trip...
               </p>
             </div>
@@ -103,11 +103,12 @@ export default function JoinTripPage() {
           {status === 'already' && (
             <div>
               <div className="text-3xl mb-4">👋</div>
-              <p className="text-[#f5efe6] font-medium mb-1">You're already in!</p>
-              <p className="text-[#b8b0a2] text-sm mb-6">{tripTitle}</p>
+              <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>You're already in!</p>
+              <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>{tripTitle}</p>
               <Link
                 href={`/trip/${tripId}`}
-                className="inline-block bg-[#C4563A] text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-[#a64428] transition-colors"
+                className="inline-block text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-accent-hover transition-colors"
+                style={{ background: 'var(--accent)' }}
               >
                 View trip →
               </Link>
@@ -117,11 +118,12 @@ export default function JoinTripPage() {
           {status === 'error' && (
             <div>
               <div className="text-3xl mb-4">😕</div>
-              <p className="text-[#f5efe6] font-medium mb-1">Something went wrong</p>
-              <p className="text-[#b8b0a2] text-sm mb-6">{error}</p>
+              <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>Something went wrong</p>
+              <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>{error}</p>
               <Link
                 href="/dashboard"
-                className="inline-block border border-[rgba(242,237,228,0.1)] text-[#b8b0a2] text-sm font-medium px-6 py-2.5 rounded-lg hover:text-[#f5efe6] transition-colors"
+                className="inline-block border border-border/40 text-sm font-medium px-6 py-2.5 rounded-lg hover:text-text-primary transition-colors"
+                style={{ color: 'var(--text-secondary)' }}
               >
                 Back to dashboard
               </Link>

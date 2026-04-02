@@ -84,7 +84,7 @@ export function FundDashboard({
       {/* Progress card */}
       <div
         style={{
-          background: '#1a1612',
+          background: 'var(--surface)',
           border: '1px solid rgba(242,237,228,0.08)',
           borderRadius: '16px',
           padding: '24px',
@@ -96,7 +96,7 @@ export function FundDashboard({
               style={{
                 fontFamily: 'var(--font-geist-mono)',
                 fontSize: '11px',
-                color: '#C4563A',
+                color: 'var(--accent)',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
                 marginBottom: '4px',
@@ -104,16 +104,16 @@ export function FundDashboard({
             >
               Group fund
             </p>
-            <p style={{ fontSize: '26px', fontWeight: 600, color: '#f5efe6', lineHeight: 1 }}>
+            <p style={{ fontSize: '26px', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1 }}>
               ${totalRaised.toLocaleString()}
-              <span style={{ fontSize: '14px', fontWeight: 400, color: '#b8b0a2', marginLeft: '4px' }}>
+              <span style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)', marginLeft: '4px' }}>
                 raised
               </span>
             </p>
           </div>
-          <p style={{ fontSize: '13px', color: '#b8b0a2' }}>
+          <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
             of{' '}
-            <span style={{ fontFamily: 'var(--font-geist-mono)', color: '#f5efe6' }}>
+            <span style={{ fontFamily: 'var(--font-geist-mono)', color: 'var(--text-primary)' }}>
               ${goalAmount.toLocaleString()}
             </span>{' '}
             goal
@@ -132,7 +132,7 @@ export function FundDashboard({
             style={{
               height: '100%',
               width: `${progressPct}%`,
-              background: progressPct >= 100 ? '#4ade80' : '#C4563A',
+              background: progressPct >= 100 ? '#4ade80' : 'var(--accent)',
               borderRadius: '999px',
               transition: 'width 0.6s ease',
             }}
@@ -140,10 +140,10 @@ export function FundDashboard({
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
-          <p style={{ fontSize: '12px', color: '#b8b0a2' }}>
+          <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
             {paidContributions.length} {paidContributions.length === 1 ? 'contribution' : 'contributions'}
           </p>
-          <p style={{ fontSize: '12px', fontFamily: 'var(--font-geist-mono)', color: '#b8b0a2' }}>
+          <p style={{ fontSize: '12px', fontFamily: 'var(--font-geist-mono)', color: 'var(--text-secondary)' }}>
             {Math.round(progressPct)}%
           </p>
         </div>
@@ -152,13 +152,13 @@ export function FundDashboard({
       {/* Contribute form */}
       <div
         style={{
-          background: '#1a1612',
+          background: 'var(--surface)',
           border: '1px solid rgba(242,237,228,0.08)',
           borderRadius: '16px',
           padding: '24px',
         }}
       >
-        <p style={{ fontSize: '14px', fontWeight: 500, color: '#f5efe6', marginBottom: '16px' }}>
+        <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
           Add your contribution
         </p>
 
@@ -171,9 +171,9 @@ export function FundDashboard({
               style={{
                 padding: '8px',
                 borderRadius: '8px',
-                border: `1px solid ${amount === String(s) ? '#C4563A' : 'rgba(242,237,228,0.08)'}`,
+                border: `1px solid ${amount === String(s) ? 'var(--accent)' : 'var(--border)'}`,
                 background: amount === String(s) ? 'rgba(196,86,58,0.08)' : 'transparent',
-                color: amount === String(s) ? '#C4563A' : '#b8b0a2',
+                color: amount === String(s) ? 'var(--accent)' : 'var(--text-secondary)',
                 fontSize: '13px',
                 fontFamily: 'var(--font-geist-mono)',
                 cursor: 'pointer',
@@ -193,7 +193,7 @@ export function FundDashboard({
               left: '12px',
               top: '50%',
               transform: 'translateY(-50%)',
-              color: '#b8b0a2',
+              color: 'var(--text-secondary)',
               fontSize: '14px',
             }}
           >
@@ -215,7 +215,7 @@ export function FundDashboard({
               border: '1px solid rgba(242,237,228,0.1)',
               borderRadius: '8px',
               fontSize: '14px',
-              color: '#f5efe6',
+              color: 'var(--text-primary)',
               outline: 'none',
               boxSizing: 'border-box',
             }}
@@ -232,7 +232,7 @@ export function FundDashboard({
           style={{
             width: '100%',
             padding: '11px',
-            background: loading ? '#7a3520' : '#C4563A',
+            background: loading ? 'var(--accent-text)' : 'var(--accent)',
             color: '#fff',
             border: 'none',
             borderRadius: '8px',
@@ -245,7 +245,7 @@ export function FundDashboard({
           {loading ? 'Redirecting to payment…' : 'Contribute'}
         </button>
 
-        <p style={{ fontSize: '12px', color: '#b8b0a2', textAlign: 'center', marginTop: '10px' }}>
+        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '10px' }}>
           Secure payment via Stripe · Test mode
         </p>
       </div>
@@ -254,7 +254,7 @@ export function FundDashboard({
       {paidContributions.length > 0 && (
         <div
           style={{
-            background: '#1a1612',
+            background: 'var(--surface)',
             border: '1px solid rgba(242,237,228,0.08)',
             borderRadius: '16px',
             padding: '24px',
@@ -264,7 +264,7 @@ export function FundDashboard({
             style={{
               fontFamily: 'var(--font-geist-mono)',
               fontSize: '11px',
-              color: '#C4563A',
+              color: 'var(--accent)',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               marginBottom: '16px',
@@ -283,7 +283,7 @@ export function FundDashboard({
                         width: '28px',
                         height: '28px',
                         borderRadius: '50%',
-                        background: c.user_id === currentUserId ? '#C4563A' : '#5b8bd4',
+                        background: c.user_id === currentUserId ? 'var(--accent)' : '#5b8bd4',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -295,14 +295,14 @@ export function FundDashboard({
                     >
                       {profile?.display_name?.[0]?.toUpperCase() ?? '?'}
                     </div>
-                    <span style={{ fontSize: '14px', color: '#f5efe6' }}>
+                    <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>
                       {profile?.display_name ?? 'Anonymous'}
                       {c.user_id === currentUserId && (
-                        <span style={{ fontSize: '12px', color: '#b8b0a2', marginLeft: '6px' }}>(you)</span>
+                        <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginLeft: '6px' }}>(you)</span>
                       )}
                     </span>
                   </div>
-                  <span style={{ fontSize: '14px', fontFamily: 'var(--font-geist-mono)', color: '#f5efe6' }}>
+                  <span style={{ fontSize: '14px', fontFamily: 'var(--font-geist-mono)', color: 'var(--text-primary)' }}>
                     ${(c.amount / 100).toLocaleString()}
                   </span>
                 </div>

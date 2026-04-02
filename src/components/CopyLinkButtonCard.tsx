@@ -40,7 +40,7 @@ export function CopyLinkButtonCard({ tripId }: { tripId: string }) {
         fontSize: 12,
         fontFamily: 'var(--font-geist-mono, monospace)',
         fontWeight: 500,
-        color: copied ? '#4ade80' : '#b8b0a2',
+        color: copied ? '#4ade80' : 'var(--text-secondary)',
         cursor: loading ? 'default' : 'pointer',
         letterSpacing: '0.04em',
         transition: 'all 0.2s',
