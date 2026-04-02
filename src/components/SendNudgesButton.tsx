@@ -26,9 +26,9 @@ export function SendNudgesButton({ tripId }: { tripId: string }) {
   }
 
   const label = {
-    idle: '📣 Send nudges',
+    idle: 'Send nudges',
     loading: 'Sending...',
-    done: count > 0 ? `✓ ${count} nudge${count === 1 ? '' : 's'} sent` : '✓ No nudges needed',
+    done: count > 0 ? `${count} nudge${count === 1 ? '' : 's'} sent` : 'No nudges needed',
     error: 'Failed — try again',
   }[status]
 
@@ -36,8 +36,12 @@ export function SendNudgesButton({ tripId }: { tripId: string }) {
     <button
       onClick={handleSend}
       disabled={status === 'loading'}
-      className="bg-[#1a1612] border border-[rgba(242,237,228,0.1)] hover:border-[rgba(196,86,58,0.4)] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors disabled:opacity-50 w-full sm:w-auto text-center"
-      style={{ color: 'var(--text-primary)' }}
+      className="text-sm font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+      style={{
+        background: 'var(--surface)',
+        border: '0.5px solid var(--border)',
+        color: 'var(--text-secondary)',
+      }}
     >
       {label}
     </button>

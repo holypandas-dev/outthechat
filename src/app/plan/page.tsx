@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { Nav } from '@/components/Nav'
 
 const VIBES = [
   { id: 'food_adventure', label: 'Food adventure', desc: 'Eat everything, find hidden spots' },
@@ -121,23 +121,7 @@ export default function PlanPage() {
   return (
     <div style={{ background: 'var(--background)', minHeight: '100vh' }}>
 
-      {/* Nav */}
-      <nav
-        className="px-6 sm:px-10 py-5 flex items-center justify-between sticky top-0 z-10"
-        style={{ borderBottom: '0.5px solid var(--border)', background: 'var(--background)' }}
-      >
-        <Link href="/dashboard" style={{ fontFamily: 'var(--font-fraunces)', fontSize: '15px' }}>
-          <span style={{ color: 'var(--accent)' }}>Out</span>
-          <span style={{ color: 'var(--text-primary)' }}>TheChat</span>
-        </Link>
-        <Link
-          href="/dashboard"
-          className="text-sm transition-colors"
-          style={{ color: 'var(--text-secondary)' }}
-        >
-          ← Dashboard
-        </Link>
-      </nav>
+      <Nav />
 
       <main className="max-w-2xl mx-auto px-6 py-12 sm:py-16">
 

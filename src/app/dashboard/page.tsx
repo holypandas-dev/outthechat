@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { DeleteTripButton } from '@/components/DeleteTripButton'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { Nav } from '@/components/Nav'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -39,49 +39,11 @@ export default async function DashboardPage() {
   const { data: trips } = await tripsQuery
 
   const firstName = profile?.display_name?.split(' ')[0] || 'there'
-  const initials = getInitials(profile?.display_name, user.email!)
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
 
-      {/* Nav */}
-      <nav style={{ borderBottom: '1px solid var(--border)', background: 'var(--background)' }}
-        className="px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 z-10">
-        <span className="text-sm tracking-tight">
-          <span className="font-medium" style={{ color: 'var(--accent)', fontFamily: 'var(--font-fraunces)' }}>Out</span>
-          <span style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-fraunces)' }}>TheChat</span>
-        </span>
-        <div className="flex items-center gap-3 sm:gap-4">
-          <Link href="/profile" className="flex items-center gap-2.5 group">
-            {profile?.avatar_url ? (
-              <img
-                src={profile.avatar_url}
-                alt={profile.display_name || 'Profile'}
-                className="w-8 h-8 rounded-full object-cover transition-colors"
-                style={{ border: '1px solid var(--border)' }}
-              />
-            ) : (
-              <div className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                style={{ background: 'var(--accent-muted)', border: '1px solid var(--border)' }}>
-                <span className="text-xs font-semibold" style={{ color: 'var(--accent)' }}>{initials}</span>
-              </div>
-            )}
-            <span className="hidden sm:inline text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
-              {profile?.display_name || user.email}
-            </span>
-          </Link>
-          <ThemeToggle />
-          <form action="/api/auth/signout" method="POST">
-            <button
-              type="submit"
-              className="text-sm transition-colors"
-              style={{ color: 'var(--text-secondary)' }}
-            >
-              Sign out
-            </button>
-          </form>
-        </div>
-      </nav>
+      <Nav profile={{ display_name: profile?.display_name ?? null, avatar_url: profile?.avatar_url ?? null, email: user.email }} />
 
       {/* Main */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
@@ -204,14 +166,6 @@ export default async function DashboardPage() {
   )
 }
 
-function getInitials(name: string | null | undefined, email: string): string {
-  if (name) {
-    const parts = name.trim().split(/\s+/).filter(Boolean)
-    if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-    return parts[0][0].toUpperCase()
-  }
-  return email[0].toUpperCase()
-}
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, React.CSSProperties> = {
