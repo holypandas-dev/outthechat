@@ -294,6 +294,8 @@ export default function Home() {
         <div className="flex gap-6">
           <Link href="/login" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Sign in</Link>
           <Link href="/join" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Sign up</Link>
+          <Link href="/terms" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Terms</Link>
+          <Link href="/privacy" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Privacy</Link>
         </div>
       </footer>
 

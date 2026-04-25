@@ -9,6 +9,7 @@ import { TripGroupChat } from '@/components/TripGroupChat'
 import { TripChatNavButton } from '@/components/TripChatNavButton'
 import { ItinerarySection } from '@/components/ItinerarySection'
 import { WhatToWear } from '@/components/WhatToWear'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export default async function TripPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -70,30 +71,34 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
 
 
   const commitmentLabel = (score: number) => {
-    if (score >= 91) return { text: 'Locked in 🔒', colorClass: 'text-green-400', colorStyle: undefined }
-    if (score >= 76) return { text: 'This is happening ✈️', colorClass: '', colorStyle: { color: 'var(--accent)' } }
-    if (score >= 51) return { text: 'Getting real 🔥', colorClass: 'text-amber-400', colorStyle: undefined }
-    if (score >= 26) return { text: 'Planning mode 📋', colorClass: 'text-blue-400', colorStyle: undefined }
-    return { text: 'Just dreaming 💭', colorClass: '', colorStyle: { color: 'var(--text-secondary)' } }
+    if (score >= 91) return { text: 'Locked in', colorStyle: { color: '#16a34a' } }
+    if (score >= 76) return { text: 'This is happening', colorStyle: { color: 'var(--accent)' } }
+    if (score >= 51) return { text: 'Getting real', colorStyle: { color: '#d97706' } }
+    if (score >= 26) return { text: 'Planning mode', colorStyle: { color: '#2563eb' } }
+    return { text: 'Just dreaming', colorStyle: { color: 'var(--text-secondary)' } }
   }
 
   const commitment = commitmentLabel(trip.commitment_score || 0)
 
   return (
-    <div className="min-h-screen bg-[#0f0d0b]">
+    <div className="min-h-screen" style={{ background: 'var(--background)' }}>
 
       {/* Nav */}
-      <nav className="border-b border-[rgba(242,237,228,0.08)] px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 bg-[#0f0d0b] z-10">
-        <Link href="/dashboard" className="font-mono text-sm">
+      <nav
+        className="px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 z-10"
+        style={{ borderBottom: '0.5px solid var(--border)', background: 'var(--background)' }}
+      >
+        <Link href="/dashboard" style={{ fontFamily: 'var(--font-fraunces)', fontSize: '15px' }}>
           <span style={{ color: 'var(--accent)' }}>Out</span>
           <span style={{ color: 'var(--text-primary)' }}>TheChat</span>
         </Link>
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-3 sm:gap-4">
           <TripChatNavButton />
-          <Link href="/plan" className="hidden sm:inline text-sm hover:text-text-primary transition-colors" style={{ color: 'var(--text-secondary)' }}>
+          <ThemeToggle />
+          <Link href="/plan" className="hidden sm:inline text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
             + New trip
           </Link>
-          <Link href="/dashboard" className="text-sm hover:text-text-primary transition-colors" style={{ color: 'var(--text-secondary)' }}>
+          <Link href="/dashboard" className="text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>
             <span className="hidden sm:inline">Dashboard</span>
             <span className="sm:hidden">← Back</span>
           </Link>
@@ -114,14 +119,14 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
               </h1>
               <div className="mt-4 w-full sm:max-w-sm">
                 <div className="flex justify-between items-center mb-1.5">
-                  <span className={`text-sm font-medium ${commitment.colorClass}`} style={commitment.colorStyle}>
+                  <span className="text-sm font-medium" style={commitment.colorStyle}>
                     {commitment.text}
                   </span>
                   <span className="text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>
                     {trip.commitment_score}%
                   </span>
                 </div>
-                <div className="h-1.5 bg-[rgba(242,237,228,0.06)] rounded-full overflow-hidden">
+                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{ background: 'var(--accent)', width: `${trip.commitment_score}%` }}
@@ -136,7 +141,8 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
                   {members.slice(0, 5).map((m, i) => (
                     <div
                       key={m.id}
-                      className="w-8 h-8 rounded-full border-2 border-[#0f0d0b] flex items-center justify-center text-xs font-medium text-white"
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium"
+                      style={{ outline: '2px solid var(--background)', color: 'white' }}
                       style={{ background: ['var(--accent)', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a'][i % 5] }}
                     >
                       {(m.profiles as { display_name: string })?.display_name?.[0]?.toUpperCase() || '?'}
@@ -158,12 +164,12 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
                 return (
                   <div
                     key={tier}
-                    className={`px-4 py-2 rounded-lg border text-sm ${
-                      trip.budget_tier === tier
-                        ? 'border-accent bg-[rgba(196,86,58,0.08)]'
-                        : 'border-[rgba(242,237,228,0.08)]'
-                    }`}
-                    style={trip.budget_tier === tier ? { color: 'var(--text-primary)' } : { color: 'var(--text-secondary)' }}
+                    className="px-4 py-2 rounded-lg text-sm"
+                    style={{
+                      border: trip.budget_tier === tier ? '1px solid var(--accent)' : '0.5px solid var(--border)',
+                      background: trip.budget_tier === tier ? 'var(--accent-muted)' : 'transparent',
+                      color: trip.budget_tier === tier ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    }}
                   >
                     <span className="capitalize">{tier}</span>
                     <span className="ml-2 font-mono">~${cost.toLocaleString()}/person</span>
@@ -174,7 +180,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
           )}
 
           {trip.local_tips && (trip.local_tips as string[]).length > 0 && (
-            <div className="mt-6 bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-xl p-4">
+            <div className="mt-6 rounded-xl p-4" style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}>
               <p className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
                 Local tips
               </p>

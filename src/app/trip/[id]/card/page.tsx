@@ -470,7 +470,7 @@ export default async function TripCardPage({ params }: { params: Promise<{ id: s
                 className="font-mono"
                 style={{ fontSize: 11, color: 'rgba(184,176,162,0.7)', letterSpacing: '0.05em' }}
               >
-                outthechat.vercel.app
+                {(process.env.NEXT_PUBLIC_SITE_URL || 'outthechat.com').replace(/^https?:\/\//, '')}
               </p>
             </div>
 

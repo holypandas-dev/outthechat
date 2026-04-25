@@ -61,7 +61,7 @@ export default function ResetPasswordPage() {
 
   if (error === 'invalid_link') {
     return (
-      <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
           <Link href="/" className="inline-block mb-8">
             <span className="font-mono text-sm tracking-widest" style={{ color: 'var(--accent)' }}>Out</span>
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         {/* Logo */}

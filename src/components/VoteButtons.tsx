@@ -74,22 +74,19 @@ export function VoteButtons({
       <button
         onClick={() => handleVote(1)}
         disabled={loading}
-        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
-          currentVote === 1
-            ? 'bg-green-950/60 border border-green-700/50 text-green-400'
-            : 'bg-[rgba(242,237,228,0.04)] border border-[rgba(242,237,228,0.08)] hover:border-green-700/40 hover:text-green-400'
-        }`}
-        style={currentVote !== 1 ? { color: 'var(--text-secondary)' } : undefined}
+        className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
+        style={currentVote === 1
+          ? { background: '#dcfce7', border: '1px solid #86efac', color: '#16a34a' }
+          : { background: 'var(--surface)', border: '0.5px solid var(--border)', color: 'var(--text-secondary)' }
+        }
       >
-        👍 {currentVote === 1 ? 'In' : 'Up'}
+        {currentVote === 1 ? 'In' : 'Up'}
       </button>
 
       {/* Score */}
       <span
-        className={`text-xs font-mono min-w-[20px] text-center ${
-          score > 0 ? 'text-green-400' : score < 0 ? 'text-red-400' : ''
-        }`}
-        style={score === 0 ? { color: 'var(--text-secondary)' } : undefined}
+        className="text-xs font-mono min-w-[20px] text-center"
+        style={{ color: score > 0 ? '#16a34a' : score < 0 ? '#dc2626' : 'var(--text-secondary)' }}
       >
         {score > 0 ? `+${score}` : score}
       </span>
@@ -98,14 +95,13 @@ export function VoteButtons({
       <button
         onClick={() => handleVote(-1)}
         disabled={loading}
-        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
-          currentVote === -1
-            ? 'bg-red-950/60 border border-red-700/50 text-red-400'
-            : 'bg-[rgba(242,237,228,0.04)] border border-[rgba(242,237,228,0.08)] hover:border-red-700/40 hover:text-red-400'
-        }`}
-        style={currentVote !== -1 ? { color: 'var(--text-secondary)' } : undefined}
+        className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
+        style={currentVote === -1
+          ? { background: '#fee2e2', border: '1px solid #fca5a5', color: '#dc2626' }
+          : { background: 'var(--surface)', border: '0.5px solid var(--border)', color: 'var(--text-secondary)' }
+        }
       >
-        👎 {currentVote === -1 ? 'Out' : 'Down'}
+        {currentVote === -1 ? 'Out' : 'Down'}
       </button>
     </div>
   )

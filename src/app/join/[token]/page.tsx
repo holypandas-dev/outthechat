@@ -32,7 +32,7 @@ export default function JoinTripPage() {
       const res = await fetch('/api/join-trip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, user_id: user.id }),
+        body: JSON.stringify({ token }),
       })
 
       const data = await res.json()
@@ -61,7 +61,7 @@ export default function JoinTripPage() {
   }, [token])
 
   return (
-    <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-sm text-center">
 
         {/* Logo */}
@@ -72,7 +72,7 @@ export default function JoinTripPage() {
           </span>
         </div>
 
-        <div className="bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-2xl p-8">
+        <div className="bg-surface border border-border rounded-2xl p-8">
 
           {status === 'loading' && (
             <div>

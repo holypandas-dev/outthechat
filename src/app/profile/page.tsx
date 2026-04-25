@@ -79,17 +79,15 @@ export default function ProfilePage() {
       setAvatarFile(null)
     }
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { setError('Not authenticated'); setSaving(false); return }
+    const res = await fetch('/api/profile/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ display_name: displayName, bio }),
+    })
+    const data = await res.json()
 
-    const { error: updateError } = await supabase
-      .from('profiles')
-      .update({ display_name: displayName, bio: bio })
-      .eq('id', user.id)
-
-    if (updateError) {
-      console.error('Profile update error:', updateError)
-      setError(JSON.stringify(updateError, null, 2))
+    if (!res.ok) {
+      setError(data.error || 'Failed to save profile')
     } else {
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
@@ -102,16 +100,16 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-sm font-mono animate-pulse" style={{ color: 'var(--text-secondary)' }}>Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0d0b]">
+    <div className="min-h-screen bg-background">
       {/* Nav */}
-      <nav className="border-b border-[rgba(242,237,228,0.08)] px-6 py-4 flex items-center justify-between">
+      <nav className="border-b border-border px-6 py-4 flex items-center justify-between">
         <span className="font-mono text-sm">
           <span style={{ color: 'var(--accent)' }}>Out</span>
           <span style={{ color: 'var(--text-primary)' }}>TheChat</span>
@@ -142,7 +140,7 @@ export default function ProfilePage() {
                 <img
                   src={avatarPreview || avatarUrl!}
                   alt="Profile photo"
-                  className="w-20 h-20 rounded-full object-cover border-2 border-[rgba(242,237,228,0.1)] group-hover:border-accent transition-colors"
+                  className="w-20 h-20 rounded-full object-cover border-2 border-border group-hover:border-accent transition-colors"
                 />
               ) : (
                 <div className="w-20 h-20 rounded-full bg-accent/15 border-2 border-border/40 group-hover:border-accent transition-colors flex items-center justify-center">
@@ -187,7 +185,7 @@ export default function ProfilePage() {
               onChange={e => setDisplayName(e.target.value)}
               placeholder="Your name"
               required
-              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-accent transition-colors"
+              className="w-full bg-surface border border-border rounded-lg px-4 py-3 placeholder-text-muted text-sm focus:outline-none focus:border-accent transition-colors"
               style={{ color: 'var(--text-primary)' }}
             />
           </div>
@@ -203,20 +201,20 @@ export default function ProfilePage() {
               placeholder="Tell your travel crew about yourself..."
               rows={3}
               maxLength={200}
-              className="w-full bg-[#1a1612] border border-[rgba(242,237,228,0.1)] rounded-lg px-4 py-3 placeholder-[rgba(242,237,228,0.25)] text-sm focus:outline-none focus:border-accent transition-colors resize-none"
+              className="w-full bg-surface border border-border rounded-lg px-4 py-3 placeholder-text-muted text-sm focus:outline-none focus:border-accent transition-colors resize-none"
               style={{ color: 'var(--text-primary)' }}
             />
             <p className="text-right text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>{bio.length}/200</p>
           </div>
 
           {error && (
-            <div className="bg-red-950/60 border border-red-800/40 rounded-lg px-4 py-3 text-red-400 text-sm">
+            <div className="rounded-lg px-4 py-3 text-sm" style={{ background: '#fee2e2', border: '1px solid #fca5a5', color: '#dc2626' }}>
               <pre className="whitespace-pre-wrap break-all font-mono text-xs">{error}</pre>
             </div>
           )}
 
           {success && (
-            <div className="bg-green-950/60 border border-green-800/40 rounded-lg px-4 py-3 text-green-400 text-sm">
+            <div className="rounded-lg px-4 py-3 text-sm" style={{ background: '#dcfce7', border: '1px solid #86efac', color: '#16a34a' }}>
               Profile saved!
             </div>
           )}

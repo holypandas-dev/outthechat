@@ -1,13 +1,22 @@
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   try {
-    const { token, user_id } = await request.json()
+    const { token } = await request.json()
 
-    if (!token || !user_id) {
-      return NextResponse.json({ error: 'Missing token or user_id' }, { status: 400 })
+    if (!token) {
+      return NextResponse.json({ error: 'Missing invite token' }, { status: 400 })
     }
+
+    // Verify the session server-side — never trust user_id from the client
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'You must be logged in to join a trip.' }, { status: 401 })
+    }
+    const user_id = user.id
 
     const admin = createAdminClient()
 

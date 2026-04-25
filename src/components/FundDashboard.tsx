@@ -85,7 +85,7 @@ export function FundDashboard({
       <div
         style={{
           background: 'var(--surface)',
-          border: '1px solid rgba(242,237,228,0.08)',
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '24px',
         }}
@@ -123,7 +123,7 @@ export function FundDashboard({
         <div
           style={{
             height: '6px',
-            background: 'rgba(242,237,228,0.06)',
+            background: 'var(--surface-raised)',
             borderRadius: '999px',
             overflow: 'hidden',
           }}
@@ -153,7 +153,7 @@ export function FundDashboard({
       <div
         style={{
           background: 'var(--surface)',
-          border: '1px solid rgba(242,237,228,0.08)',
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '24px',
         }}
@@ -211,8 +211,8 @@ export function FundDashboard({
               paddingRight: '16px',
               paddingTop: '10px',
               paddingBottom: '10px',
-              background: 'rgba(242,237,228,0.04)',
-              border: '1px solid rgba(242,237,228,0.1)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
               borderRadius: '8px',
               fontSize: '14px',
               color: 'var(--text-primary)',
@@ -255,7 +255,7 @@ export function FundDashboard({
         <div
           style={{
             background: 'var(--surface)',
-            border: '1px solid rgba(242,237,228,0.08)',
+            border: '1px solid var(--border)',
             borderRadius: '16px',
             padding: '24px',
           }}

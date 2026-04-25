@@ -62,7 +62,7 @@ export function ItinerarySection({
   tripId,
   destination,
   memberCount,
-  currentUserId,
+  currentUserId: _currentUserId,
   memberProfiles,
   initialSuggestionsMap,
 }: ItinerarySectionProps) {
@@ -155,27 +155,51 @@ export function ItinerarySection({
     const key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
     if (!key) return
 
+    // Returns query chain from most specific → guaranteed generic fallback
+    function queryChain(activity: Activity): string[] {
+      const t = activity.title
+      const d = destination
+      switch (activity.category) {
+        case 'food':
+          return [`${t} food`, `restaurant food ${d}`, `restaurant food plating`, 'food dining']
+        case 'nightlife':
+          return [`${t} bar`, `nightlife ${d}`, 'nightlife bar cocktails', 'bar drinks']
+        case 'culture':
+          return [`${t}`, `museum ${d}`, 'museum interior art', 'art gallery']
+        case 'nature':
+          return [`${t}`, `nature ${d}`, `landscape ${d}`, 'nature scenic']
+        case 'hotel':
+          return [`${t} hotel`, `hotel ${d}`, 'hotel room interior', 'hotel lobby']
+        case 'activity':
+          return [`${t} ${d}`, `${d} attraction`, `${d} tourism`, d]
+        default:
+          return [`${t} ${d}`, d, 'travel destination']
+      }
+    }
+
+    async function pickPhoto(queries: string[]): Promise<string | undefined> {
+      for (const query of queries) {
+        try {
+          const res = await fetch(
+            `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=3&client_id=${key}`
+          )
+          const data = await res.json()
+          const results: { urls: { small: string } }[] = data.results ?? []
+          if (results.length > 0) {
+            const idx = Math.floor(Math.random() * Math.min(results.length, 3))
+            return results[idx]?.urls?.small
+          }
+        } catch {
+          // try next query
+        }
+      }
+      return undefined
+    }
+
     const allActivitiesForPhotos = days.flatMap(d => d.activities || [])
     allActivitiesForPhotos.forEach(async (activity) => {
-      try {
-        const query = encodeURIComponent(`${activity.title} ${activity.location}`)
-        const res = await fetch(
-          `https://api.unsplash.com/search/photos?query=${query}&per_page=1&client_id=${key}`
-        )
-        const data = await res.json()
-        let url = data.results?.[0]?.urls?.small
-        if (!url) {
-          const fallbackQuery = encodeURIComponent(destination)
-          const fallbackRes = await fetch(
-            `https://api.unsplash.com/search/photos?query=${fallbackQuery}&per_page=1&client_id=${key}`
-          )
-          const fallbackData = await fallbackRes.json()
-          url = fallbackData.results?.[0]?.urls?.small
-        }
-        if (url) setPhotoMap(prev => ({ ...prev, [activity.id]: url }))
-      } catch {
-        // skip failed photo fetch
-      }
+      const url = await pickPhoto(queryChain(activity))
+      if (url) setPhotoMap(prev => ({ ...prev, [activity.id]: url }))
     })
   }, [days])
 
@@ -189,24 +213,27 @@ export function ItinerarySection({
         location: a.location,
         day_number: day.day_number,
         category: a.category,
+        description: a.description,
       }))
   )
 
-  function renderActivityCard(activity: Activity, dayNumber?: number, slot?: string, isSuggestion = false) {
+  function renderActivityCard(activity: Activity, _dayNumber?: number, slot?: string, isSuggestion = false) {
     const outcome = getVoteOutcome(activity)
     const suggestions = suggestionsMap[activity.id] || []
     const showSuggestForm = suggestFormOpen === activity.id
 
-    let borderClass = 'border-[rgba(242,237,228,0.06)]'
-    if (highlightedId === activity.id) borderClass = 'border-accent activity-highlight'
-    else if (outcome === 'favorite') borderClass = 'border-green-600/50'
-    else if (outcome === 'replace') borderClass = 'border-red-600/50'
+    let cardBorder = '0.5px solid var(--border)'
+    let cardHighlight = ''
+    if (highlightedId === activity.id) { cardBorder = '1px solid var(--accent)'; cardHighlight = 'activity-highlight' }
+    else if (outcome === 'favorite') cardBorder = '1px solid #16a34a66'
+    else if (outcome === 'replace') cardBorder = '1px solid #dc262666'
 
     return (
       <div key={activity.id} className="space-y-2">
         <div
           id={`activity-${activity.id}`}
-          className={`bg-[#1a1612] border rounded-xl p-4 hover:border-[rgba(196,86,58,0.2)] transition-colors ${borderClass}`}
+          className={`rounded-xl p-4 transition-colors ${cardHighlight}`}
+          style={{ background: 'var(--surface)', border: cardBorder }}
         >
           {/* Vote outcome badge */}
           {outcome === 'favorite' && (
@@ -293,6 +320,8 @@ export function ItinerarySection({
                 <img
                   src={photoMap[activity.id]}
                   alt={activity.title}
+                  width={80}
+                  height={80}
                   className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
                 />
               )}
@@ -312,7 +341,7 @@ export function ItinerarySection({
 
         {/* Inline suggest replacement form */}
         {showSuggestForm && (
-          <div className="bg-[#1a1612] border border-[rgba(196,86,58,0.2)] rounded-xl p-4">
+          <div className="rounded-xl p-4" style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}>
             <p className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
               ✏️ Suggest a replacement
             </p>
@@ -366,7 +395,7 @@ export function ItinerarySection({
         </p>
         <div className="flex items-center gap-2 flex-shrink-0">
           {/* List / Map toggle */}
-          <div className="flex items-center gap-0.5 p-1 bg-[#1a1612] border border-[rgba(242,237,228,0.08)] rounded-lg">
+          <div className="flex items-center gap-0.5 p-1 rounded-lg" style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}>
             <button
               onClick={() => setView('list')}
               className={`px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
@@ -394,12 +423,11 @@ export function ItinerarySection({
           {/* Finalized toggle */}
           <button
             onClick={() => { setFinalizedView(v => !v); setView('list') }}
-            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-lg border transition-all whitespace-nowrap ${
-              finalizedView
-                ? 'bg-green-950/60 border-green-700/50 text-green-400'
-                : 'bg-[#1a1612] border-[rgba(242,237,228,0.08)] hover:border-green-700/40 hover:text-green-400'
-            }`}
-            style={!finalizedView ? { color: 'var(--text-secondary)' } : undefined}
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-lg transition-all whitespace-nowrap"
+            style={finalizedView
+              ? { background: '#dcfce7', border: '1px solid #86efac', color: '#166534' }
+              : { background: 'var(--surface)', border: '0.5px solid var(--border)', color: 'var(--text-secondary)' }
+            }
           >
             Finalized ✓
           </button>

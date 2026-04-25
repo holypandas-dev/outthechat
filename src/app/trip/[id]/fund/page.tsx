@@ -120,8 +120,8 @@ export default async function FundPage({
         {cancelled && (
           <div
             style={{
-              background: 'rgba(242,237,228,0.04)',
-              border: '1px solid rgba(242,237,228,0.08)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
               borderRadius: '12px',
               padding: '14px 16px',
               fontSize: '14px',

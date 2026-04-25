@@ -33,7 +33,7 @@ export function DeleteTripButton({ tripId, variant = 'action' }: {
       {variant === 'card' ? (
         <button
           onClick={e => { e.preventDefault(); e.stopPropagation(); setShowConfirm(true) }}
-          className="p-1.5 rounded-md bg-[#0f0d0b] border border-[rgba(242,237,228,0.12)] hover:text-red-400 hover:border-red-800/60 transition-colors"
+          className="p-1.5 rounded-md bg-background border border-border hover:text-red-500 transition-colors"
           style={{ color: 'var(--text-secondary)' }}
           title="Delete trip"
         >
@@ -55,7 +55,7 @@ export function DeleteTripButton({ tripId, variant = 'action' }: {
           onClick={() => !loading && setShowConfirm(false)}
         >
           <div
-            className="bg-[#1a1612] border border-[rgba(242,237,228,0.12)] rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl"
+            className="bg-surface border border-border rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl"
             onClick={e => e.stopPropagation()}
           >
             <h3 className="font-semibold text-base mb-1" style={{ color: 'var(--text-primary)' }}>Delete this trip?</h3>

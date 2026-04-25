@@ -107,7 +107,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
           width: isMobile ? '100vw' : '400px',
           height: '100dvh',
           background: 'var(--background)',
-          borderLeft: '1px solid rgba(242,237,228,0.08)',
+          borderLeft: '0.5px solid var(--border)',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 50,
@@ -119,7 +119,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
         <div
           style={{
             padding: '16px 20px',
-            borderBottom: '1px solid rgba(242,237,228,0.08)',
+            borderBottom: '0.5px solid var(--border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -281,7 +281,7 @@ export function TripAIChat({ tripId }: TripAIChatProps) {
         <div
           style={{
             padding: '12px 16px 16px',
-            borderTop: '1px solid rgba(242,237,228,0.08)',
+            borderTop: '0.5px solid var(--border)',
             flexShrink: 0,
           }}
         >

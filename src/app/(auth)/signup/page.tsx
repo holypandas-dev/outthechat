@@ -41,7 +41,7 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
           <div className="text-4xl mb-4">✈️</div>
           <h2 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Check your email</h2>
@@ -62,7 +62,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0d0b] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         {/* Logo */}

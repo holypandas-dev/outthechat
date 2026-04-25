@@ -219,7 +219,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
         <div
           style={{
             padding: '16px 20px',
-            borderBottom: '1px solid rgba(242,237,228,0.08)',
+            borderBottom: '0.5px solid var(--border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -417,7 +417,7 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
         <div
           style={{
             padding: '12px 16px 16px',
-            borderTop: '1px solid rgba(242,237,228,0.08)',
+            borderTop: '0.5px solid var(--border)',
             flexShrink: 0,
           }}
         >
