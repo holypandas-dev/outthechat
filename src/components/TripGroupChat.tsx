@@ -353,9 +353,9 @@ export function TripGroupChat({ tripId, currentUserId, memberProfiles }: TripGro
                         <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', margin: '0 0 3px' }}>
                           {activity.title as string}
                         </p>
-                        {activity.location && (
+                        {!!activity.location && (
                           <p style={{ fontSize: '11px', color: 'var(--text-secondary)', margin: '0 0 4px' }}>
-                            📍 {activity.location as string}
+                            <span>📍</span> {activity.location as string}
                           </p>
                         )}
                         {(activity.cost_estimate as number) > 0 && (
