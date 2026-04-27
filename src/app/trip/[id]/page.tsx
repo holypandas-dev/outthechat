@@ -142,8 +142,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
                     <div
                       key={m.id}
                       className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium"
-                      style={{ outline: '2px solid var(--background)', color: 'white' }}
-                      style={{ background: ['var(--accent)', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a'][i % 5] }}
+                      style={{ outline: '2px solid var(--background)', color: 'white', background: ['var(--accent)', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a'][i % 5] }}
                     >
                       {(m.profiles as { display_name: string })?.display_name?.[0]?.toUpperCase() || '?'}
                     </div>
