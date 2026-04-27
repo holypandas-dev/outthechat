@@ -23,7 +23,7 @@ export default function Home() {
               Sign in
             </Link>
             <Link
-              href="/join"
+              href="/signup"
               className="text-sm font-medium px-5 py-2 rounded-md transition-colors"
               style={{ background: 'var(--text-primary)', color: 'var(--background)' }}
             >
@@ -64,7 +64,7 @@ export default function Home() {
         </p>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
           <Link
-            href="/join"
+            href="/signup"
             className="text-sm font-medium px-7 py-3.5 rounded-md transition-colors"
             style={{ background: 'var(--text-primary)', color: 'var(--background)' }}
           >
@@ -272,7 +272,7 @@ export default function Home() {
             Stop planning in group chats. Start planning in OutTheChat.
           </p>
           <Link
-            href="/join"
+            href="/signup"
             className="inline-block text-sm font-medium px-10 py-4 rounded-md transition-colors"
             style={{ background: 'var(--text-primary)', color: 'var(--background)' }}
           >
@@ -293,7 +293,7 @@ export default function Home() {
         <p className="text-xs" style={{ color: 'var(--text-muted)' }}>© 2026 OutTheChat. All rights reserved.</p>
         <div className="flex gap-6">
           <Link href="/login" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Sign in</Link>
-          <Link href="/join" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Sign up</Link>
+          <Link href="/signup" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Sign up</Link>
           <Link href="/terms" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Terms</Link>
           <Link href="/privacy" className="text-xs transition-colors" style={{ color: 'var(--text-secondary)' }}>Privacy</Link>
         </div>
