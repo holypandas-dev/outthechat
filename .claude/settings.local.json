@@ -15,7 +15,10 @@
       "Bash(find /c/Users/angel/Documents/outthchat -name *schema* -o -name *prisma*)",
       "Bash(head -100 /c/Users/angel/Documents/outthchat/supabase/migrations/*.sql)",
       "Bash(wc -l /c/Users/angel/Documents/outthchat/supabase/migrations/*)",
-      "Bash(wc -l /c/Users/angel/Documents/outthchat/src/app/api/*/route.ts)"
+      "Bash(wc -l /c/Users/angel/Documents/outthchat/src/app/api/*/route.ts)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
