@@ -210,9 +210,9 @@ export default function Home() {
           >
             {[
               { title: 'AI itinerary generator', body: "Full day-by-day plans built around your group's vibe, budget, and travel style.", soon: false },
-              { title: 'Flight search', body: 'Find and compare flights for your whole group without leaving the app.', soon: true },
-              { title: 'Hotel & stay booking', body: 'Browse stays that fit your budget and group size, all in one place.', soon: true },
-              { title: 'Excursions & activities', body: 'Book tours and experiences directly through OutTheChat.', soon: true },
+              { title: 'Flight recommendations', body: 'Get flight suggestions for your dates and budget — book directly with the airline in one tap.', soon: false },
+              { title: 'Hotel & stay discovery', body: 'Browse curated stay options that fit your group size and budget — powered by Booking.com.', soon: false },
+              { title: 'Excursions & activities', body: 'Find tours and experiences for every destination — book through Viator without leaving your itinerary.', soon: false },
               { title: 'Shared trip budget', body: 'Everyone sees costs upfront. No surprises, no awkward money conversations.', soon: false },
               { title: 'Group commitment tracker', body: "See who's in, who's wavering, and nudge everyone to lock it in.", soon: false },
             ].map((item, i) => (
