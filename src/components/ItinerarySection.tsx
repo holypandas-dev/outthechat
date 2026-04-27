@@ -281,6 +281,17 @@ export function ItinerarySection({
                   <p className="text-xs italic" style={{ color: 'var(--text-secondary)' }}>{activity.insider_tip}</p>
                 </div>
               )}
+              {!['hotel', 'transport'].includes(activity.category) && (
+                <a
+                  href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00049840`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] transition-opacity hover:opacity-70 mt-2 inline-block"
+                  style={{ color: 'var(--accent)' }}
+                >
+                  Find experiences →
+                </a>
+              )}
               <div className="flex items-center gap-3 flex-wrap">
                 <VoteButtons
                   activityId={activity.id}
