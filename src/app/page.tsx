@@ -60,7 +60,7 @@ export default function Home() {
           className="text-base sm:text-lg leading-relaxed mb-10"
           style={{ color: 'var(--text-secondary)', maxWidth: '480px' }}
         >
-          OutTheChat turns messy group conversations into real, fully planned trips — itineraries, budgets, bookings, and everyone actually committed.
+          OutTheChat turns messy group conversations into real, fully planned trips — AI itineraries, shared budgets, and curated recommendations for flights, hotels, and excursions all in one place.
         </p>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
           <Link
