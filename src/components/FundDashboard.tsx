@@ -2,315 +2,295 @@
 
 import { useState } from 'react'
 
-interface Contribution {
-  id: string
+interface Member {
   user_id: string
-  amount: number
-  status: string
-  created_at: string
-  profiles: { display_name: string }[] | { display_name: string } | null
+  display_name: string | null
 }
 
 interface FundDashboardProps {
   tripId: string
-  goalAmount: number
-  contributions: Contribution[]
+  destination: string
+  costPerPerson: number
+  costLow: number
+  costHigh: number
+  groupSize: number
+  members: Member[]
+  committedUserIds: string[]
   currentUserId: string
-  paymentSuccess: boolean
 }
+
+const AVATAR_COLORS = ['var(--accent)', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a']
 
 export function FundDashboard({
   tripId,
-  goalAmount,
-  contributions,
+  destination,
+  costPerPerson,
+  costLow,
+  costHigh,
+  groupSize,
+  members,
+  committedUserIds: initialCommitted,
   currentUserId,
-  paymentSuccess,
 }: FundDashboardProps) {
-  const [amount, setAmount] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [committedIds, setCommittedIds] = useState<string[]>(initialCommitted)
+  const [committing, setCommitting] = useState(false)
   const [error, setError] = useState('')
 
-  const paidContributions = contributions.filter(c => c.status === 'paid')
-  const totalRaisedCents = paidContributions.reduce((sum, c) => sum + c.amount, 0)
-  const totalRaised = totalRaisedCents / 100
-  const progressPct = Math.min((totalRaised / goalAmount) * 100, 100)
+  const iCommitted = committedIds.includes(currentUserId)
+  const committedCount = committedIds.length
+  const allCommitted = committedCount >= groupSize
+  const progressPct = Math.min((committedCount / Math.max(groupSize, 1)) * 100, 100)
 
-  const suggestions = [
-    Math.max(25, Math.round(goalAmount * 0.1)),
-    Math.round(goalAmount * 0.25),
-    Math.round(goalAmount * 0.5),
-  ]
-
-  async function handleContribute() {
-    const val = parseFloat(amount)
-    if (!val || val < 1) {
-      setError('Enter an amount of at least $1')
-      return
-    }
-    setLoading(true)
+  async function handleCommit() {
+    setCommitting(true)
     setError('')
     try {
-      const res = await fetch('/api/create-payment', {
+      const res = await fetch('/api/commit-share', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tripId, amount: val }),
+        body: JSON.stringify({ tripId }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      window.location.href = data.url
+      setCommittedIds(prev => [...prev, currentUserId])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
-      setLoading(false)
     }
+    setCommitting(false)
   }
+
+  const committedSet = new Set(committedIds)
 
   return (
     <div className="space-y-5">
-      {paymentSuccess && (
-        <div
-          style={{
-            background: 'rgba(34,197,94,0.08)',
-            border: '1px solid rgba(34,197,94,0.25)',
-            borderRadius: '12px',
-            padding: '14px 16px',
-            fontSize: '14px',
-            color: '#4ade80',
-          }}
-        >
-          Payment received — your contribution has been added to the group fund!
+
+      {/* Ready to book banner */}
+      {allCommitted && (
+        <div style={{
+          background: 'rgba(22,163,74,0.07)',
+          border: '1px solid rgba(22,163,74,0.25)',
+          borderRadius: '16px',
+          padding: '20px 24px',
+        }}>
+          <p style={{ fontSize: '13px', fontWeight: 600, color: '#16a34a', marginBottom: '4px' }}>
+            Your group is ready to book!
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            Everyone&apos;s committed. Time to lock in the trip.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <a
+              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(destination)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'block',
+                textAlign: 'center',
+                padding: '11px',
+                background: '#003580',
+                color: '#fff',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 500,
+                textDecoration: 'none',
+              }}
+            >
+              Find hotels on Booking.com →
+            </a>
+            <a
+              href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00049840`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'block',
+                textAlign: 'center',
+                padding: '11px',
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-primary)',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 500,
+                textDecoration: 'none',
+              }}
+            >
+              Book experiences on Viator →
+            </a>
+          </div>
         </div>
       )}
 
-      {/* Progress card */}
-      <div
-        style={{
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: '16px',
-          padding: '24px',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
-          <div>
-            <p
-              style={{
-                fontFamily: 'var(--font-geist-mono)',
-                fontSize: '11px',
-                color: 'var(--accent)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                marginBottom: '4px',
-              }}
-            >
-              Group fund
-            </p>
-            <p style={{ fontSize: '26px', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1 }}>
-              ${totalRaised.toLocaleString()}
-              <span style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)', marginLeft: '4px' }}>
-                raised
-              </span>
-            </p>
-          </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-            of{' '}
-            <span style={{ fontFamily: 'var(--font-geist-mono)', color: 'var(--text-primary)' }}>
-              ${goalAmount.toLocaleString()}
-            </span>{' '}
-            goal
-          </p>
-        </div>
-
-        <div
-          style={{
-            height: '6px',
-            background: 'var(--surface-raised)',
-            borderRadius: '999px',
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              height: '100%',
-              width: `${progressPct}%`,
-              background: progressPct >= 100 ? '#4ade80' : 'var(--accent)',
-              borderRadius: '999px',
-              transition: 'width 0.6s ease',
-            }}
-          />
-        </div>
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
+      {/* Cost breakdown */}
+      <div style={{
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: '16px',
+        padding: '24px',
+      }}>
+        <p style={{
+          fontFamily: 'var(--font-geist-mono)',
+          fontSize: '11px',
+          color: 'var(--accent)',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          marginBottom: '4px',
+        }}>
+          Your share
+        </p>
+        <p style={{ fontSize: '32px', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1, marginBottom: '6px' }}>
+          ${costPerPerson.toLocaleString()}
+          <span style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)', marginLeft: '6px' }}>
+            per person
+          </span>
+        </p>
+        {(costLow > 0 || costHigh > 0) && (
           <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-            {paidContributions.length} {paidContributions.length === 1 ? 'contribution' : 'contributions'}
+            Estimated range{' '}
+            <span style={{ fontFamily: 'var(--font-geist-mono)', color: 'var(--text-primary)' }}>
+              ${costLow.toLocaleString()} – ${costHigh.toLocaleString()}
+            </span>
+            {' '}per person
+          </p>
+        )}
+        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+          Based on a group of {groupSize} · AI estimate, actual costs may vary
+        </p>
+      </div>
+
+      {/* Commitment progress */}
+      <div style={{
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: '16px',
+        padding: '24px',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '12px' }}>
+          <p style={{
+            fontFamily: 'var(--font-geist-mono)',
+            fontSize: '11px',
+            color: 'var(--accent)',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+          }}>
+            Group commitment
           </p>
           <p style={{ fontSize: '12px', fontFamily: 'var(--font-geist-mono)', color: 'var(--text-secondary)' }}>
-            {Math.round(progressPct)}%
+            {committedCount} / {groupSize}
           </p>
         </div>
-      </div>
 
-      {/* Contribute form */}
-      <div
-        style={{
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: '16px',
-          padding: '24px',
-        }}
-      >
-        <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
-          Add your contribution
-        </p>
-
-        {/* Quick amounts */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
-          {suggestions.map(s => (
-            <button
-              key={s}
-              onClick={() => setAmount(String(s))}
-              style={{
-                padding: '8px',
-                borderRadius: '8px',
-                border: `1px solid ${amount === String(s) ? 'var(--accent)' : 'var(--border)'}`,
-                background: amount === String(s) ? 'rgba(196,86,58,0.08)' : 'transparent',
-                color: amount === String(s) ? 'var(--accent)' : 'var(--text-secondary)',
-                fontSize: '13px',
-                fontFamily: 'var(--font-geist-mono)',
-                cursor: 'pointer',
-                transition: 'all 0.15s',
-              }}
-            >
-              ${s}
-            </button>
-          ))}
+        <div style={{
+          height: '6px',
+          background: 'var(--surface-raised)',
+          borderRadius: '999px',
+          overflow: 'hidden',
+          marginBottom: '16px',
+        }}>
+          <div style={{
+            height: '100%',
+            width: `${progressPct}%`,
+            background: allCommitted ? '#16a34a' : 'var(--accent)',
+            borderRadius: '999px',
+            transition: 'width 0.6s ease',
+          }} />
         </div>
 
-        {/* Custom input */}
-        <div style={{ position: 'relative', marginBottom: '14px' }}>
-          <span
-            style={{
-              position: 'absolute',
-              left: '12px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: 'var(--text-secondary)',
-              fontSize: '14px',
-            }}
-          >
-            $
-          </span>
-          <input
-            type="number"
-            min="1"
-            value={amount}
-            onChange={e => setAmount(e.target.value)}
-            placeholder="Custom amount"
-            style={{
-              width: '100%',
-              paddingLeft: '28px',
-              paddingRight: '16px',
-              paddingTop: '10px',
-              paddingBottom: '10px',
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: '8px',
-              fontSize: '14px',
-              color: 'var(--text-primary)',
-              outline: 'none',
-              boxSizing: 'border-box',
-            }}
-          />
-        </div>
-
-        {error && (
-          <p style={{ fontSize: '12px', color: '#f87171', marginBottom: '10px' }}>{error}</p>
-        )}
-
-        <button
-          onClick={handleContribute}
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '11px',
-            background: loading ? 'var(--accent-text)' : 'var(--accent)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '14px',
-            fontWeight: 500,
-            cursor: loading ? 'not-allowed' : 'pointer',
-            transition: 'background 0.15s',
-          }}
-        >
-          {loading ? 'Redirecting to payment…' : 'Contribute'}
-        </button>
-
-        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '10px' }}>
-          Secure payment via Stripe · Test mode
-        </p>
-      </div>
-
-      {/* Contributors list */}
-      {paidContributions.length > 0 && (
-        <div
-          style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: '16px',
-            padding: '24px',
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-geist-mono)',
-              fontSize: '11px',
-              color: 'var(--accent)',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              marginBottom: '16px',
-            }}
-          >
-            Contributors
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {paidContributions.map(c => {
-              const profile = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles
-              return (
-                <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '50%',
-                        background: c.user_id === currentUserId ? 'var(--accent)' : '#5b8bd4',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: '#fff',
-                        flexShrink: 0,
-                      }}
-                    >
-                      {profile?.display_name?.[0]?.toUpperCase() ?? '?'}
-                    </div>
-                    <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>
-                      {profile?.display_name ?? 'Anonymous'}
-                      {c.user_id === currentUserId && (
-                        <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginLeft: '6px' }}>(you)</span>
-                      )}
-                    </span>
+        {/* Member list */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {members.map((m, i) => {
+            const committed = committedSet.has(m.user_id)
+            const isMe = m.user_id === currentUserId
+            return (
+              <div key={m.user_id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    background: AVATAR_COLORS[i % AVATAR_COLORS.length],
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: '#fff',
+                    flexShrink: 0,
+                  }}>
+                    {m.display_name?.[0]?.toUpperCase() ?? '?'}
                   </div>
-                  <span style={{ fontSize: '14px', fontFamily: 'var(--font-geist-mono)', color: 'var(--text-primary)' }}>
-                    ${(c.amount / 100).toLocaleString()}
+                  <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>
+                    {m.display_name ?? 'Member'}
+                    {isMe && (
+                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginLeft: '6px' }}>(you)</span>
+                    )}
                   </span>
                 </div>
-              )
-            })}
-          </div>
+                {committed ? (
+                  <span style={{ fontSize: '12px', color: '#16a34a', fontWeight: 500 }}>✓ In</span>
+                ) : (
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Pending</span>
+                )}
+              </div>
+            )
+          })}
         </div>
-      )}
+      </div>
+
+      {/* Commit action */}
+      <div style={{
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: '16px',
+        padding: '24px',
+      }}>
+        {iCommitted ? (
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: '22px', marginBottom: '6px' }}>✓</p>
+            <p style={{ fontSize: '14px', fontWeight: 500, color: '#16a34a', marginBottom: '4px' }}>
+              You&apos;re committed
+            </p>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+              Waiting for the rest of the group to confirm.
+            </p>
+          </div>
+        ) : (
+          <>
+            <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '6px' }}>
+              Ready to make it official?
+            </p>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+              Committing tells your group you&apos;re in and you&apos;ll cover your share.
+            </p>
+
+            {error && (
+              <p style={{ fontSize: '12px', color: '#f87171', marginBottom: '10px' }}>{error}</p>
+            )}
+
+            <button
+              onClick={handleCommit}
+              disabled={committing}
+              style={{
+                width: '100%',
+                padding: '12px',
+                background: committing ? 'var(--surface-raised)' : 'var(--accent)',
+                color: committing ? 'var(--text-secondary)' : '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 500,
+                cursor: committing ? 'not-allowed' : 'pointer',
+                transition: 'background 0.15s',
+              }}
+            >
+              {committing ? 'Saving…' : "I'm in — I'll cover my share"}
+            </button>
+
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '10px' }}>
+              This is a commitment to your group, not a payment.
+            </p>
+          </>
+        )}
+      </div>
     </div>
   )
 }

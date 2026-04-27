@@ -1,20 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import Stripe from 'stripe'
 import { FundDashboard } from '@/components/FundDashboard'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export default async function FundPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ session_id?: string; cancelled?: string }>
 }) {
   const { id } = await params
-  const { session_id, cancelled } = await searchParams
 
   const supabase = await createClient()
 
@@ -30,42 +24,41 @@ export default async function FundPage({
   if (error || !trip) redirect('/dashboard')
 
   // Verify user is a member
-  const { data: member } = await supabase
+  const { data: membership } = await supabase
     .from('trip_members')
     .select('id')
     .eq('trip_id', id)
     .eq('user_id', user.id)
     .maybeSingle()
 
-  if (!member) redirect('/dashboard')
+  if (!membership) redirect('/dashboard')
 
-  // On successful Stripe redirect, verify the session and mark contribution as paid
-  let paymentSuccess = false
-  if (session_id) {
-    try {
-      const session = await stripe.checkout.sessions.retrieve(session_id)
-      if (session.payment_status === 'paid') {
-        await supabase
-          .from('fund_contributions')
-          .update({ status: 'paid' })
-          .eq('stripe_session_id', session_id)
-        paymentSuccess = true
-      }
-    } catch {
-      // Invalid session_id — ignore silently
-    }
-  }
-
-  const { data: contributions } = await supabase
-    .from('fund_contributions')
-    .select('id, user_id, amount, status, created_at, profiles(display_name)')
+  // Fetch all members with display names
+  const { data: membersRaw } = await supabase
+    .from('trip_members')
+    .select('user_id, profiles(display_name)')
     .eq('trip_id', id)
-    .order('created_at', { ascending: false })
 
-  // Goal = mid-range cost per person × group size, minimum $500
+  const members = (membersRaw ?? []).map(m => ({
+    user_id: m.user_id,
+    display_name: (Array.isArray(m.profiles) ? m.profiles[0] : m.profiles)?.display_name ?? null,
+  }))
+
+  // Fetch who has committed
+  const { data: commitments } = await supabase
+    .from('fund_contributions')
+    .select('user_id')
+    .eq('trip_id', id)
+    .eq('status', 'committed')
+
+  const committedUserIds = (commitments ?? []).map(c => c.user_id)
+
+  // Cost per person from AI estimate
   const estimatedCost = trip.estimated_cost as Record<string, number> | null
-  const midCost = estimatedCost?.mid ?? 0
-  const goalAmount = Math.max(midCost * (trip.group_size ?? 1), 500)
+  const costPerPerson = estimatedCost?.mid ?? 0
+  const costLow = estimatedCost?.low ?? 0
+  const costHigh = estimatedCost?.high ?? 0
+  const groupSize = trip.group_size ?? members.length
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
@@ -114,31 +107,19 @@ export default async function FundPage({
           <h1 style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
             {trip.title}
           </h1>
-          <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>Group travel fund</p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>Trip cost & commitment</p>
         </div>
-
-        {cancelled && (
-          <div
-            style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: '12px',
-              padding: '14px 16px',
-              fontSize: '14px',
-              color: 'var(--text-secondary)',
-              marginBottom: '24px',
-            }}
-          >
-            Payment cancelled. You can try again whenever you&apos;re ready.
-          </div>
-        )}
 
         <FundDashboard
           tripId={id}
-          goalAmount={goalAmount}
-          contributions={contributions ?? []}
+          destination={trip.destination}
+          costPerPerson={costPerPerson}
+          costLow={costLow}
+          costHigh={costHigh}
+          groupSize={groupSize}
+          members={members}
+          committedUserIds={committedUserIds}
           currentUserId={user.id}
-          paymentSuccess={paymentSuccess}
         />
       </main>
     </div>
