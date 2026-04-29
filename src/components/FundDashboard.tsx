@@ -98,7 +98,7 @@ export function FundDashboard({
               Find hotels on Booking.com →
             </a>
             <a
-              href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00049840`}
+              href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00298843&mcid=42383`}
               target="_blank"
               rel="noopener noreferrer"
               style={{

@@ -283,7 +283,7 @@ export function ItinerarySection({
               )}
               {!['hotel', 'transport'].includes(activity.category) && (
                 <a
-                  href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00049840`}
+                  href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00298843&mcid=42383`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[11px] transition-opacity hover:opacity-70 mt-2 inline-block"
