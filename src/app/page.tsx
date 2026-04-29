@@ -17,6 +17,7 @@ export default function Home() {
           <div className="hidden sm:flex items-center gap-8">
             <a href="#how-it-works" className="text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>How it works</a>
             <a href="#features" className="text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>Features</a>
+            <Link href="/pricing" className="text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>Pricing</Link>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/login" className="text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>

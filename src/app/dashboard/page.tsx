@@ -12,13 +12,13 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('*')
+    .select('*, is_premium')
     .eq('id', user.id)
     .single()
 
   if (!profile?.display_name) redirect('/profile/setup')
 
-  const { data: memberRows, error: memberError } = await supabase
+  const { data: memberRows } = await supabase
     .from('trip_members')
     .select('trip_id')
     .eq('user_id', user.id)
@@ -69,6 +69,30 @@ export default async function DashboardPage() {
             + New trip
           </Link>
         </div>
+
+        {/* Upgrade nudge — shown when free user hits 3 trips */}
+        {!profile?.is_premium && trips && trips.length >= 3 && (
+          <div
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl px-5 py-4 mb-8"
+            style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+          >
+            <div>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                You&apos;ve hit the free plan limit
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+                Upgrade to Premium for unlimited trips, unlimited group sizes, and more.
+              </p>
+            </div>
+            <Link
+              href="/pricing"
+              className="text-sm font-medium px-5 py-2.5 rounded-lg whitespace-nowrap self-start sm:self-auto"
+              style={{ background: 'var(--accent)', color: '#fff', textDecoration: 'none' }}
+            >
+              Upgrade · $9/mo
+            </Link>
+          </div>
+        )}
 
         {/* Trips grid */}
         {trips && trips.length > 0 ? (
