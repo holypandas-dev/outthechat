@@ -38,7 +38,7 @@ export default function Home() {
         <div className="flex items-center gap-3 mb-8">
           <div style={{ width: '32px', height: '0.5px', background: 'var(--accent)' }} />
           <span className="text-xs font-medium uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
-            AI-powered group travel planning
+            Smart group travel planning
           </span>
         </div>
         <h1
@@ -209,7 +209,7 @@ export default function Home() {
             style={{ border: '0.5px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}
           >
             {[
-              { title: 'AI itinerary generator', body: "Full day-by-day plans built around your group's vibe, budget, and travel style.", soon: false },
+              { title: 'Itinerary generator', body: "Full day-by-day plans built around your group's vibe, budget, and travel style.", soon: false },
               { title: 'Flight recommendations', body: 'Get flight suggestions for your dates and budget — book directly with the airline in one tap.', soon: false },
               { title: 'Hotel & stay discovery', body: 'Browse curated stay options that fit your group size and budget — powered by Booking.com.', soon: false },
               { title: 'Excursions & activities', body: 'Find tours and experiences for every destination — book through Viator without leaving your itinerary.', soon: false },

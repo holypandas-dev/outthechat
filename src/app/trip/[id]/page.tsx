@@ -10,6 +10,7 @@ import { TripChatNavButton } from '@/components/TripChatNavButton'
 import { ItinerarySection } from '@/components/ItinerarySection'
 import { WhatToWear } from '@/components/WhatToWear'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { GroupSizeEditor } from '@/components/GroupSizeEditor'
 
 export default async function TripPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -105,7 +106,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 pb-24 sm:pb-16">
 
         {/* Trip header */}
         <div className="mb-10">
@@ -135,24 +136,31 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
               </div>
             </div>
 
-            {members && members.length > 0 && (
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  {members.slice(0, 5).map((m, i) => (
-                    <div
-                      key={m.id}
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium"
-                      style={{ outline: '2px solid var(--background)', color: 'white', background: ['var(--accent)', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a'][i % 5] }}
-                    >
-                      {(m.profiles as { display_name: string })?.display_name?.[0]?.toUpperCase() || '?'}
-                    </div>
-                  ))}
+            <div className="flex flex-col items-end gap-1.5">
+              {members && members.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <div className="flex -space-x-2">
+                    {members.slice(0, 5).map((m, i) => (
+                      <div
+                        key={m.id}
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium"
+                        style={{ outline: '2px solid var(--background)', color: 'white', background: ['var(--accent)', '#5b8bd4', '#6bbf8e', '#c47bd4', '#e8a23a'][i % 5] }}
+                      >
+                        {(m.profiles as { display_name: string })?.display_name?.[0]?.toUpperCase() || '?'}
+                      </div>
+                    ))}
+                  </div>
+                  <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    {members.length} joined
+                  </span>
                 </div>
-                <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                  {members.length} {members.length === 1 ? 'person' : 'people'}
-                </span>
-              </div>
-            )}
+              )}
+              <GroupSizeEditor
+                tripId={id}
+                initialSize={trip.group_size ?? members?.length ?? 1}
+                isCreator={trip.creator_id === user.id}
+              />
+            </div>
           </div>
 
           {trip.estimated_cost && Object.keys(trip.estimated_cost).length > 0 && (

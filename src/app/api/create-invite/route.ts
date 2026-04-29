@@ -12,14 +12,15 @@ export async function POST(request: Request) {
 
     const { tripId } = await request.json()
 
-    // Verify user is the organizer
-    const { data: trip } = await supabase
-      .from('trips')
-      .select('id, title, creator_id')
-      .eq('id', tripId)
-      .single()
+    // Verify user is a trip member (any member can generate an invite)
+    const { data: member } = await supabase
+      .from('trip_members')
+      .select('id')
+      .eq('trip_id', tripId)
+      .eq('user_id', user.id)
+      .maybeSingle()
 
-    if (!trip || trip.creator_id !== user.id) {
+    if (!member) {
       return NextResponse.json({ error: 'Not authorized' }, { status: 403 })
     }
 
@@ -28,7 +29,6 @@ export async function POST(request: Request) {
       .from('invite_links')
       .select('token')
       .eq('trip_id', tripId)
-      .eq('created_by', user.id)
       .maybeSingle()
 
     if (existing) {

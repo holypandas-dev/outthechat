@@ -130,7 +130,7 @@ export default function PlanPage() {
           <div className="flex items-center gap-3 mb-5">
             <div style={{ width: '24px', height: '0.5px', background: 'var(--accent)' }} />
             <span style={{ fontSize: '11px', fontWeight: '500', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)' }}>
-              AI Trip Generator
+              Trip Planner
             </span>
           </div>
           <h1
@@ -140,7 +140,7 @@ export default function PlanPage() {
             Where are we going?
           </h1>
           <p style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: '1.7' }}>
-            Describe your trip and the AI will build a full itinerary in seconds.
+            Describe your trip and we'll build a full itinerary in seconds.
           </p>
         </div>
 
@@ -193,7 +193,7 @@ export default function PlanPage() {
               style={inputStyle}
             />
             <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-              Helps the AI estimate realistic flight costs in your budget
+              Helps estimate realistic flight costs in your budget
             </p>
           </div>
 
@@ -270,7 +270,7 @@ export default function PlanPage() {
                 ))}
               </select>
               <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Helps the AI factor in seasonal events, weather, and pricing
+                Helps factor in seasonal events, weather, and pricing
               </p>
             </div>
           )}
