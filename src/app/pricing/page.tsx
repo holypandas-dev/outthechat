@@ -9,9 +9,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 export default async function PricingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ success?: string; cancelled?: string; session_id?: string }>
+  searchParams: Promise<{ success?: string; cancelled?: string; session_id?: string; limit?: string }>
 }) {
-  const { success, cancelled, session_id } = await searchParams
+  const { success, cancelled, session_id, limit } = await searchParams
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -47,7 +47,7 @@ export default async function PricingPage({
   }
 
   const FREE_FEATURES = [
-    { label: 'Up to 3 trips', included: true },
+    { label: 'Up to 2 trips', included: true },
     { label: 'Group size up to 5', included: true },
     { label: 'Full AI itinerary generation', included: true },
     { label: 'Group chat & voting', included: true },
@@ -123,6 +123,11 @@ export default async function PricingPage({
         </div>
 
         {/* Banners */}
+        {limit && !isPremium && (
+          <div style={{ background: 'rgba(var(--accent-rgb),0.06)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 20px', fontSize: '14px', color: 'var(--text-primary)', marginBottom: '32px', textAlign: 'center' }}>
+            You&apos;ve used your 2 free trips. Upgrade to keep planning.
+          </div>
+        )}
         {success && isPremium && (
           <div style={{ background: 'rgba(22,163,74,0.07)', border: '1px solid rgba(22,163,74,0.25)', borderRadius: '12px', padding: '14px 20px', fontSize: '14px', color: '#16a34a', marginBottom: '32px', textAlign: 'center' }}>
             Welcome to Premium — you now have unlimited trips and group sizes.

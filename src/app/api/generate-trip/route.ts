@@ -16,6 +16,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Enforce free plan trip limit
+    const { data: profile } = await supabase.from('profiles').select('is_premium').eq('id', user.id).single()
+    if (!profile?.is_premium) {
+      const { count } = await supabase.from('trips').select('id', { count: 'exact', head: true }).eq('creator_id', user.id)
+      if ((count ?? 0) >= 2) {
+        return NextResponse.json({ error: 'trip_limit_reached' }, { status: 403 })
+      }
+    }
+
     const { prompt, destination, days, vibe, budget, groupSize, startDate, endDate, departureCity, travelMonth } = await request.json()
 
     const dateContext = startDate && endDate

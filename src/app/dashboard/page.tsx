@@ -71,7 +71,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Upgrade nudge — shown when free user hits 3 trips */}
-        {!profile?.is_premium && trips && trips.length >= 3 && (
+        {!profile?.is_premium && trips && trips.length >= 2 && (
           <div
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl px-5 py-4 mb-8"
             style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}

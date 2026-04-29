@@ -88,6 +88,10 @@ export default function PlanPage() {
         }),
       })
       const data = await res.json()
+      if (res.status === 403 && data.error === 'trip_limit_reached') {
+        router.push('/pricing?limit=1')
+        return
+      }
       if (!res.ok) throw new Error(data.error || 'Generation failed')
       router.push(`/trip/${data.tripId}`)
     } catch (err: unknown) {
