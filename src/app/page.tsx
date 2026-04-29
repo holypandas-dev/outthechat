@@ -87,9 +87,9 @@ export default function Home() {
           style={{ animation: 'marquee 24s linear infinite' }}
         >
           {[
-            'AI Itineraries', 'Group Budgets', 'Flight Search', 'Hotel Booking',
+            'Smart Itineraries', 'Group Budgets', 'Flight Search', 'Hotel Booking',
             'Excursions', 'Commitment Tracker', 'Trip Maps', 'Group Chat',
-            'AI Itineraries', 'Group Budgets', 'Flight Search', 'Hotel Booking',
+            'Smart Itineraries', 'Group Budgets', 'Flight Search', 'Hotel Booking',
             'Excursions', 'Commitment Tracker', 'Trip Maps', 'Group Chat',
           ].map((item, i) => (
             <span key={i} className="flex items-center gap-10">
@@ -161,7 +161,7 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-0.5">
             {[
-              { step: '01 — Describe', title: 'Tell the AI where you want to go', body: 'Destination, vibe, budget, group size. The more detail, the better the plan.' },
+              { step: '01 — Describe', title: 'Tell us where you want to go', body: 'Destination, vibe, budget, group size. The more detail, the better the plan.' },
               { step: '02 — Generate', title: 'Get a full itinerary instantly', body: 'Day-by-day plans, activities, estimated costs, flights and hotels — all in seconds.' },
               { step: '03 — Commit', title: 'Invite your group & lock it in', body: "Everyone votes, commits funds, and the trip actually happens." },
             ].map((item, i) => (
