@@ -227,7 +227,7 @@ export default function InvestorPage() {
           </p>
           <div style={{ marginTop: '40px', padding: '32px', background: 'var(--surface)', border: '1px solid var(--accent)', borderRadius: '16px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '6px', fontFamily: 'var(--font-geist-mono)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Contact</p>
-            <p style={{ fontSize: '18px', fontWeight: 500, color: 'var(--text-primary)' }}>outthechat.vercel.app</p>
+            <p style={{ fontSize: '18px', fontWeight: 500, color: 'var(--text-primary)' }}>outthechat.app</p>
             <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>officialangelrm@gmail.com</p>
           </div>
         </section>
