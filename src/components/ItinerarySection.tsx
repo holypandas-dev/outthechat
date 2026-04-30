@@ -80,6 +80,7 @@ export function ItinerarySection({
   const [suggestFormOpen, setSuggestFormOpen] = useState<string | null>(null) // activityId
   const [suggestMessage, setSuggestMessage] = useState('')
   const [suggestLoading, setSuggestLoading] = useState(false)
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({})
 
   function getScore(activity: Activity) {
     return liveScores[activity.id] ?? activity.vote_score ?? 0
@@ -221,6 +222,13 @@ export function ItinerarySection({
     const outcome = getVoteOutcome(activity)
     const suggestions = suggestionsMap[activity.id] || []
     const showSuggestForm = suggestFormOpen === activity.id
+    const isExpanded = expandedCards[activity.id] ?? false
+
+    const durationLabel = activity.duration_minutes > 0
+      ? activity.duration_minutes >= 60
+        ? `${Math.floor(activity.duration_minutes / 60)}h${activity.duration_minutes % 60 > 0 ? `${activity.duration_minutes % 60}m` : ''}`
+        : `${activity.duration_minutes}m`
+      : null
 
     let cardBorder = '0.5px solid var(--border)'
     let cardHighlight = ''
@@ -235,64 +243,98 @@ export function ItinerarySection({
           className={`rounded-xl p-4 transition-colors ${cardHighlight}`}
           style={{ background: 'var(--surface)', border: cardBorder }}
         >
-          {/* Vote outcome badge */}
+          {/* Outcome / attribution banners */}
           {outcome === 'favorite' && (
-            <div className="flex items-center gap-1.5 mb-3 text-green-400 text-xs font-medium">
+            <div className="flex items-center gap-1.5 mb-2.5 text-green-400 text-xs font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-              ✓ Group favorite
+              Group favorite
             </div>
           )}
           {outcome === 'replace' && (
-            <div className="flex items-center gap-1.5 mb-3 text-red-400 text-xs font-medium">
+            <div className="flex items-center gap-1.5 mb-2.5 text-red-400 text-xs font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" />
-              👎 Needs replacing
+              Needs replacing
             </div>
           )}
-
-          {/* Suggestion attribution */}
           {isSuggestion && (
-            <div className="flex items-center gap-1.5 mb-3 text-xs" style={{ color: 'var(--accent)' }}>
+            <div className="flex items-center gap-1.5 mb-2.5 text-xs" style={{ color: 'var(--accent)' }}>
               💡 Suggested by {getDisplayName(activity.suggested_by)}
             </div>
           )}
 
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
+          {/* Main row */}
+          <div className="flex items-start gap-3">
+            {/* Left: info */}
+            <div className="flex-1 min-w-0">
+              {/* Category pill + time slot */}
+              <div className="flex items-center gap-2 mb-1.5">
+                <span
+                  className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full"
+                  style={{ background: 'var(--accent-muted)', color: 'var(--accent)' }}
+                >
+                  {categoryEmoji[activity.category] || '📍'} {activity.category}
+                </span>
                 {slot && (
-                  <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: 'var(--text-secondary)' }}>
+                  <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
                     {slot}
                   </span>
                 )}
-                <span className="text-[10px] font-mono" style={{ color: 'var(--accent)' }}>
-                  {categoryEmoji[activity.category] || '📍'} {activity.category}
-                </span>
               </div>
-              <h3 className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{activity.title}</h3>
-              {activity.location && (
-                <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>📍 {activity.location}</p>
-              )}
-              {activity.description && (
-                <p className="text-xs mt-2 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{activity.description}</p>
-              )}
-              {activity.insider_tip && (
-                <div className="mt-2 flex gap-1.5">
-                  <span className="text-xs flex-shrink-0" style={{ color: 'var(--accent)' }}>💡</span>
-                  <p className="text-xs italic" style={{ color: 'var(--text-secondary)' }}>{activity.insider_tip}</p>
+
+              {/* Title */}
+              <h3 className="font-medium text-sm leading-snug" style={{ color: 'var(--text-primary)' }}>
+                {activity.title}
+              </h3>
+
+              {/* Location · duration · cost */}
+              <div className="flex items-center gap-1.5 flex-wrap mt-1">
+                {activity.location && (
+                  <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>📍 {activity.location}</span>
+                )}
+                {activity.location && (durationLabel || activity.cost_estimate > 0) && (
+                  <span style={{ color: 'var(--border)' }}>·</span>
+                )}
+                {durationLabel && (
+                  <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{durationLabel}</span>
+                )}
+                {durationLabel && activity.cost_estimate > 0 && (
+                  <span style={{ color: 'var(--border)' }}>·</span>
+                )}
+                {activity.cost_estimate > 0 && (
+                  <span className="text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>~${activity.cost_estimate}</span>
+                )}
+              </div>
+
+              {/* Expanded: description + tip + Viator */}
+              {isExpanded && (
+                <div className="mt-3 space-y-2">
+                  {activity.description && (
+                    <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                      {activity.description}
+                    </p>
+                  )}
+                  {activity.insider_tip && (
+                    <div className="flex gap-1.5">
+                      <span className="text-xs flex-shrink-0" style={{ color: 'var(--accent)' }}>💡</span>
+                      <p className="text-xs italic" style={{ color: 'var(--text-secondary)' }}>{activity.insider_tip}</p>
+                    </div>
+                  )}
+                  {!['hotel', 'transport'].includes(activity.category) && (
+                    <a
+                      href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00298843&mcid=42383`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] transition-opacity hover:opacity-70 inline-block"
+                      style={{ color: 'var(--accent)' }}
+                    >
+                      Find experiences →
+                    </a>
+                  )}
                 </div>
               )}
-              {!['hotel', 'transport'].includes(activity.category) && (
-                <a
-                  href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00298843&mcid=42383`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[11px] transition-opacity hover:opacity-70 mt-2 inline-block"
-                  style={{ color: 'var(--accent)' }}
-                >
-                  Find experiences →
-                </a>
-              )}
-              <div className="flex items-center gap-3 flex-wrap">
+
+              {/* Actions row */}
+              <div className="flex items-center gap-3 flex-wrap mt-3">
                 <VoteButtons
                   activityId={activity.id}
                   tripId={tripId}
@@ -301,12 +343,19 @@ export function ItinerarySection({
                   initialVoteCount={activity.vote_count ?? 0}
                   onScoreChange={(score, voteCount) => handleScoreChange(activity.id, score, voteCount)}
                 />
+                {(activity.description || activity.insider_tip) && (
+                  <button
+                    onClick={() => setExpandedCards(prev => ({ ...prev, [activity.id]: !isExpanded }))}
+                    className="text-[11px] transition-colors"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    {isExpanded ? 'Show less ↑' : 'Show more ↓'}
+                  </button>
+                )}
                 {!isSuggestion && (
                   <button
-                    onClick={() => window.dispatchEvent(new CustomEvent('share-activity-to-chat', {
-                      detail: { activity }
-                    }))}
-                    className="text-[11px] hover:text-accent transition-colors flex items-center gap-1 ml-auto"
+                    onClick={() => window.dispatchEvent(new CustomEvent('share-activity-to-chat', { detail: { activity } }))}
+                    className="text-[11px] transition-colors ml-auto"
                     style={{ color: 'var(--text-secondary)' }}
                   >
                     💬 Share
@@ -314,11 +363,8 @@ export function ItinerarySection({
                 )}
                 {!isSuggestion && (outcome === 'replace' || getScore(activity) <= -1) && (
                   <button
-                    onClick={() => {
-                      setSuggestFormOpen(showSuggestForm ? null : activity.id)
-                      setSuggestMessage('')
-                    }}
-                    className="text-[11px] hover:text-accent transition-colors flex items-center gap-1"
+                    onClick={() => { setSuggestFormOpen(showSuggestForm ? null : activity.id); setSuggestMessage('') }}
+                    className="text-[11px] transition-colors"
                     style={{ color: 'var(--text-secondary)' }}
                   >
                     ✏️ Suggest replacement
@@ -326,31 +372,21 @@ export function ItinerarySection({
                 )}
               </div>
             </div>
-            <div className="flex flex-col items-end gap-2 flex-shrink-0">
-              {photoMap[activity.id] && (
-                <img
-                  src={photoMap[activity.id]}
-                  alt={activity.title}
-                  width={80}
-                  height={80}
-                  className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
-                />
-              )}
-              {activity.cost_estimate > 0 && (
-                <p className="text-sm font-mono" style={{ color: 'var(--text-primary)' }}>~${activity.cost_estimate}</p>
-              )}
-              {activity.duration_minutes > 0 && (
-                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                  {activity.duration_minutes >= 60
-                    ? `${Math.floor(activity.duration_minutes / 60)}h${activity.duration_minutes % 60 > 0 ? ` ${activity.duration_minutes % 60}m` : ''}`
-                    : `${activity.duration_minutes}m`}
-                </p>
-              )}
-            </div>
+
+            {/* Right: photo */}
+            {photoMap[activity.id] && (
+              <img
+                src={photoMap[activity.id]}
+                alt={activity.title}
+                width={72}
+                height={72}
+                className="w-16 h-16 sm:w-[72px] sm:h-[72px] object-cover rounded-lg flex-shrink-0"
+              />
+            )}
           </div>
         </div>
 
-        {/* Inline suggest replacement form */}
+        {/* Suggest replacement form */}
         {showSuggestForm && (
           <div className="rounded-xl p-4" style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}>
             <p className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
@@ -367,7 +403,7 @@ export function ItinerarySection({
             <div className="flex items-center gap-2 mt-2">
               <button
                 onClick={() => { setSuggestFormOpen(null); setSuggestMessage('') }}
-                className="text-xs hover:text-text-primary transition-colors px-3 py-1.5"
+                className="text-xs px-3 py-1.5"
                 style={{ color: 'var(--text-secondary)' }}
               >
                 Cancel
@@ -375,19 +411,17 @@ export function ItinerarySection({
               <button
                 onClick={() => handleSuggestReplacement(activity.id)}
                 disabled={suggestLoading || !suggestMessage.trim()}
-                className="flex items-center gap-1.5 hover:bg-accent-hover disabled:opacity-50 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 disabled:opacity-50 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
                 style={{ background: 'var(--accent)' }}
               >
-                {suggestLoading ? (
-                  <span className="inline-block w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />
-                ) : null}
+                {suggestLoading && <span className="inline-block w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />}
                 Generate suggestion →
               </button>
             </div>
           </div>
         )}
 
-        {/* Suggestions for this activity */}
+        {/* Suggestions */}
         {suggestions.length > 0 && (
           <div className="space-y-2">
             {suggestions.map(suggestion => renderActivityCard(suggestion, undefined, undefined, true))}
