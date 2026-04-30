@@ -320,15 +320,26 @@ export function ItinerarySection({
                     </div>
                   )}
                   {!['hotel', 'transport'].includes(activity.category) && (
-                    <a
-                      href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00298843&mcid=42383`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[11px] transition-opacity hover:opacity-70 inline-block"
-                      style={{ color: 'var(--accent)' }}
-                    >
-                      Find experiences →
-                    </a>
+                    <div className="flex items-center gap-3">
+                      <a
+                        href={`https://www.google.com/maps/search/${encodeURIComponent(`${activity.title} ${activity.location}`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] transition-opacity hover:opacity-70 inline-block"
+                        style={{ color: 'var(--accent)' }}
+                      >
+                        View on Maps →
+                      </a>
+                      <a
+                        href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00298843&mcid=42383`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] transition-opacity hover:opacity-70 inline-block"
+                        style={{ color: 'var(--text-muted)' }}
+                      >
+                        Book experiences →
+                      </a>
+                    </div>
                   )}
                 </div>
               )}
