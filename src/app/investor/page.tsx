@@ -221,7 +221,7 @@ export default function InvestorPage() {
         {/* ── ASK ─────────────────────────────── */}
         <section style={{ marginBottom: '0' }}>
           <Label>The ask</Label>
-          <h2 style={h2Style}>Raising $XXX pre-seed.</h2>
+          <h2 style={h2Style}>Raising $200,000 pre-seed.</h2>
           <p style={bodyStyle}>
             Funds will be used for: paid user acquisition, affiliate partnership development, premium feature buildout (expense splitting, PDF export, multi-destination), and operational costs.
           </p>
