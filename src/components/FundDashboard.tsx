@@ -153,7 +153,7 @@ export function FundDashboard({
           </p>
         )}
         <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-          Based on a group of {groupSize} · AI estimate, actual costs may vary
+          Based on a group of {groupSize} · Estimated cost, actual prices may vary
         </p>
       </div>
 
