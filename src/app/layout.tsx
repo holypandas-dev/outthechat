@@ -23,22 +23,22 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: 'OutTheChat — AI group trip planning',
+    default: 'OutTheChat — Smart group travel planning',
     template: '%s | OutTheChat',
   },
-  description: 'Turn messy group chats into real, fully planned trips. AI-generated itineraries, shared budgets, and group commitment — all in one place.',
+  description: 'Plan your group trip in minutes. Itineraries, shared budgets, and booking recommendations — all in one place.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://outthechat.com'),
   openGraph: {
     type: 'website',
     siteName: 'OutTheChat',
-    title: 'OutTheChat — AI group trip planning',
-    description: 'Turn messy group chats into real, fully planned trips. AI itineraries, shared budgets, and group commitment.',
+    title: 'OutTheChat — Smart group travel planning',
+    description: 'Plan your group trip in minutes. Itineraries, shared budgets, and booking recommendations — all in one place.',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'OutTheChat' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OutTheChat — AI group trip planning',
-    description: 'Turn messy group chats into real, fully planned trips.',
+    title: 'OutTheChat — Smart group travel planning',
+    description: 'Plan your group trip in minutes. Itineraries, shared budgets, and booking recommendations — all in one place.',
     images: ['/og-image.png'],
   },
 };
