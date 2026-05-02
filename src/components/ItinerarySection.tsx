@@ -240,160 +240,186 @@ export function ItinerarySection({
       <div key={activity.id} className="space-y-2">
         <div
           id={`activity-${activity.id}`}
-          className={`rounded-xl p-4 transition-colors ${cardHighlight}`}
+          className={`rounded-xl overflow-hidden transition-colors ${cardHighlight}`}
           style={{ background: 'var(--surface)', border: cardBorder }}
         >
-          {/* Outcome / attribution banners */}
-          {outcome === 'favorite' && (
-            <div className="flex items-center gap-1.5 mb-2.5 text-green-400 text-xs font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-              Group favorite
+          {/* Photo — full width with overlaid badges */}
+          {photoMap[activity.id] && (
+            <div className="relative w-full h-40">
+              <img
+                src={photoMap[activity.id]}
+                alt={activity.title}
+                className="w-full h-full object-cover"
+              />
+              {/* Overlay gradient */}
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%)' }} />
+              {/* Time slot badge */}
+              {slot && (
+                <span
+                  className="absolute top-2.5 right-2.5 text-[10px] font-medium uppercase tracking-widest px-2 py-0.5 rounded-full"
+                  style={{ background: 'rgba(0,0,0,0.55)', color: '#fff', backdropFilter: 'blur(4px)' }}
+                >
+                  {slot}
+                </span>
+              )}
+              {/* Duration badge */}
+              {durationLabel && (
+                <span
+                  className="absolute bottom-2.5 right-2.5 text-[10px] font-medium px-2 py-0.5 rounded-full"
+                  style={{ background: 'rgba(0,0,0,0.55)', color: '#fff', backdropFilter: 'blur(4px)' }}
+                >
+                  {durationLabel}
+                </span>
+              )}
+              {/* Outcome badge on photo */}
+              {outcome === 'favorite' && (
+                <span className="absolute top-2.5 left-2.5 text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-500 text-white">
+                  ✓ Favorite
+                </span>
+              )}
+              {outcome === 'replace' && (
+                <span className="absolute top-2.5 left-2.5 text-[10px] font-medium px-2 py-0.5 rounded-full bg-red-500 text-white">
+                  👎 Replace
+                </span>
+              )}
             </div>
           )}
-          {outcome === 'replace' && (
-            <div className="flex items-center gap-1.5 mb-2.5 text-red-400 text-xs font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" />
-              Needs replacing
-            </div>
+
+          {/* No photo fallback banners */}
+          {!photoMap[activity.id] && (
+            <>
+              {outcome === 'favorite' && (
+                <div className="flex items-center gap-1.5 px-4 pt-3 text-green-400 text-xs font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                  Group favorite
+                </div>
+              )}
+              {outcome === 'replace' && (
+                <div className="flex items-center gap-1.5 px-4 pt-3 text-red-400 text-xs font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" />
+                  Needs replacing
+                </div>
+              )}
+            </>
           )}
+
           {isSuggestion && (
-            <div className="flex items-center gap-1.5 mb-2.5 text-xs" style={{ color: 'var(--accent)' }}>
+            <div className="flex items-center gap-1.5 px-4 pt-3 text-xs" style={{ color: 'var(--accent)' }}>
               💡 Suggested by {getDisplayName(activity.suggested_by)}
             </div>
           )}
 
-          {/* Main row */}
-          <div className="flex items-start gap-3">
-            {/* Left: info */}
-            <div className="flex-1 min-w-0">
-              {/* Category pill + time slot */}
-              <div className="flex items-center gap-2 mb-1.5">
-                <span
-                  className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full"
-                  style={{ background: 'var(--accent-muted)', color: 'var(--accent)' }}
-                >
-                  {categoryEmoji[activity.category] || '📍'} {activity.category}
-                </span>
-                {slot && (
-                  <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
-                    {slot}
-                  </span>
-                )}
-              </div>
-
-              {/* Title */}
-              <h3 className="font-medium text-sm leading-snug" style={{ color: 'var(--text-primary)' }}>
-                {activity.title}
-              </h3>
-
-              {/* Location · duration · cost */}
-              <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                {activity.location && (
-                  <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>📍 {activity.location}</span>
-                )}
-                {activity.location && (durationLabel || activity.cost_estimate > 0) && (
-                  <span style={{ color: 'var(--border)' }}>·</span>
-                )}
-                {durationLabel && (
-                  <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{durationLabel}</span>
-                )}
-                {durationLabel && activity.cost_estimate > 0 && (
-                  <span style={{ color: 'var(--border)' }}>·</span>
-                )}
-                {activity.cost_estimate > 0 && (
-                  <span className="text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>~${activity.cost_estimate}</span>
-                )}
-              </div>
-
-              {/* Expanded: description + tip + Viator */}
-              {isExpanded && (
-                <div className="mt-3 space-y-2">
-                  {activity.description && (
-                    <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                      {activity.description}
-                    </p>
-                  )}
-                  {activity.insider_tip && (
-                    <div className="flex gap-1.5">
-                      <span className="text-xs flex-shrink-0" style={{ color: 'var(--accent)' }}>💡</span>
-                      <p className="text-xs italic" style={{ color: 'var(--text-secondary)' }}>{activity.insider_tip}</p>
-                    </div>
-                  )}
-                  {!['hotel', 'transport'].includes(activity.category) && (
-                    <div className="flex items-center gap-3">
-                      <a
-                        href={`https://www.google.com/maps/search/${encodeURIComponent(`${activity.title} ${activity.location}`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] transition-opacity hover:opacity-70 inline-block"
-                        style={{ color: 'var(--accent)' }}
-                      >
-                        View on Maps →
-                      </a>
-                      <a
-                        href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00298843&mcid=42383`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] transition-opacity hover:opacity-70 inline-block"
-                        style={{ color: 'var(--text-muted)' }}
-                      >
-                        Book experiences →
-                      </a>
-                    </div>
-                  )}
-                </div>
+          {/* Card body */}
+          <div className="p-4">
+            {/* Category pill */}
+            <div className="flex items-center gap-2 mb-2">
+              <span
+                className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full"
+                style={{ background: 'var(--accent-muted)', color: 'var(--accent)' }}
+              >
+                {categoryEmoji[activity.category] || '📍'} {activity.category}
+              </span>
+              {!photoMap[activity.id] && slot && (
+                <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>{slot}</span>
               )}
-
-              {/* Actions row */}
-              <div className="flex items-center gap-3 flex-wrap mt-3">
-                <VoteButtons
-                  activityId={activity.id}
-                  tripId={tripId}
-                  initialScore={activity.vote_score ?? 0}
-                  initialVote={voteMap[activity.id] ?? 0}
-                  initialVoteCount={activity.vote_count ?? 0}
-                  onScoreChange={(score, voteCount) => handleScoreChange(activity.id, score, voteCount)}
-                />
-                {(activity.description || activity.insider_tip) && (
-                  <button
-                    onClick={() => setExpandedCards(prev => ({ ...prev, [activity.id]: !isExpanded }))}
-                    className="text-[11px] transition-colors"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
-                    {isExpanded ? 'Show less ↑' : 'Show more ↓'}
-                  </button>
-                )}
-                {!isSuggestion && (
-                  <button
-                    onClick={() => window.dispatchEvent(new CustomEvent('share-activity-to-chat', { detail: { activity } }))}
-                    className="text-[11px] transition-colors ml-auto"
-                    style={{ color: 'var(--text-secondary)' }}
-                  >
-                    💬 Share
-                  </button>
-                )}
-                {!isSuggestion && (outcome === 'replace' || getScore(activity) <= -1) && (
-                  <button
-                    onClick={() => { setSuggestFormOpen(showSuggestForm ? null : activity.id); setSuggestMessage('') }}
-                    className="text-[11px] transition-colors"
-                    style={{ color: 'var(--text-secondary)' }}
-                  >
-                    ✏️ Suggest replacement
-                  </button>
-                )}
-              </div>
             </div>
 
-            {/* Right: photo */}
-            {photoMap[activity.id] && (
-              <img
-                src={photoMap[activity.id]}
-                alt={activity.title}
-                width={72}
-                height={72}
-                className="w-16 h-16 sm:w-[72px] sm:h-[72px] object-cover rounded-lg flex-shrink-0"
-              />
+            {/* Title */}
+            <h3 className="font-semibold text-base leading-snug mb-1" style={{ color: 'var(--text-primary)' }}>
+              {activity.title}
+            </h3>
+
+            {/* Location */}
+            {activity.location && (
+              <p className="text-sm mb-1.5" style={{ color: 'var(--text-secondary)' }}>
+                📍 {activity.location}
+              </p>
             )}
+
+            {/* Meta: cost */}
+            {activity.cost_estimate > 0 && (
+              <p className="text-xs font-mono mb-3" style={{ color: 'var(--text-muted)' }}>
+                ~${activity.cost_estimate}
+              </p>
+            )}
+
+            {/* Expanded: description + tip + links */}
+            {isExpanded && (
+              <div className="mb-3 space-y-2">
+                {activity.description && (
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                    {activity.description}
+                  </p>
+                )}
+                {activity.insider_tip && (
+                  <div className="flex gap-1.5">
+                    <span className="text-xs flex-shrink-0" style={{ color: 'var(--accent)' }}>💡</span>
+                    <p className="text-xs italic" style={{ color: 'var(--text-secondary)' }}>{activity.insider_tip}</p>
+                  </div>
+                )}
+                {!['hotel', 'transport'].includes(activity.category) && (
+                  <div className="flex items-center gap-3">
+                    <a
+                      href={`https://www.google.com/maps/search/${encodeURIComponent(`${activity.title} ${activity.location}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] transition-opacity hover:opacity-70"
+                      style={{ color: 'var(--accent)' }}
+                    >
+                      View on Maps →
+                    </a>
+                    <a
+                      href={`https://www.viator.com/search/${encodeURIComponent(destination)}?pid=P00298843&mcid=42383`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] transition-opacity hover:opacity-70"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      Book experiences →
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Actions row */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <VoteButtons
+                activityId={activity.id}
+                tripId={tripId}
+                initialScore={activity.vote_score ?? 0}
+                initialVote={voteMap[activity.id] ?? 0}
+                initialVoteCount={activity.vote_count ?? 0}
+                onScoreChange={(score, voteCount) => handleScoreChange(activity.id, score, voteCount)}
+              />
+              {(activity.description || activity.insider_tip) && (
+                <button
+                  onClick={() => setExpandedCards(prev => ({ ...prev, [activity.id]: !isExpanded }))}
+                  className="text-[11px] transition-colors"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  {isExpanded ? 'Show less ↑' : 'Show more ↓'}
+                </button>
+              )}
+              {!isSuggestion && (
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('share-activity-to-chat', { detail: { activity } }))}
+                  className="text-[11px] transition-colors ml-auto"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  💬 Share
+                </button>
+              )}
+              {!isSuggestion && (outcome === 'replace' || getScore(activity) <= -1) && (
+                <button
+                  onClick={() => { setSuggestFormOpen(showSuggestForm ? null : activity.id); setSuggestMessage('') }}
+                  className="text-[11px] transition-colors"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  ✏️ Suggest replacement
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

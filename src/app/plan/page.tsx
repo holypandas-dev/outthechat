@@ -5,14 +5,14 @@ import { useRouter } from 'next/navigation'
 import { Nav } from '@/components/Nav'
 
 const VIBES = [
-  { id: 'food_adventure', label: 'Food adventure', desc: 'Eat everything, find hidden spots' },
-  { id: 'luxury', label: 'Luxury soft life', desc: 'Five star everything' },
-  { id: 'backpacker', label: 'Backpacker', desc: 'Budget, authentic, off the beaten path' },
-  { id: 'girls_trip', label: 'Girls trip', desc: 'Vibes, brunch, and good times' },
-  { id: 'nightlife', label: 'Party & nightlife', desc: 'Clubs, bars, and late nights' },
-  { id: 'wellness', label: 'Wellness retreat', desc: 'Spas, nature, and recharge' },
-  { id: 'culture', label: 'Culture & history', desc: 'Museums, architecture, and local life' },
-  { id: 'adventure', label: 'Adventure', desc: 'Hiking, surfing, and adrenaline' },
+  { id: 'food_adventure', label: '🍜 Food adventure', desc: 'Eat everything, find hidden spots' },
+  { id: 'luxury', label: '✨ Luxury soft life', desc: 'Five star everything' },
+  { id: 'backpacker', label: '🎒 Backpacker', desc: 'Budget, authentic, off the beaten path' },
+  { id: 'girls_trip', label: '💅 Girls trip', desc: 'Vibes, brunch, and good times' },
+  { id: 'nightlife', label: '🎉 Party & nightlife', desc: 'Clubs, bars, and late nights' },
+  { id: 'wellness', label: '🧘 Wellness retreat', desc: 'Spas, nature, and recharge' },
+  { id: 'culture', label: '🏛️ Culture & history', desc: 'Museums, architecture, and local life' },
+  { id: 'adventure', label: '🏄 Adventure', desc: 'Hiking, surfing, and adrenaline' },
 ]
 
 const MONTHS = [
