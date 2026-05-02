@@ -21,6 +21,15 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  // Delete child records first to avoid FK constraint errors
+  await supabase.from('votes').delete().eq('trip_id', tripId)
+  await supabase.from('comments').delete().eq('trip_id', tripId)
+  await supabase.from('activities').delete().eq('trip_id', tripId)
+  await supabase.from('days').delete().eq('trip_id', tripId)
+  await supabase.from('fund_contributions').delete().eq('trip_id', tripId)
+  await supabase.from('invite_links').delete().eq('trip_id', tripId)
+  await supabase.from('trip_members').delete().eq('trip_id', tripId)
+
   const { error } = await supabase
     .from('trips')
     .delete()
