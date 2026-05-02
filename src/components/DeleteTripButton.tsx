@@ -20,8 +20,11 @@ export function DeleteTripButton({ tripId, variant = 'action' }: {
         body: JSON.stringify({ tripId }),
       })
       if (!res.ok) throw new Error('Failed')
-      router.push('/dashboard')
-      router.refresh()
+      if (variant === 'card') {
+        router.refresh()
+      } else {
+        router.push('/dashboard')
+      }
     } catch {
       setLoading(false)
       setShowConfirm(false)
