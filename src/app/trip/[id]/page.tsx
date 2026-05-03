@@ -70,16 +70,24 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
     display_name: (m.profiles as { display_name: string } | null)?.display_name || null,
   }))
 
+  // Commitment: count actual fund_contributions rows
+  const { count: committedCount } = await supabase
+    .from('fund_contributions')
+    .select('id', { count: 'exact', head: true })
+    .eq('trip_id', id)
+    .eq('status', 'committed')
 
-  const commitmentLabel = (score: number) => {
-    if (score >= 91) return { text: 'Locked in', colorStyle: { color: '#16a34a' } }
-    if (score >= 76) return { text: 'This is happening', colorStyle: { color: 'var(--accent)' } }
-    if (score >= 51) return { text: 'Getting real', colorStyle: { color: '#d97706' } }
-    if (score >= 26) return { text: 'Planning mode', colorStyle: { color: '#2563eb' } }
+  const totalMembers = members?.length || 1
+  const commitPct = Math.round(((committedCount ?? 0) / totalMembers) * 100)
+
+  const commitmentLabel = (pct: number) => {
+    if (pct >= 100) return { text: "Let's go 🎉", colorStyle: { color: '#16a34a' } }
+    if (pct >= 51)  return { text: 'Almost there', colorStyle: { color: 'var(--accent)' } }
+    if (pct >= 26)  return { text: 'Getting serious', colorStyle: { color: '#d97706' } }
     return { text: 'Just dreaming', colorStyle: { color: 'var(--text-secondary)' } }
   }
 
-  const commitment = commitmentLabel(trip.commitment_score || 0)
+  const commitment = commitmentLabel(commitPct)
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--background)' }}>
@@ -124,13 +132,13 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
                     {commitment.text}
                   </span>
                   <span className="text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>
-                    {trip.commitment_score}%
+                    {committedCount ?? 0}/{totalMembers} committed
                   </span>
                 </div>
                 <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
                   <div
                     className="h-full rounded-full transition-all duration-500"
-                    style={{ background: 'var(--accent)', width: `${trip.commitment_score}%` }}
+                    style={{ background: 'var(--accent)', width: `${commitPct}%` }}
                   />
                 </div>
               </div>
