@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -30,6 +31,28 @@ export async function POST(request: Request) {
   if (error) {
     console.error('Commit error:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  // Recalculate commitment score based on committed members vs group size
+  const admin = createAdminClient()
+
+  const { data: trip } = await admin
+    .from('trips')
+    .select('group_size')
+    .eq('id', tripId)
+    .single()
+
+  const { count: committedCount } = await admin
+    .from('fund_contributions')
+    .select('id', { count: 'exact', head: true })
+    .eq('trip_id', tripId)
+    .eq('status', 'committed')
+
+  if (trip && committedCount !== null) {
+    const groupSize = trip.group_size || 1
+    // Score: 10 base + up to 80 points as members commit, capped at 90
+    const score = Math.min(90, Math.round(10 + (committedCount / groupSize) * 80))
+    await admin.from('trips').update({ commitment_score: score }).eq('id', tripId)
   }
 
   return NextResponse.json({ ok: true })
