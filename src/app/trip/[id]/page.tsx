@@ -233,41 +233,33 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
 
         {/* Actions */}
         <div className="mt-12 pt-8" style={{ borderTop: '0.5px solid var(--border)' }}>
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-4 flex-wrap">
-              {trip.creator_id === user.id && <SendNudgesButton tripId={id} />}
-              <Link
-                href={`/trip/${id}/fund`}
-                className="text-sm transition-colors"
-                style={{ color: 'var(--text-secondary)' }}
-              >
-                Group fund
-              </Link>
-              <Link
-                href={`/trip/${id}/card`}
-                className="text-sm transition-colors"
-                style={{ color: 'var(--text-secondary)' }}
-              >
-                Share card
-              </Link>
-            </div>
+          {/* Primary actions — 2×2 on mobile, single row on sm+ */}
+          <div className="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-3">
+            {trip.creator_id === user.id && <SendNudgesButton tripId={id} />}
+            <Link
+              href={`/trip/${id}/fund`}
+              className="flex items-center justify-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+              style={{ background: 'var(--surface)', border: '0.5px solid var(--border)', color: 'var(--text-secondary)' }}
+            >
+              💰 Group fund
+            </Link>
+            <Link
+              href={`/trip/${id}/card`}
+              className="flex items-center justify-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+              style={{ background: 'var(--surface)', border: '0.5px solid var(--border)', color: 'var(--text-secondary)' }}
+            >
+              🃏 Share card
+            </Link>
             <InviteButton tripId={id} />
           </div>
 
-          <div className="mt-5 flex items-center justify-between flex-wrap gap-3">
+          {/* Secondary: nav + delete */}
+          <div className="mt-5 flex items-center justify-between gap-3">
             <div className="flex items-center gap-5">
-              <Link
-                href="/dashboard"
-                className="text-sm transition-colors"
-                style={{ color: 'var(--text-muted)' }}
-              >
+              <Link href="/dashboard" className="text-sm transition-colors" style={{ color: 'var(--text-muted)' }}>
                 ← Dashboard
               </Link>
-              <Link
-                href="/plan"
-                className="text-sm transition-colors"
-                style={{ color: 'var(--text-muted)' }}
-              >
+              <Link href="/plan" className="text-sm transition-colors" style={{ color: 'var(--text-muted)' }}>
                 New trip
               </Link>
             </div>
