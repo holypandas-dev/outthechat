@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -11,6 +12,9 @@ export async function POST(request: Request) {
     }
 
     const { tripId } = await request.json()
+    if (!tripId) {
+      return NextResponse.json({ error: 'Missing tripId' }, { status: 400 })
+    }
 
     // Verify user is a trip member (any member can generate an invite)
     const { data: member } = await supabase
@@ -24,33 +28,43 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Not authorized' }, { status: 403 })
     }
 
-    // Check if an invite link already exists for this trip
-    const { data: existing } = await supabase
+    // Use admin client to bypass RLS on invite_links for both read and write
+    const admin = createAdminClient()
+
+    // Return existing link if one already exists for this trip
+    const { data: existing, error: readError } = await admin
       .from('invite_links')
       .select('token')
       .eq('trip_id', tripId)
       .maybeSingle()
 
+    if (readError) {
+      console.error('create-invite read error:', readError)
+      return NextResponse.json({ error: readError.message }, { status: 500 })
+    }
+
     if (existing) {
       return NextResponse.json({ token: existing.token })
     }
 
-    // Create new invite link
-    const { data: invite, error } = await supabase
+    // Generate token explicitly — don't rely on a DB default
+    const token = crypto.randomUUID()
+
+    const { data: invite, error: insertError } = await admin
       .from('invite_links')
-      .insert({
-        trip_id: tripId,
-        created_by: user.id,
-      })
+      .insert({ trip_id: tripId, created_by: user.id, token })
       .select('token')
       .single()
 
-    if (error) throw error
+    if (insertError) {
+      console.error('create-invite insert error:', insertError)
+      return NextResponse.json({ error: insertError.message }, { status: 500 })
+    }
 
     return NextResponse.json({ token: invite.token })
 
-  } catch (error) {
-    console.error('Create invite error:', error)
+  } catch (err) {
+    console.error('create-invite unexpected error:', err)
     return NextResponse.json({ error: 'Failed to create invite' }, { status: 500 })
   }
 }
