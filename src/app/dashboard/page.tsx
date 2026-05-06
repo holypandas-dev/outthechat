@@ -38,6 +38,20 @@ export default async function DashboardPage() {
 
   const { data: trips } = await tripsQuery
 
+  // Fetch live committed counts for all trips in one query
+  const tripIds = (trips || []).map(t => t.id)
+  const committedMap: Record<string, number> = {}
+  if (tripIds.length > 0) {
+    const { data: contributions } = await supabase
+      .from('fund_contributions')
+      .select('trip_id')
+      .in('trip_id', tripIds)
+      .eq('status', 'committed')
+    for (const c of contributions || []) {
+      committedMap[c.trip_id] = (committedMap[c.trip_id] || 0) + 1
+    }
+  }
+
   const firstName = profile?.display_name?.split(' ')[0] || 'there'
 
   return (
@@ -97,7 +111,12 @@ export default async function DashboardPage() {
         {/* Trips grid */}
         {trips && trips.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {trips.map(trip => (
+            {trips.map(trip => {
+              const memberCount = (trip.trip_members as { count: number }[])?.[0]?.count || 1
+              const committed = committedMap[trip.id] ?? 0
+              const commitPct = Math.round((committed / memberCount) * 100)
+
+              return (
               <div key={trip.id} className="relative group">
                 <Link
                   href={`/trip/${trip.id}`}
@@ -133,13 +152,13 @@ export default async function DashboardPage() {
                         Commitment
                       </span>
                       <span className="text-[10px] font-medium" style={{ color: 'var(--accent)' }}>
-                        {trip.commitment_score}%
+                        {committed}/{memberCount} committed
                       </span>
                     </div>
                     <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
                       <div
                         className="h-full rounded-full transition-all"
-                        style={{ width: `${trip.commitment_score}%`, background: 'var(--accent)' }}
+                        style={{ width: `${commitPct}%`, background: 'var(--accent)' }}
                       />
                     </div>
                   </div>
@@ -163,7 +182,8 @@ export default async function DashboardPage() {
                   </div>
                 )}
               </div>
-            ))}
+              )
+            })}
           </div>
         ) : (
           <div className="rounded-2xl p-8 sm:p-16 text-center"
