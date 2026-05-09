@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Home() {
   return (
@@ -36,48 +37,117 @@ export default function Home() {
 
       {/* Hero */}
       <section className="px-6 sm:px-10 pt-24 pb-20 max-w-5xl mx-auto">
-        <div className="flex items-center gap-3 mb-8">
-          <div style={{ width: '32px', height: '0.5px', background: 'var(--accent)' }} />
-          <span className="text-xs font-medium uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
-            Smart group travel planning
-          </span>
-        </div>
-        <h1
-          className="font-medium mb-8"
-          style={{
-            fontFamily: 'var(--font-fraunces)',
-            color: 'var(--text-primary)',
-            letterSpacing: '-0.02em',
-            maxWidth: '720px',
-            lineHeight: '1.06',
-            fontSize: 'clamp(38px, 6vw, 60px)',
-          }}
-        >
-          Your group trip is still<br />
-          in the chat.<br />
-          <em style={{ color: 'var(--accent)', fontStyle: 'italic' }}>Let&apos;s fix that.</em>
-        </h1>
-        <p
-          className="text-base sm:text-lg leading-relaxed mb-10"
-          style={{ color: 'var(--text-secondary)', maxWidth: '480px' }}
-        >
-          OutTheChat turns messy group conversations into real, fully planned trips — smart itineraries, shared budgets, and curated recommendations for flights, hotels, and excursions all in one place.
-        </p>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-          <Link
-            href="/signup"
-            className="text-sm font-medium px-7 py-3.5 rounded-md transition-colors"
-            style={{ background: 'var(--text-primary)', color: 'var(--background)' }}
-          >
-            Plan my trip for free →
-          </Link>
-          
-            <a href="#how-it-works"
-            className="text-sm transition-colors"
-            style={{ color: 'var(--text-secondary)', borderBottom: '0.5px solid var(--accent)', paddingBottom: '1px' }}
-          >
-            See how it works
-          </a>
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-16 lg:gap-12">
+
+          {/* Left: hero text */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 mb-8">
+              <div style={{ width: '32px', height: '0.5px', background: 'var(--accent)' }} />
+              <span className="text-xs font-medium uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+                Smart group travel planning
+              </span>
+            </div>
+            <h1
+              className="font-medium mb-8"
+              style={{
+                fontFamily: 'var(--font-fraunces)',
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.02em',
+                maxWidth: '720px',
+                lineHeight: '1.06',
+                fontSize: 'clamp(38px, 6vw, 60px)',
+              }}
+            >
+              Your group trip is still<br />
+              in the chat.<br />
+              <em style={{ color: 'var(--accent)', fontStyle: 'italic' }}>Let&apos;s fix that.</em>
+            </h1>
+            <p
+              className="text-base sm:text-lg leading-relaxed mb-10"
+              style={{ color: 'var(--text-secondary)', maxWidth: '480px' }}
+            >
+              OutTheChat turns messy group conversations into real, fully planned trips — smart itineraries, shared budgets, and curated recommendations for flights, hotels, and excursions all in one place.
+            </p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+              <Link
+                href="/signup"
+                className="text-sm font-medium px-7 py-3.5 rounded-md transition-colors"
+                style={{ background: 'var(--text-primary)', color: 'var(--background)' }}
+              >
+                Plan my trip for free →
+              </Link>
+
+                <a href="#how-it-works"
+                className="text-sm transition-colors"
+                style={{ color: 'var(--text-secondary)', borderBottom: '0.5px solid var(--accent)', paddingBottom: '1px' }}
+              >
+                See how it works
+              </a>
+            </div>
+          </div>
+
+          {/* Right: phone mockups */}
+          <div className="flex-shrink-0 self-center lg:self-auto" style={{ position: 'relative', width: '340px', height: '540px' }}>
+            {/* Terracotta blob */}
+            <div style={{
+              position: 'absolute',
+              width: '300px',
+              height: '300px',
+              borderRadius: '50%',
+              background: '#C0543A',
+              opacity: 0.2,
+              filter: 'blur(70px)',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              pointerEvents: 'none',
+            }} />
+
+            {/* Back phone: dashboard, rotated 4deg, offset right + down, z-index 1 */}
+            <div style={{
+              position: 'absolute',
+              right: 0,
+              bottom: 0,
+              width: '220px',
+              height: '470px',
+              border: '8px solid #1A1208',
+              borderRadius: '44px',
+              overflow: 'hidden',
+              transform: 'rotate(4deg)',
+              zIndex: 1,
+              boxShadow: '0 40px 80px rgba(26,18,8,0.18)',
+            }}>
+              <Image
+                src="/screenshots/dashboard.png"
+                alt="OutTheChat dashboard"
+                fill
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+
+            {/* Front phone: trip itinerary, rotated -3deg, z-index 2 */}
+            <div style={{
+              position: 'absolute',
+              left: 0,
+              top: 20,
+              width: '240px',
+              height: '500px',
+              border: '8px solid #1A1208',
+              borderRadius: '44px',
+              overflow: 'hidden',
+              transform: 'rotate(-3deg)',
+              zIndex: 2,
+              boxShadow: '0 40px 80px rgba(26,18,8,0.18)',
+            }}>
+              <Image
+                src="/screenshots/trip-view.png"
+                alt="Trip itinerary view"
+                fill
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+          </div>
+
         </div>
       </section>
 
